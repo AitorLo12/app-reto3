@@ -95,8 +95,8 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 		configureLogger(); 		
 		
 		//establecemos título e icono de la aplicación
-		setTitle("NSLA");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaRegistro.class.getResource("")));
+		setTitle("Real Federación EspaÑola de Balonmano");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaRegistro.class.getResource("/img/Logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//ubicación y tamaño de la ventana
@@ -608,8 +608,8 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 				//Si coinciden, se le redirige a la ventana de temporadas
 				else {					
 					Nombre = NewReg.getNombre();
-					//VentanaTemporadas vt = new VentanaTemporadas();
-					//vt.setVisible(true);
+					VentanaTemporadas vt = new VentanaTemporadas();
+					vt.setVisible(true);
 					dispose();
 				    LOGGER.info(VentanaRegistro.getNombre()+" ha iniciado sesion");
 				}
