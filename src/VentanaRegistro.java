@@ -582,12 +582,12 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 			
 			
 			//Si algún campo está vacio
-			if (NewReg.Nombre.isEmpty() || NewReg.Contraseña.isEmpty()){
+			if (NewReg.getNombre().isEmpty() || NewReg.getContraseña().isEmpty()){
 				//Cambia el color del fondo de los campos
-				if (NewReg.Nombre.isEmpty()) {
+				if (NewReg.getNombre().isEmpty()) {
 					txtNombreLog.setBackground(new Color(255,192,183));
 					}
-				if (NewReg.Contraseña.isEmpty()) {
+				if (NewReg.getContraseña().isEmpty()) {
 					txtPassLog.setBackground(new Color(255,192,183));
 					}
 				//Monstramos error por pantalla
@@ -607,7 +607,7 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 				
 				//Si coinciden, se le redirige a la ventana de temporadas
 				else {					
-					Nombre = NewReg.Nombre;
+					Nombre = NewReg.getNombre();
 					//VentanaTemporadas vt = new VentanaTemporadas();
 					//vt.setVisible(true);
 					dispose();
@@ -648,7 +648,7 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 			}
 			
 			//Si existe un usuario con este nombre
-			else if (existeUser(NewReg.Nombre, listaUsuarios)) {
+			else if (existeUser(NewReg.getNombre(), listaUsuarios)) {
 				
 				//Monstramos error por pantalla
 				JOptionPane.showMessageDialog(null, "Ya existe un usuario con este nombre.", "Usuario ya existente", JOptionPane.ERROR_MESSAGE);
@@ -712,7 +712,7 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
               usuario.getContraseña().equals(NewReg.getContraseña())) {
         	  
         	  //El usuario con esas credenciales existe en la lista entonces devolvemos true y le damos los permisos del usuario encontrado a NewReg
-        	  NewReg.Permisos = usuario.Permisos;
+        	  NewReg.setPermisos(usuario.getPermisos());
         	  return true; 
           }
       }
