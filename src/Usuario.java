@@ -1,9 +1,9 @@
 public class Usuario {
 
 	
-	String Nombre;
-	String Contraseña; 
-	String Permisos;
+	private String Nombre;
+	private String Contraseña; 
+	private String Permisos;
 	
 	
 	//Constructor por defecto

@@ -4,7 +4,6 @@ public class Persona {
 	
 	private String nombre;
 	private String apellido;
-	private String equipo;
 	private String imagen;
 	private String posicion;
 	
@@ -15,7 +14,6 @@ public class Persona {
 		
 		nombre = null;
 		apellido = null;
-		equipo = null;
 		imagen = null;
 		posicion = null;
 		
@@ -23,21 +21,19 @@ public class Persona {
 	
 	//Constructores personalizados
 		//Jugadores
-	public Persona (String N,String A,String E,String I,String P) {
+	public Persona (String N,String A,String I,String P) {
 		
 		nombre = N;
 		apellido = A;
-		equipo = E;
 		imagen = I;
 		posicion = P;
 		
 	}
 		//Entrenadores
-	public Persona (String N,String A,String E,String I) {
+	public Persona (String N,String A,String I) {
 		
 		nombre = N;
 		apellido = A;
-		equipo = E;
 		imagen = I;
 		posicion = "Entrenador";
 	}
@@ -64,14 +60,6 @@ public class Persona {
 
 	public void setPosicion(String posicion) {
 		this.posicion = posicion;
-	}
-
-	public String getEquipo() {
-		return equipo;
-	}
-
-	public void setEquipo(String equipo) {
-		this.equipo = equipo;
 	}
 
 	public String getImagen() {

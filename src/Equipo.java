@@ -5,55 +5,58 @@ public class Equipo {
 	
 	//Definimos las variables necesarias para la clase
 	
-	String nombre;
-	String iniciales;
-	int puntos;
-	int pjugados;
-	int	pganados;
-	int	pperdidos;
-	int	ptsfavor;
-	int	ptscontra;
-	String imagenEscudo;
-	String imagenEstadio;
-	String descripcion;
-	List<Persona> listaJugadores;
+	private String nombre;
+	private String iniciales;
+	private int temporada;
+	private int puntos;
+	private int pjugados;
+	private int	pganados;
+	private int	pperdidos;
+	private int	ptsfavor;
+	private int	ptscontra;
+	private String imagenEscudo;
+	private String imagenEstadio;
+	private String descripcion;
+	private List<Persona> listaJugadores;
 	
 	
 	//Constructor por defecto (placeholder)
 	
 	public Equipo () {
 		
-		this.nombre = null;
-		this.iniciales = null;
-		this.puntos = 0;
-		this.pjugados = 0;
-		this.pganados = 0;
-		this.pperdidos = 0;
-		this.ptsfavor = 0;
-		this.ptscontra = 0;
-		this.imagenEscudo = null;
-		this.imagenEstadio = null;
-		this.descripcion = null;
-		this.listaJugadores = new ArrayList<>();
+		nombre = null;
+		iniciales = null;
+		temporada = 1;
+		puntos = 0;
+		pjugados = 0;
+		pganados = 0;
+		pperdidos = 0;
+		ptsfavor = 0;
+		ptscontra = 0;
+		imagenEscudo = null;
+		imagenEstadio = null;
+		descripcion = null;
+		listaJugadores = new ArrayList<>();
 	
 	}
 	
 	//Contructores personalizados
 		//Constructor para guardar la información de cada equipo que creemos
-	public Equipo (String N,String I,String icn,String E,String D,List<Persona> J) {
+	public Equipo (String N,String I, int T, String icn,String E,String D,List<Persona> J) {
 		
-		this.nombre = N;
-		this.iniciales = I;
-		this.imagenEscudo = icn;
-		this.imagenEstadio = E;
-		this.descripcion = D;
-		this.listaJugadores = J;
-		this.puntos = 0;
-		this.pjugados = 0;
-		this.pganados = 0;
-		this.pperdidos = 0;
-		this.ptsfavor = 0;
-		this.ptscontra = 0;
+		nombre = N;
+		iniciales = I;
+		temporada = T;
+		imagenEscudo = icn;
+		imagenEstadio = E;
+		descripcion = D;
+		listaJugadores = J;
+		puntos = 0;
+		pjugados = 0;
+		pganados = 0;
+		pperdidos = 0;
+		ptsfavor = 0;
+		ptscontra = 0;
 		
 	}
 		
@@ -85,6 +88,14 @@ public class Equipo {
 
 	public void setIniciales(String iniciales) {
 		this.iniciales = iniciales;
+	}
+	
+	public int getTemporada() {
+		return temporada;
+	}
+
+	public void setTemporada(int temporada) {
+		this.temporada= temporada;
 	}
 
 	public int getPuntos() {
