@@ -17,6 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -74,12 +75,26 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaTemporadas.class.getResource("/img/Logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//Añade al defaultListModel cada temporada
-        //for (Temporada temporada : listaTemporadas) {
-        //	dlmListaTemporadas.addElement(temporada.getFecha());
-		// }
+		//inicializamos tanto la lista donde guardamos las temporadas como el defaultlistmodel
+		List <Temporada> listaTemporadas = new ArrayList<Temporada>();
+		DefaultListModel<String> dlmListaTemporadas = new DefaultListModel<String>();
 		
+		
+		//comprobamos si la lista está vacía y si lo está añadimos una temporada por defecto
+		if (listaTemporadas.isEmpty()) {
 			
+			//creamos una temporada por defecto y la añadimos a la lista
+			Temporada t = new Temporada ();
+			listaTemporadas.add(t);
+			
+		}
+		
+		//recorremos la lista y vamos añadiendo todas las temporadas al defaultlistmodel
+		for (Temporada t : listaTemporadas) {
+			
+			dlmListaTemporadas.addElement(t.getFecha()+" - "+t.getEstado());
+			
+		}
         
 		//ubicación y tamaño de la ventana
 		setBounds(100, 100, 650, 600);
@@ -406,10 +421,28 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	public void actionPerformed(ActionEvent e) {
 	    Object o = e.getSource();
 	    
-	    if (o == btnSiguiente) {
+	    if (o == btnAñadir) { //al pulsar el boton añadir
 	    	
+	    	//creamos una variable donde almacenamos la fecha introducida en el textfield
+	    	String fechanueva = txtTemporada.getText();
+	    	Temporada t = new Temporada(fechanueva);
 	    	
+	    	if (listaTemporadas.contains(t)){	//si ya existe una temporada con la fecha introducida
+	    			
+	    		JOptionPane.showMessageDialog(null, "Ya existe una temporada con la fecha introducida.", "Temporada ya existente", JOptionPane.ERROR_MESSAGE);
+				
+	    }
 	    	
+	    	else {		//si no existe ninguna temporada con esa fecha
+	    		
+	    		//la añadimos a la lista y al defaultlistmodel
+	    		listaTemporadas.add(t);
+	    		dlmListaTemporadas.addElement(t.getFecha()+" - "+t.getEstado());
+	    		
+	    		JOptionPane.showMessageDialog(null, "Temporada creada con éxito.", "Temporada añadida", JOptionPane.INFORMATION_MESSAGE,null);
+				
+	    		
+	    	}
 	    }
 	}
 }

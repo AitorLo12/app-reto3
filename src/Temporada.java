@@ -7,12 +7,21 @@ public class Temporada {
 	private String estado;
 	private List<Equipo> listaEquipos;
 	
-	Temporada () {
+	public Temporada () {
 		
 		fecha = "2023-2024";
 		estado = "En progreso";
 		listaEquipos = new ArrayList<Equipo>();
 		
+		
+	}
+	
+	
+	public Temporada (String fe) {
+		
+		fecha = fe;
+		estado = "En progreso";
+		listaEquipos = new ArrayList<Equipo>();
 		
 	}
 
