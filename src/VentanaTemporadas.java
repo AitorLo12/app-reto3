@@ -95,7 +95,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			dlmListaTemporadas.addElement(t.getFecha()+" - "+t.getEstado());
 			
 		}
-        
+
+    	System.out.println(listaTemporadas.size());
 		//ubicación y tamaño de la ventana
 		setBounds(100, 100, 650, 600);
 		setLocationRelativeTo(null);
