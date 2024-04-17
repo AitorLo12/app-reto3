@@ -8,33 +8,26 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Toolkit;
 import javax.swing.ListSelectionModel;
-import javax.swing.JToggleButton;
 
 public class VentanaTemporadas extends JFrame implements FocusListener, ActionListener {
 
@@ -48,7 +41,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private JLabel lblLog;
 	private JLabel lblEstado;
 	private JButton btnAtras;
-	private JToggleButton tglbtn;
 	static JTextField txtTemporada;
 	static JButton btnAñadir;
 	private JButton btnSiguiente;
@@ -59,10 +51,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	static DefaultListModel<String> dlmListaTemporadas = new DefaultListModel<>();
 	public static List<Equipo> listaEquipos;
 	public List<Equipo> listaEquiposSeleccionados = new ArrayList<>();
-    private static VentanaTemporadas instance = null;
-
-	
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -80,9 +69,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	 */
 	public VentanaTemporadas() {
 		
-		//Guardamos la instancia
-	    instance = this;
-
 		//establecemos título e icono de la aplicación
 		setTitle("Real Federación EspaÑola de Balonmano");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaTemporadas.class.getResource("/img/Logo.png")));
@@ -419,5 +405,11 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	    Object o = e.getSource();
+	    
+	    if (o == btnSiguiente) {
+	    	
+	    	
+	    	
+	    }
 	}
 }
