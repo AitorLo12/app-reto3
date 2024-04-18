@@ -47,10 +47,10 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	static JButton btnAñadir;
 	private JButton btnSiguiente;
 	static JButton btnBorrar;
-	public List<Temporada> listaTemporadas;
+	private List<Temporada> listaTemporadas;
 	private JList<String> JlistTemporadas;
 	public static Temporada temporadaSeleccionada;
-	static DefaultListModel<String> dlmListaTemporadas = new DefaultListModel<>();
+	private DefaultListModel<String> dlmListaTemporadas = new DefaultListModel<>();
 	public static List<Equipo> listaEquipos;
 	public List<Equipo> listaEquiposSeleccionados = new ArrayList<>();
     public static void main(String[] args) {
@@ -455,7 +455,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    }
 	}
 	
-	//Comprueba si existe la temporada en la lista de temporadas que hemos leído del XML
+	//Comprueba si existe la temporada en la lista de temporadas
 		public boolean existeTemporada (String fecha) {
 			boolean existe = false;
 			for (Temporada t : listaTemporadas) {
@@ -467,7 +467,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			return existe;
 		}
 		
-		//Añade la temporada a la lista de temporadas que hemos leído del XML y actualiza el XML
+		//Añade la temporada a la lista de temporadas
 		public void añadirTemporada (Temporada temporada) {
 		  	listaTemporadas.add(temporada);
 		  	dlmListaTemporadas.addElement(temporada.getFecha()+" - "+temporada.getEstado());
