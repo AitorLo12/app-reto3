@@ -8,6 +8,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	static JButton btnAñadir;
 	private JButton btnSiguiente;
 	static JButton btnBorrar;
-	public static List<Temporada> listaTemporadas;
+	public List<Temporada> listaTemporadas;
 	private JList<String> JlistTemporadas;
 	public static Temporada temporadaSeleccionada;
 	static DefaultListModel<String> dlmListaTemporadas = new DefaultListModel<>();
@@ -85,18 +86,19 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//creamos una temporada por defecto y la añadimos a la lista
 			Temporada t = new Temporada ();
-			listaTemporadas.add(t);
+			añadirTemporada(t);
 			
 		}
 		
+		else {
 		//recorremos la lista y vamos añadiendo todas las temporadas al defaultlistmodel
 		for (Temporada t : listaTemporadas) {
 			
 			dlmListaTemporadas.addElement(t.getFecha()+" - "+t.getEstado());
 			
 		}
+		}
 
-    	System.out.println(listaTemporadas.size());
 		//ubicación y tamaño de la ventana
 		setBounds(100, 100, 650, 600);
 		setLocationRelativeTo(null);
@@ -428,7 +430,13 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	String fechanueva = txtTemporada.getText();
 	    	Temporada t = new Temporada(fechanueva);
 	    	
-	    	if (listaTemporadas.contains(t)){	//si ya existe una temporada con la fecha introducida
+	    	if (txtTemporada.getText().isEmpty()) {
+	    		
+	    		JOptionPane.showMessageDialog(null, "No ha introducido ninguna fecha.", "Campos vacíos", JOptionPane.ERROR_MESSAGE);
+	    		
+	    	}
+	    	
+	    	else if (existeTemporada(txtTemporada.getText())){	//si ya existe una temporada con la fecha introducida
 	    			
 	    		JOptionPane.showMessageDialog(null, "Ya existe una temporada con la fecha introducida.", "Temporada ya existente", JOptionPane.ERROR_MESSAGE);
 				
@@ -446,4 +454,26 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	}
 	    }
 	}
+	
+	//Comprueba si existe la temporada en la lista de temporadas que hemos leído del XML
+		public boolean existeTemporada (String fecha) {
+			boolean existe = false;
+			for (Temporada t : listaTemporadas) {
+				existe = t.getFecha().equals(fecha) ? true : false;
+				if(existe) {
+					break;
+				}
+			}
+			return existe;
+		}
+		
+		//Añade la temporada a la lista de temporadas que hemos leído del XML y actualiza el XML
+		public void añadirTemporada (Temporada temporada) {
+		  	listaTemporadas.add(temporada);
+		  	dlmListaTemporadas.addElement(temporada.getFecha()+" - "+temporada.getEstado());
+		  	
+		}
+		
 }
+
+
