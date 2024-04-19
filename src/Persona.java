@@ -5,7 +5,6 @@ public class Persona {
 	private String nombre;
 	private String apellido;
 	private String imagen;
-	private String posicion;
 	
 	
 	//Constructor por defecto
@@ -15,7 +14,6 @@ public class Persona {
 		nombre = null;
 		apellido = null;
 		imagen = null;
-		posicion = null;
 		
 	}
 	
@@ -26,7 +24,6 @@ public class Persona {
 		nombre = N;
 		apellido = A;
 		imagen = I;
-		posicion = P;
 		
 	}
 		//Entrenadores
@@ -35,7 +32,6 @@ public class Persona {
 		nombre = N;
 		apellido = A;
 		imagen = I;
-		posicion = "Entrenador";
 	}
 
 	public String getNombre() {
@@ -52,14 +48,6 @@ public class Persona {
 
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
-	}
-
-	public String getPosicion() {
-		return posicion;
-	}
-
-	public void setPosicion(String posicion) {
-		this.posicion = posicion;
 	}
 
 	public String getImagen() {

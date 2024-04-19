@@ -12,6 +12,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -76,13 +80,31 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaTemporadas.class.getResource("/img/Logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//inicializamos tanto la lista donde guardamos las temporadas como el defaultlistmodel
-		List <Temporada> listaTemporadas = new ArrayList<Temporada>();
-		DefaultListModel<String> dlmListaTemporadas = new DefaultListModel<String>();
+		
+		// Se conecta a la base de datos
+		// crea una base de datos de balonmano si todavia no existe
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+
+		//Recojo todas las temporadas de la base de datos y los añado a la listatemporadas
+		TypedQuery<Temporada> tq1 = em.createQuery("SELECT t FROM Temporada t", Temporada.class);
+		listaTemporadas = tq1.getResultList();
+		
+		//Cierro la conexión
+		em.close();
+		emf.close();
 		
 		
-		//comprobamos si la lista está vacía y si lo está añadimos una temporada por defecto
-		if (listaTemporadas.isEmpty()) {
+		
+		//comprobamos si la lista está vacía o si no existe y si lo está añadimos una temporada por defecto
+		if (listaTemporadas == null) {
+			
+			
+			//inicializamos tanto la lista donde guardamos las temporadas como el defaultlistmodel
+			listaTemporadas = new ArrayList<Temporada>();
+			dlmListaTemporadas = new DefaultListModel<String>();
 			
 			//creamos una temporada por defecto y la añadimos a la lista
 			Temporada t = new Temporada ();
@@ -445,8 +467,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	else {		//si no existe ninguna temporada con esa fecha
 	    		
 	    		//la añadimos a la lista y al defaultlistmodel
-	    		listaTemporadas.add(t);
-	    		dlmListaTemporadas.addElement(t.getFecha()+" - "+t.getEstado());
+	    		añadirTemporada(t);
 	    		
 	    		JOptionPane.showMessageDialog(null, "Temporada creada con éxito.", "Temporada añadida", JOptionPane.INFORMATION_MESSAGE,null);
 				
@@ -471,6 +492,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		public void añadirTemporada (Temporada temporada) {
 		  	listaTemporadas.add(temporada);
 		  	dlmListaTemporadas.addElement(temporada.getFecha()+" - "+temporada.getEstado());
+		  	System.out.println(listaTemporadas.size());
 		  	
 		}
 		
