@@ -474,6 +474,24 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		
 	    	}
 	    }
+	    
+	    else if (o == btnBorrar) {
+	    	
+	    	int index = JlistTemporadas.getSelectedIndex();
+	    	
+	    	if (index < 0) {
+	    		
+	    		JOptionPane.showMessageDialog(null, "No ha seleccionado ninguna temporada.", "Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE);
+	    		
+	    	}
+	    	
+	    	else {
+	    		
+	    		borrarTemporada(listaTemporadas.get(index));
+	    		JOptionPane.showMessageDialog(null, "Temporada eliminada con éxito.", "Temporada eliminada", JOptionPane.INFORMATION_MESSAGE,null);
+				
+	    	}
+	    }
 	}
 	
 	//Comprueba si existe la temporada en la lista de temporadas
@@ -514,7 +532,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		public void borrarTemporada (Temporada temporada ) {
 			
 			listaTemporadas.remove(temporada);
-			dlmListaTemporadas.removeElement(temporada);
+			dlmListaTemporadas.remove(JlistTemporadas.getSelectedIndex());
 			
 			// Se conecta a la base de datos
 			// crea una base de datos de balonmano si todavia no existe
@@ -523,8 +541,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			em.getTransaction().begin();
 
 			//Borro la temporada seleccionada de la base de datos orientada a objetos
-			Query q1 = em.createQuery("DELETE t FROM Temporada t", Temporada.class);
-			
+			Query q1 = em.createQuery("DELETE FROM Temporada t WHERE t.fecha ='" +temporada.getFecha()+"'", Temporada.class);
+			q1.executeUpdate();			
 						
 			//Guardo los cambios
 			em.getTransaction().commit();
