@@ -35,6 +35,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Toolkit;
 import javax.swing.ListSelectionModel;
+import java.awt.Component;
+import javax.swing.ScrollPaneConstants;
 
 public class VentanaTemporadas extends JFrame implements FocusListener, ActionListener {
 
@@ -47,11 +49,16 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private JLabel lblInfoTemporada;
 	private JLabel lblLog;
 	private JLabel lblEstado;
+	private JLabel lblPanelEquipos;
+	private JLabel lblPanelEquipos2;
 	private JButton btnAtras;
 	static JTextField txtTemporada;
 	static JButton btnAñadir;
 	private JButton btnSiguiente;
 	static JButton btnBorrar;
+	private JScrollPane scrollPane1;
+	private JScrollPane scrollPane2;
+	private JPanel panelEquiposSeleccionados;
 	private List<Temporada> listaTemporadas;
 	private JList<String> JlistTemporadas;
 	public static Temporada temporadaSeleccionada;
@@ -139,22 +146,60 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		
 		
+		
 		//creamos y añadimos un panel que contendrá a todos los equipos para seleccionarlos a la hora de elegir los equipos
         panelEquipos = new JPanel();
+        contentPane.add(panelEquipos);
+        
+        //propiedades del panel
         panelEquipos.setBackground(Color.WHITE);
         panelEquipos.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panelEquipos.setBounds(38, 400, 359, 137);
         panelEquipos.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        contentPane.add(panelEquipos);
+ 
         
-        JScrollPane scrollPane = new JScrollPane(panelEquipos);
-	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    scrollPane.setBounds(38, 400, 359, 137);
-	    contentPane.add(scrollPane);
+
+	       
+        //creamos y añadimos un scrollPane donde pondremos el panel de los equipos disponibles
+        scrollPane1 = new JScrollPane(panelEquipos);
+	    contentPane.add(scrollPane1);
 	    
-	    GridLayout gridLayout = new GridLayout(0, 1);
-	    panelEquipos.setLayout(gridLayout);
+	    //propiedades del scrollPanel
+	    scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	    scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	    scrollPane1.setBounds(38, 400, 250, 137);
+	  	
+	  	
+	  		
+	  	//creamos y añadimos al scrollpanel un panel donde saldrán los equipos seleccionados
+	  	panelEquiposSeleccionados = new JPanel();
+	  	contentPane.add(panelEquiposSeleccionados);
+	  		
+	  	//propiedades del panel
+	  	panelEquiposSeleccionados.setBorder(new LineBorder(new Color(0, 0, 0)));
+	  	panelEquiposSeleccionados.setBackground(Color.WHITE);
+		panelEquiposSeleccionados.setBounds(250, 400, 359, 137);
+	  	panelEquiposSeleccionados.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+	    
+	  	
+	  	
+	 	//creamos y añadimos un panel donde pondremos la lista de los equipos seleccionados
+	  	scrollPane2 = new JScrollPane(panelEquiposSeleccionados);
+	  	contentPane.add(scrollPane2);
+	  		
+	  	//propiedades del scrollPane
+	  	scrollPane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+	  	scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+	  	scrollPane2.setBounds(303, 400, 250, 137);
+	  	
+	  	
+		/*
+		 * GridLayout gridLayout = new GridLayout(0, 1);
+		 * panelEquipos.setLayout(gridLayout);
+		 * 
+		 * GridLayout gridLayout2 = new GridLayout(0,1);
+		 * panelEquiposSeleccionados.setLayout(gridLayout2);
+		 */
 		
 		
 		//creamos y añadimos un Jlabel para el título de inicio
@@ -187,7 +232,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		//propiedades del JLabel
 		lblInfoEquipos.setForeground(new Color (0,0,0));
 		lblInfoEquipos.setFont(new Font("Arial", Font.PLAIN, 15));
-		lblInfoEquipos.setBounds(38, 370, 464, 18);
+		lblInfoEquipos.setBounds(38, 355, 464, 18);
 		
 		
 		
@@ -372,6 +417,28 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		btnSiguiente.setBorder(null);
 		btnSiguiente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
+		
+		
+		//creamos un JLabel que indique los equipos
+		lblPanelEquipos = new JLabel("Equipos disponibles.");
+		contentPane.add(lblPanelEquipos);
+		
+		//propiedades del JLabel
+		lblPanelEquipos.setForeground(Color.BLACK);
+		lblPanelEquipos.setFont(new Font("Arial", Font.BOLD, 15));
+		lblPanelEquipos.setBounds(38, 378, 160, 18);
+		
+		
+		
+		//creamos un JLabel que indique los equipos seleccionados
+		lblPanelEquipos2 = new JLabel("Equipos seleccionados.");
+		contentPane.add(lblPanelEquipos2);
+		
+		//propiedades del JLabel
+		lblPanelEquipos2.setForeground(Color.BLACK);
+		lblPanelEquipos2.setFont(new Font("Arial", Font.BOLD, 15));
+		lblPanelEquipos2.setBounds(303, 378, 180, 18);
+		
 		//añadimos los listeners necesarios
 		btnSiguiente.addActionListener(this);
 		btnSiguiente.addMouseListener(new MouseAdapter(){
@@ -404,8 +471,13 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			txtTemporada.setVisible(false);
 			lblInfoTemporada.setVisible(false);
 			panelEquipos.setVisible(false);
+			panelEquiposSeleccionados.setVisible(false);
 			lblInfoEquipos.setVisible(false);
-			scrollPane.setVisible(false);
+			lblPanelEquipos.setVisible(false);
+			lblPanelEquipos2.setVisible(false);
+			scrollPane1.setVisible(false);
+			scrollPane2.setVisible(false);
+			
 			JlistTemporadas.setBounds(38,206,525,150);
 			btnSiguiente.setBounds(38,400,525,100);
 			}
@@ -415,8 +487,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			txtTemporada.setVisible(true);
 			lblInfoTemporada.setVisible(true);
 			panelEquipos.setVisible(true);
+			panelEquiposSeleccionados.setVisible(true);
 			lblInfoEquipos.setVisible(true);
-			scrollPane.setVisible(true);
+			lblPanelEquipos.setVisible(true);
+			lblPanelEquipos2.setVisible(true);
+			scrollPane1.setVisible(true);
+			scrollPane2.setVisible(true);
 			JlistTemporadas.setBounds(38, 206, 200, 137);
 			btnSiguiente.setBounds(290,300,269,45);
 			}
@@ -552,7 +628,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			emf.close();
 			
 		}
-		
 }
 
 
