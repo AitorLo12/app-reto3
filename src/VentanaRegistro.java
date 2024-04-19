@@ -29,6 +29,11 @@ import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Cursor;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.swing.JButton;
 import java.awt.Toolkit;
 
@@ -60,15 +65,6 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 	static Usuario NewReg;
 	static String Nombre;
 	public static final Logger LOGGER = Logger.getLogger(VentanaRegistro.class.getName());
-	
-	//creamos el usuario de admin con el constructor por defecto y lo añadimos en la lista de usuarios
-	static {
-	Usuario ad = new Usuario();
-	listaUsuarios.add(ad);
-	Usuario us = new Usuario ("Usuario", "1234");
-	listaUsuarios.add(us);
-	
-	}
 	
 	//creamos la varible para poder llamar a la función de usuario
 
@@ -105,6 +101,30 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 		
 		//quita el redimensionado de la ventana
 		setResizable(false);
+		
+/*--------------------------------------------------BASE DE DATOS ORIENTADA A OBJETOS-----------------------------------------------------------*/
+		
+		
+		// Se conecta a la base de datos orientada a objetos para coger los datos de los Usuarios
+		// crea una base de datos de balonmano si todavia no existe
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		
+		//Recojo todas las temporadas de la base de datos y los añado a la listaUsuarios
+		TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
+		listaUsuarios = tq1.getResultList();
+		
+		
+		em.getTransaction().commit();
+		
+		//Cierro la conexión
+		em.close();
+		emf.close();
+		
+		
+/*-----------------------------------------------------------------------------------------------------------------------------------------------*/		
+
 		
 		//creamos un panel para el login
 		contentPaneL = new JPanel();
@@ -665,10 +685,11 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 			
 			else {
 				
-				//Añadimos el usuario a la lista de usuarios
-				listaUsuarios.add(NewReg);
+				//Añadimos el usuario
+				añadirUsuario(NewReg);
 				//Informamos del registro correcto
 				JOptionPane.showMessageDialog(null, "Usuario registrado correctamente.", "Registro completo", JOptionPane.INFORMATION_MESSAGE);
+				
 				//Regresamos al usuario al panel del login
 				contentPaneR.setVisible(false);
 				contentPaneL.setVisible(true);
@@ -741,6 +762,28 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 		//las contraseñas no coinciden
 		return false;	
 	}
+	
+	//Añade el usuario a la lista de usuarios y lo actualiza en la base de datos
+	public void añadirUsuario(Usuario Usuario) {
+			  	listaUsuarios.add(Usuario);
+			  	
+			  	// Se conecta a la base de datos
+				// crea una base de datos de balonmano si todavia no existe
+				EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
+				EntityManager em = emf.createEntityManager();
+				em.getTransaction().begin();
+
+				//Añado la temporada a la base de datos orientada a objetos
+				em.persist(Usuario);
+				
+				//Guardo los cambios
+				em.getTransaction().commit();
+				
+				//Cierro la conexión
+				em.close();
+				emf.close();
+			  	
+			}
 	
 	//Getters y setters del nombre
 

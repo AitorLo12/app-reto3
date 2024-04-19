@@ -8,7 +8,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +35,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Toolkit;
 import javax.swing.ListSelectionModel;
-import java.awt.Component;
 import javax.swing.ScrollPaneConstants;
 
 public class VentanaTemporadas extends JFrame implements FocusListener, ActionListener {
@@ -65,6 +69,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private DefaultListModel<String> dlmListaTemporadas = new DefaultListModel<>();
 	public static List<Equipo> listaEquipos;
 	public List<Equipo> listaEquiposSeleccionados = new ArrayList<>();
+	
+
+	private Connection conexion;
+	private Statement st;
+	private ResultSet rs;
+	
     public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -88,8 +98,11 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaTemporadas.class.getResource("/img/Logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+
+		/*-----------------------------------------------BASE DE DATOS ORIENTADA A OBJETOS-------------------------------------------------------*/
 		
-		// Se conecta a la base de datos
+		
+		// Se conecta a la base de datos orientada a objetos para coger los datos de las temporadas
 		// crea una base de datos de balonmano si todavia no existe
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
 		EntityManager em = emf.createEntityManager();
@@ -103,7 +116,69 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		em.close();
 		emf.close();
 		
+
+		/*-----------------------------------------------BASE DE DATOS MYSQL---------------------------------------------------------------------*/
 		
+		//me intento conectar a la base de datos mysql para coger los datos de los equipos
+		try {
+			
+			
+			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
+			
+			// si se ha conectado correctamente
+			System.out.println("Conexión Correcta.");
+			
+			//creo el Statement 
+			Statement st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			//como es una query, creo un objeto ResultSet 
+			ResultSet rs = st.executeQuery("SELECT Nom_Equipo FROM balonmano.equipos;");
+			
+			List<Equipo> listaEquipos = new ArrayList<Equipo>();
+			
+			while (rs.next()) {
+				// creo un nuevo Alumno por cada registro
+				String Nombre = rs.getString("Nom_Equipo");
+				Equipo e = new Equipo (Nombre);
+				//lo añado a la lista donde están todos los equipos
+				
+				listaEquipos.add(e);
+			}
+			
+			for (Equipo e : listaEquipos) {
+			
+			System.out.println(e.getNombre());
+			
+			}
+			
+			//Cierro el resultset
+			rs.close();
+			
+			//Cierro el statement 
+			st.close();
+		
+			// cierro la conexion
+			conexion.close();
+			
+			
+		}
+	
+			catch (SQLException e) {
+				// si se produce una excepción SQL
+				int errorcode = e.getErrorCode();
+				if (errorcode == 1062) {
+				 // si es un error de clave duplicada
+				 System.out.println("Error Clave Duplicada. Ya existe un registro con esa clave.");
+				}
+				else {
+				//si se produce cualquier otro error sql
+				 System.out.println("Error SQL Numero "+e.getErrorCode()+":"+e.getMessage());
+				}
+				
+			}
+		
+		
+		/*-------------------------------------------------------------------------------------------------------------------------------------*/
 		
 		//comprobamos si la lista está vacía o si no existe y si lo está añadimos una temporada por defecto
 		if (listaTemporadas.isEmpty()) {
