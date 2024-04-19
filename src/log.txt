@@ -68,3 +68,17 @@ abr 19, 2024 8:59:29 A. M. VentanaRegistro actionPerformed
 INFORMACIÓN: Usuario ha iniciado sesion
 abr 19, 2024 9:06:15 A. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
+abr 19, 2024 9:49:56 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 19, 2024 9:50:49 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 19, 2024 9:51:16 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 19, 2024 9:53:09 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 19, 2024 9:53:22 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 19, 2024 9:54:21 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 19, 2024 9:54:31 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion

@@ -15,6 +15,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -86,7 +87,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		
 
 		//Recojo todas las temporadas de la base de datos y los añado a la listatemporadas
 		TypedQuery<Temporada> tq1 = em.createQuery("SELECT t FROM Temporada t", Temporada.class);
@@ -99,7 +99,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		
 		//comprobamos si la lista está vacía o si no existe y si lo está añadimos una temporada por defecto
-		if (listaTemporadas == null) {
+		if (listaTemporadas.isEmpty()) {
 			
 			
 			//inicializamos tanto la lista donde guardamos las temporadas como el defaultlistmodel
@@ -492,8 +492,47 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		public void añadirTemporada (Temporada temporada) {
 		  	listaTemporadas.add(temporada);
 		  	dlmListaTemporadas.addElement(temporada.getFecha()+" - "+temporada.getEstado());
-		  	System.out.println(listaTemporadas.size());
 		  	
+		  	// Se conecta a la base de datos
+			// crea una base de datos de balonmano si todavia no existe
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
+			EntityManager em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			//Añado la temporada a la base de datos orientada a objetos
+			em.persist(temporada);
+			
+			//Guardo los cambios
+			em.getTransaction().commit();
+			
+			//Cierro la conexión
+			em.close();
+			emf.close();
+		  	
+		}
+		
+		public void borrarTemporada (Temporada temporada ) {
+			
+			listaTemporadas.remove(temporada);
+			dlmListaTemporadas.removeElement(temporada);
+			
+			// Se conecta a la base de datos
+			// crea una base de datos de balonmano si todavia no existe
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
+			EntityManager em = emf.createEntityManager();
+			em.getTransaction().begin();
+
+			//Borro la temporada seleccionada de la base de datos orientada a objetos
+			Query q1 = em.createQuery("DELETE t FROM Temporada t", Temporada.class);
+			
+						
+			//Guardo los cambios
+			em.getTransaction().commit();
+						
+			//Cierro la conexión
+			em.close();
+			emf.close();
+			
 		}
 		
 }
