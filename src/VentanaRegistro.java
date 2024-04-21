@@ -113,8 +113,7 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 		
 		//Recojo todas las temporadas de la base de datos y los añado a la listaUsuarios
 		TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
-		listaUsuarios = tq1.getResultList();
-		
+		listaUsuarios = tq1.getResultList();	
 		
 		em.getTransaction().commit();
 		
