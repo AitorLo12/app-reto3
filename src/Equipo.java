@@ -26,7 +26,7 @@ public class Equipo {
 		
 		nombre = null;
 		iniciales = null;
-		temporada = 1;
+		temporada = 0;
 		puntos = 0;
 		pjugados = 0;
 		pganados = 0;

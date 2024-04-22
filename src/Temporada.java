@@ -28,6 +28,17 @@ public class Temporada {
 		listaEquipos = new ArrayList<Equipo>();
 		
 	}
+	
+	public Temporada (String fe,Equipo A,Equipo B, Equipo C,Equipo D,Equipo E, Equipo F){
+		fecha = fe;
+		estado = "En progreso";
+		listaEquipos.add(A);
+		listaEquipos.add(B);
+		listaEquipos.add(C);
+		listaEquipos.add(D);
+		listaEquipos.add(E);
+		listaEquipos.add(F);	
+	}
 
 	public String getFecha() {
 		return fecha;

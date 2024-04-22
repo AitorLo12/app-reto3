@@ -72,7 +72,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private JList<String> JlistTemporadas;
 	public static Temporada temporadaSeleccionada;
 	private DefaultListModel<String> dlmListaTemporadas = new DefaultListModel<>();
-	public static List<Equipo> listaEquipos;
+	public List<Equipo> listaEquipos;
 	public List<Equipo> listaEquiposSeleccionados = new ArrayList<>();
 	
 
@@ -634,7 +634,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	
 	    	//creamos una variable donde almacenamos la fecha introducida en el textfield
 	    	String fechanueva = txtTemporada.getText();
-	    	Temporada t = new Temporada(fechanueva);
 	    	
 	    	if (txtTemporada.getText().isEmpty()) {
 	    		
@@ -647,11 +646,45 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		JOptionPane.showMessageDialog(null, "Ya existe una temporada con la fecha introducida.", "Temporada ya existente", JOptionPane.ERROR_MESSAGE);
 				
 	    }
+	    	else if (dlmListaSeleccionados.size()!=6) {
+	    		
+	    		JOptionPane.showMessageDialog(null, "No se han seleccionados 6 equipos para la creación de temporada.", "Numero de equipos seleccionados incorrecto", JOptionPane.ERROR_MESSAGE);
+	    		
+	    	}
+	    	
 	    	
 	    	else {		//si no existe ninguna temporada con esa fecha
 	    		
+	    		List<Equipo> Seleccionados = new ArrayList<>();
+	    		for (int i = 0; i < dlmListaTemporadas.size(); i++) {
+	    		    
+	    		    String nombre = dlmListaTemporadas.getElementAt(i);
+	    		    
+	    		    for (Equipo equipo : listaEquipos) {
+	    		    	
+	    		    
+	    		        if (equipo.getNombre().equals(nombre)) {
+	    		        	
+	    		        }
+	    		            Seleccionados.add(equipo);
+	    		            break;
+	    		            
+	    		}
+	    		            
+	    		}
+	    		
+	    		//Creamos una nueva temporada con la fecha y los equipos introducidos
+	    		Temporada t = new Temporada(fechanueva,Seleccionados.get(0),Seleccionados.get(1),Seleccionados.get(2),Seleccionados.get(3),Seleccionados.get(4),Seleccionados.get(5));
+	    		
 	    		//la añadimos a la lista y al defaultlistmodel
 	    		añadirTemporada(t);
+	    		System.out.println(t.getFecha());
+	    		System.out.println(t.getEstado());
+	    		for (Equipo eq : t.getListaEquipos()) {
+	    			
+	    			System.out.println(eq.getNombre());
+	    			
+	    		}
 	    		
 	    		JOptionPane.showMessageDialog(null, "Temporada creada con éxito.", "Temporada añadida", JOptionPane.INFORMATION_MESSAGE,null);
 				
@@ -668,6 +701,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		JOptionPane.showMessageDialog(null, "No ha seleccionado ninguna temporada.", "Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE);
 	    		
 	    	}
+	    	
+	    	
 	    	
 	    	else {
 	    		
