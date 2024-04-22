@@ -46,7 +46,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JPanel panelEquipos;
 	private JLabel lblTemporadas;
 	private JLabel lblInfo;
 	private JLabel lblInfoEquipos;
@@ -56,13 +55,19 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private JLabel lblPanelEquipos;
 	private JLabel lblPanelEquipos2;
 	private JButton btnAtras;
-	static JTextField txtTemporada;
-	static JButton btnAñadir;
+	private JTextField txtTemporada;
+	private JButton btnAñadir;
 	private JButton btnSiguiente;
-	static JButton btnBorrar;
+	private JButton btnBorrar;
+	private JButton btnDerecha;
+	private JButton btnIzquierda;
+	
 	private JScrollPane scrollPane1;
 	private JScrollPane scrollPane2;
-	private JPanel panelEquiposSeleccionados;
+	private JList<String> JListEquipos;
+	private DefaultListModel<String> dlmListaEquipos = new DefaultListModel<>();
+	private JList<String> JListEquiposSeleccionados;
+	private DefaultListModel<String> dlmListaSeleccionados = new DefaultListModel<>();
 	private List<Temporada> listaTemporadas;
 	private JList<String> JlistTemporadas;
 	public static Temporada temporadaSeleccionada;
@@ -147,7 +152,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			for (Equipo e : listaEquipos) {
 			
-			System.out.println(e.getNombre());
+				dlmListaEquipos.addElement(e.getNombre());
 			
 			}
 			
@@ -223,49 +228,49 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		
 		//creamos y añadimos un panel que contendrá a todos los equipos para seleccionarlos a la hora de elegir los equipos
-        panelEquipos = new JPanel();
-        contentPane.add(panelEquipos);
+        JListEquipos = new JList<>(dlmListaEquipos);
+        contentPane.add(JListEquipos);
         
         //propiedades del panel
-        panelEquipos.setBackground(Color.WHITE);
-        panelEquipos.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelEquipos.setBounds(38, 400, 359, 137);
-        panelEquipos.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JListEquipos.setBackground(Color.WHITE);
+        JListEquipos.setBorder(new LineBorder(new Color(0, 0, 0)));
+        JListEquipos.setBounds(38, 400, 359, 137);
+        JListEquipos.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
  
         
 
 	       
         //creamos y añadimos un scrollPane donde pondremos el panel de los equipos disponibles
-        scrollPane1 = new JScrollPane(panelEquipos);
+        scrollPane1 = new JScrollPane(JListEquipos);
 	    contentPane.add(scrollPane1);
 	    
 	    //propiedades del scrollPanel
 	    scrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	    scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    scrollPane1.setBounds(38, 400, 250, 137);
+	    scrollPane1.setBounds(38, 400, 220, 137);
 	  	
 	  	
 	  		
 	  	//creamos y añadimos al scrollpanel un panel donde saldrán los equipos seleccionados
-	  	panelEquiposSeleccionados = new JPanel();
-	  	contentPane.add(panelEquiposSeleccionados);
+	  	JListEquiposSeleccionados = new JList<>(dlmListaSeleccionados);
+	  	contentPane.add(JListEquiposSeleccionados);
 	  		
 	  	//propiedades del panel
-	  	panelEquiposSeleccionados.setBorder(new LineBorder(new Color(0, 0, 0)));
-	  	panelEquiposSeleccionados.setBackground(Color.WHITE);
-		panelEquiposSeleccionados.setBounds(250, 400, 359, 137);
-	  	panelEquiposSeleccionados.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+	  	JListEquiposSeleccionados.setBorder(new LineBorder(new Color(0, 0, 0)));
+	  	JListEquiposSeleccionados.setBackground(Color.WHITE);
+	  	JListEquiposSeleccionados.setBounds(250, 400, 359, 137);
+	  	JListEquiposSeleccionados.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 	    
 	  	
 	  	
 	 	//creamos y añadimos un panel donde pondremos la lista de los equipos seleccionados
-	  	scrollPane2 = new JScrollPane(panelEquiposSeleccionados);
+	  	scrollPane2 = new JScrollPane(JListEquiposSeleccionados);
 	  	contentPane.add(scrollPane2);
 	  		
 	  	//propiedades del scrollPane
 	  	scrollPane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	  	scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-	  	scrollPane2.setBounds(303, 400, 250, 137);
+	  	scrollPane2.setBounds(333, 400, 220, 137);
 	  	
 	  	
 		/*
@@ -492,6 +497,89 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		btnSiguiente.setBorder(null);
 		btnSiguiente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
+		//añadimos los listeners necesarios
+		btnSiguiente.addActionListener(this);
+		btnSiguiente.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseEntered(MouseEvent me) {
+				//cuando de pasa el ratón por encima
+				btnSiguiente.setBackground(new Color(128,128,128));
+				btnSiguiente.setForeground(new Color (255,255,255));
+			}
+			@Override
+			public void mouseExited(MouseEvent me) {
+				//Cuando el raton no esta por encima
+				btnSiguiente.setBackground(new Color (192, 192, 192));
+				btnSiguiente.setForeground(new Color (0,0,0));
+			}
+			
+			
+		});
+		
+		
+		
+		//creamos y añadimos un botón para mover los equipos seleccionados en la lista de la izquierda hacia la derecha
+		btnDerecha = new JButton ("--->");
+		contentPane.add(btnDerecha);
+		
+		//propiedades del JButton
+		btnDerecha.setBounds(280, 430, 30, 20);
+		btnDerecha.setForeground(new Color(0, 0, 0));
+		btnDerecha.setBackground(new Color(192, 192, 192));
+		btnDerecha.setFont(new Font("Arial Black", Font.BOLD, 12));
+		btnDerecha.setBorder(null);
+		btnDerecha.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		//añadimos los listeners necesarios
+		btnDerecha.addActionListener(this);
+		btnDerecha.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseEntered(MouseEvent me) {
+				//cuando de pasa el ratón por encima
+				btnDerecha.setBackground(new Color(128,128,128));
+				btnDerecha.setForeground(new Color (255,255,255));
+			}
+			@Override
+			public void mouseExited(MouseEvent me) {
+				//Cuando el raton no esta por encima
+				btnDerecha.setBackground(new Color (192, 192, 192));
+				btnDerecha.setForeground(new Color (0,0,0));
+			}
+			
+			
+		});
+		
+		
+		//creamos y añadimos un botón para mover los equipos seleccionados en la lista de la izquierda hacia la derecha
+		btnIzquierda = new JButton ("<---");
+		contentPane.add(btnIzquierda);
+		
+		//propiedades del JButton
+		btnIzquierda.setBounds(280, 480, 30, 20);
+		btnIzquierda.setForeground(new Color(0, 0, 0));
+		btnIzquierda.setBackground(new Color(192, 192, 192));
+		btnIzquierda.setFont(new Font("Arial Black", Font.BOLD, 12));
+		btnIzquierda.setBorder(null);
+		btnIzquierda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		//añadimos los listeners necesarios
+		btnIzquierda.addActionListener(this);
+		btnIzquierda.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseEntered(MouseEvent me) {
+				//cuando de pasa el ratón por encima
+				btnIzquierda.setBackground(new Color(128,128,128));
+				btnIzquierda.setForeground(new Color (255,255,255));
+			}
+			@Override
+			public void mouseExited(MouseEvent me) {
+				//Cuando el raton no esta por encima
+				btnIzquierda.setBackground(new Color (192, 192, 192));
+				btnIzquierda.setForeground(new Color (0,0,0));
+			}
+					
+					
+		});
 		
 		
 		//creamos un JLabel que indique los equipos
@@ -512,65 +600,10 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		//propiedades del JLabel
 		lblPanelEquipos2.setForeground(Color.BLACK);
 		lblPanelEquipos2.setFont(new Font("Arial", Font.BOLD, 15));
-		lblPanelEquipos2.setBounds(303, 378, 180, 18);
+		lblPanelEquipos2.setBounds(333, 378, 180, 18);
+			
 		
-		//añadimos los listeners necesarios
-		btnSiguiente.addActionListener(this);
-		btnSiguiente.addMouseListener(new MouseAdapter(){
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				//cuando se pulsa el ratón encima cerramos la ventana actual y volvemos a la venta de registro
-
-			
-			}
-			@Override
-			public void mouseEntered(MouseEvent me) {
-				//cuando de pasa el ratón por encima
-				btnSiguiente.setBackground(new Color(128,128,128));
-				btnSiguiente.setForeground(new Color (255,255,255));
-			}
-			@Override
-			public void mouseExited(MouseEvent me) {
-				//Cuando el raton no esta por encima
-				btnSiguiente.setBackground(new Color (192, 192, 192));
-				btnSiguiente.setForeground(new Color (0,0,0));
-			}
-			
-		});
-		
-		//Dependiendo los permisos del usuario introducido se le ocultarán o no los botones para editar las temporadas
-		if (VentanaRegistro.NewReg.getPermisos() != "Admin") {
-			btnAñadir.setVisible(false);
-			btnBorrar.setVisible(false);
-			txtTemporada.setVisible(false);
-			lblInfoTemporada.setVisible(false);
-			panelEquipos.setVisible(false);
-			panelEquiposSeleccionados.setVisible(false);
-			lblInfoEquipos.setVisible(false);
-			lblPanelEquipos.setVisible(false);
-			lblPanelEquipos2.setVisible(false);
-			scrollPane1.setVisible(false);
-			scrollPane2.setVisible(false);
-			
-			JlistTemporadas.setBounds(38,206,525,150);
-			btnSiguiente.setBounds(38,400,525,100);
-			}
-			else {
-			btnAñadir.setVisible(true);
-			btnBorrar.setVisible(true);
-			txtTemporada.setVisible(true);
-			lblInfoTemporada.setVisible(true);
-			panelEquipos.setVisible(true);
-			panelEquiposSeleccionados.setVisible(true);
-			lblInfoEquipos.setVisible(true);
-			lblPanelEquipos.setVisible(true);
-			lblPanelEquipos2.setVisible(true);
-			scrollPane1.setVisible(true);
-			scrollPane2.setVisible(true);
-			JlistTemporadas.setBounds(38, 206, 200, 137);
-			btnSiguiente.setBounds(290,300,269,45);
-			}
+		CambiarVentana(VentanaRegistro.NewReg);
 		
 	}
 	
@@ -643,6 +676,24 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				
 	    	}
 	    }
+	    
+	    else if (o == btnSiguiente) {
+	    	
+	    	
+	    }
+	    
+	    else if (o == btnDerecha) {
+	    	
+
+	    	MoverEquiposDerecha();
+	    	
+	    }
+	    
+	    else if (o == btnIzquierda) {
+	    	
+	    	MoverEquiposIzquierda();
+	    	
+	    }
 	}
 	
 	//Comprueba si existe la temporada en la lista de temporadas
@@ -702,6 +753,70 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			em.close();
 			emf.close();
 			
+		}
+		
+		public void CambiarVentana (Usuario u) {
+			
+			//Dependiendo los permisos del usuario introducido se le ocultarán o no los botones para editar las temporadas
+			if (!u.getPermisos().equals("Admin")) {
+				
+				btnAñadir.setVisible(false);
+				btnBorrar.setVisible(false);
+				btnDerecha.setVisible(false);
+				btnIzquierda.setVisible(false);
+				txtTemporada.setVisible(false);
+				lblInfoTemporada.setVisible(false);
+				JListEquipos.setVisible(false);
+				JListEquiposSeleccionados.setVisible(false);
+				lblInfoEquipos.setVisible(false);
+				lblPanelEquipos.setVisible(false);
+				lblPanelEquipos2.setVisible(false);
+				scrollPane1.setVisible(false);
+				scrollPane2.setVisible(false);
+				
+				JlistTemporadas.setBounds(38,206,525,150);
+				btnSiguiente.setBounds(38,400,525,100);
+				}
+			
+				else {
+				btnAñadir.setVisible(true);
+				btnBorrar.setVisible(true);
+				btnDerecha.setVisible(true);
+				btnIzquierda.setVisible(true);
+				txtTemporada.setVisible(true);
+				lblInfoTemporada.setVisible(true);
+				JListEquipos.setVisible(true);
+				JListEquiposSeleccionados.setVisible(true);
+				lblInfoEquipos.setVisible(true);
+				lblPanelEquipos.setVisible(true);
+				lblPanelEquipos2.setVisible(true);
+				scrollPane1.setVisible(true);
+				scrollPane2.setVisible(true);
+				JlistTemporadas.setBounds(38, 206, 200, 137);
+				btnSiguiente.setBounds(290,300,269,45);
+				}
+			
+		}
+		
+		public void MoverEquiposDerecha() {
+			
+			List<String> Lista = new ArrayList<>();
+			Lista = (JListEquipos.getSelectedValuesList());
+			for (String s : Lista) {
+				
+				dlmListaSeleccionados.addElement(s);
+				dlmListaEquipos.removeElement(s);				
+			}
+		}
+		public void MoverEquiposIzquierda() {
+			
+			List<String> Lista = new ArrayList<>();
+			Lista = (JListEquiposSeleccionados.getSelectedValuesList());
+			for (String s : Lista) {
+				
+				dlmListaEquipos.addElement(s);
+				dlmListaSeleccionados.removeElement(s);				
+			}
 		}
 }
 
