@@ -61,6 +61,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private JButton btnBorrar;
 	private JButton btnDerecha;
 	private JButton btnIzquierda;
+	private JButton btnUsuarios;
 	
 	private JScrollPane scrollPane1;
 	private JScrollPane scrollPane2;
@@ -103,46 +104,46 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaTemporadas.class.getResource("/img/Logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-
-		/*-----------------------------------------------BASE DE DATOS ORIENTADA A OBJETOS-------------------------------------------------------*/
-		
-		
-		// Se conecta a la base de datos orientada a objetos para coger los datos de las temporadas
-		// crea una base de datos de balonmano si todavia no existe
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-
-		//Recojo todas las temporadas de la base de datos y los añado a la listatemporadas
-		TypedQuery<Temporada> tq1 = em.createQuery("SELECT t FROM Temporada t", Temporada.class);
-		listaTemporadas = tq1.getResultList();
-		
-		//Cierro la conexión
-		em.close();
-		emf.close();
 		
 
 		/*-----------------------------------------------BASE DE DATOS MYSQL---------------------------------------------------------------------*/
 		
-		//me intento conectar a la base de datos mysql para coger los datos de los equipos
+		//me intento conectar a la base de datos mysql para coger los datos de temporadas y equipos de la base de datos mysql
 		try {
 			
-			
+			//me conecto a la base de datos como root
 			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
-			
-			// si se ha conectado correctamente
-			System.out.println("Conexión Correcta.");
-			
-			//creo el Statement 
+
+
+			//CONSULTA PARA COGER LAS TEMPORADAS
+			//creo el Statement para coger las temporadas que haya en la base de datos
 			Statement st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
 			//como es una query, creo un objeto ResultSet 
-			ResultSet rs = st.executeQuery("SELECT Nom_Equipo FROM balonmano.equipos;");
-			
-			List<Equipo> listaEquipos = new ArrayList<Equipo>();
+			ResultSet rs = st.executeQuery("SELECT * FROM balonmano.temporadas;");
+
+			listaTemporadas = new ArrayList<Temporada>();
 			
 			while (rs.next()) {
-				// creo un nuevo Alumno por cada registro
+				// creo una nueva tempoarada por cada registro
+				String Fecha = rs.getString("Núm_Temp");
+				String Estado = rs.getString("Estado");
+				Temporada t = new Temporada (Fecha,Estado);
+				//lo añado a la lista donde están todas las temporadas
+				listaTemporadas.add(t);
+			}
+			
+			//CONSULTA PARA COGER LOS EQUIPOS
+			//creo el Statement para coger los equipos
+			st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			//como es una query, creo un objeto ResultSet 
+			rs = st.executeQuery("SELECT Nom_Equipo FROM balonmano.equipos;");
+			
+			listaEquipos = new ArrayList<Equipo>();
+			
+			while (rs.next()) {
+				// creo un nuevo Equipo por cada registro
 				String Nombre = rs.getString("Nom_Equipo");
 				Equipo e = new Equipo (Nombre);
 				//lo añado a la lista donde están todos los equipos
@@ -155,6 +156,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				dlmListaEquipos.addElement(e.getNombre());
 			
 			}
+			
 			
 			//Cierro el resultset
 			rs.close();
@@ -171,14 +173,10 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			catch (SQLException e) {
 				// si se produce una excepción SQL
 				int errorcode = e.getErrorCode();
-				if (errorcode == 1062) {
-				 // si es un error de clave duplicada
-				 System.out.println("Error Clave Duplicada. Ya existe un registro con esa clave.");
-				}
-				else {
-				//si se produce cualquier otro error sql
+				
+				//si se produce cualquier error sql
 				 System.out.println("Error SQL Numero "+e.getErrorCode()+":"+e.getMessage());
-				}
+				
 				
 			}
 		
@@ -550,7 +548,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		});
 		
 		
-		//creamos y añadimos un botón para mover los equipos seleccionados en la lista de la izquierda hacia la derecha
+		//creamos y añadimos un botón para mover los equipos seleccionados en la lista de la derecha hacia la izquierda
 		btnIzquierda = new JButton ("<---");
 		contentPane.add(btnIzquierda);
 		
@@ -580,6 +578,38 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 					
 					
 		});
+		
+		//creamos y añadimos un botón para acceder a la administración de los usuarios
+		btnUsuarios = new JButton ("Administrar usuarios");
+		contentPane.add(btnUsuarios);
+		
+		//propiedades del JButton
+		btnUsuarios.setBounds(280, 480, 30, 20);
+		btnUsuarios.setForeground(new Color(0, 0, 0));
+		btnUsuarios.setBackground(new Color(192, 192, 192));
+		btnUsuarios.setFont(new Font("Arial Black", Font.BOLD, 12));
+		btnUsuarios.setBorder(null);
+		btnUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		//añadimos los listeners necesarios
+		btnUsuarios.addActionListener(this);
+		btnUsuarios.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseEntered(MouseEvent me) {
+				//cuando de pasa el ratón por encima
+				btnUsuarios.setBackground(new Color(128,128,128));
+				btnUsuarios.setForeground(new Color (255,255,255));
+			}
+			@Override
+			public void mouseExited(MouseEvent me) {
+				//Cuando el raton no esta por encima
+				btnUsuarios.setBackground(new Color (192, 192, 192));
+				btnUsuarios.setForeground(new Color (0,0,0));
+			}
+					
+					
+		});
+		
 		
 		
 		//creamos un JLabel que indique los equipos
@@ -748,22 +778,41 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		  	listaTemporadas.add(temporada);
 		  	dlmListaTemporadas.addElement(temporada.getFecha()+" - "+temporada.getEstado());
 		  	
-		  	// Se conecta a la base de datos
-			// crea una base de datos de balonmano si todavia no existe
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-			EntityManager em = emf.createEntityManager();
-			em.getTransaction().begin();
+		  //me intento conectar a la base de datos mysql para borrar la temporada seleccionada
+			try {
+				
+				//me conecto a la base de datos como root
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
-			//Añado la temporada a la base de datos orientada a objetos
-			em.persist(temporada);
+
+				//CONSULTA PARA COGER LAS TEMPORADAS
+				//creo el Statement para coger las temporadas que haya en la base de datos
+				int numero = Integer.parseInt(temporada.getFecha()) - 2000;
+				Statement st = conexion.createStatement();
+				st.executeUpdate("INSERT INTO balonmano.temporadas VALUES ( '"+numero+"','"+temporada.getFecha()+"','"+temporada.getEstado()+"');");
+				
+				//Cierro el statement 
+				st.close();
 			
-			//Guardo los cambios
-			em.getTransaction().commit();
+				// cierro la conexion
+				conexion.close();
+				
+				
+			}
+		
+				catch (SQLException e) {
+					// si se produce una excepción SQL
+					int errorcode = e.getErrorCode();
+					if (errorcode == 1062) {
+						// si es un error de clave duplicada
+						JOptionPane.showMessageDialog(this,"Error Clave Duplicada. Ya existe un registro con esa clave.","Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+					}
+					else {
+						//si se produce cualquier otro error sql
+						JOptionPane.showMessageDialog(this,"Error SQL Numero "+e.getErrorCode()+":"+e.getMessage(),"Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+					}
+			}
 			
-			//Cierro la conexión
-			em.close();
-			emf.close();
-		  	
 		}
 		
 		public void borrarTemporada (Temporada temporada ) {
@@ -771,22 +820,33 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			listaTemporadas.remove(temporada);
 			dlmListaTemporadas.remove(JlistTemporadas.getSelectedIndex());
 			
-			// Se conecta a la base de datos
-			// crea una base de datos de balonmano si todavia no existe
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-			EntityManager em = emf.createEntityManager();
-			em.getTransaction().begin();
+			//me intento conectar a la base de datos mysql para borrar la temporada seleccionada
+			try {
+				
+				//me conecto a la base de datos como root
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
-			//Borro la temporada seleccionada de la base de datos orientada a objetos
-			Query q1 = em.createQuery("DELETE FROM Temporada t WHERE t.fecha ='" +temporada.getFecha()+"'", Temporada.class);
-			q1.executeUpdate();			
-						
-			//Guardo los cambios
-			em.getTransaction().commit();
-						
-			//Cierro la conexión
-			em.close();
-			emf.close();
+
+				//CONSULTA PARA COGER LAS TEMPORADAS
+				//creo el Statement para coger las temporadas que haya en la base de datos
+				Statement st = conexion.createStatement();
+				st.executeUpdate("DELETE FROM balonmano.temporadas WHERE Núm_Temp='"+temporada.getFecha()+"';");
+				
+				//Cierro el statement 
+				st.close();
+			
+				// cierro la conexion
+				conexion.close();
+				
+				
+			}
+		
+				catch (SQLException e) {
+					//si se produce una excepción SQL
+					System.out.println("Error SQL Numero "+e.getErrorCode()+":"+e.getMessage());
+					
+					
+				}
 			
 		}
 		

@@ -13,7 +13,7 @@ public class Temporada {
 	
 	public Temporada () {
 		
-		fecha = "2023-2024";
+		fecha = "2023";
 		estado = "En progreso";
 		listaEquipos = new ArrayList<Equipo>();
 		
@@ -25,6 +25,14 @@ public class Temporada {
 		
 		fecha = fe;
 		estado = "En progreso";
+		listaEquipos = new ArrayList<Equipo>();
+		
+	}
+	
+	public Temporada (String fe, String E) {
+		
+		fecha = fe;
+		estado = E;
 		listaEquipos = new ArrayList<Equipo>();
 		
 	}
