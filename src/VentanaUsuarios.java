@@ -54,6 +54,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 	private JTextField txtPass;
 	private JLabel lblPermisos;
 	private JComboBox<String> cmbPermisos;
+	private List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 
 	/**
 	 * Launch the application.
@@ -413,7 +414,6 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 			String Pass = txtPass.getText();
 			String Permisos = (String) cmbPermisos.getSelectedItem();
 			Usuario Usuario = new Usuario (Nombre, Pass,Permisos);
-			List<String> listaUsuarios = new ArrayList<>();
 			
 			// Se conecta a la base de datos
 			// crea una base de datos si todavia no existe
@@ -421,24 +421,38 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 			EntityManager em = emf.createEntityManager();
 			
 			// ejecuto la consulta para coger los nombres de los usuarios que tenemos en la base de datos
-			TypedQuery<Usuario> tq1 = em.createQuery("SELECT u.nombre FROM Usuario u", Usuario.class);
-			List<Usuario> results = tq1.getResultList();
+			TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
+			listaUsuarios = tq1.getResultList();
 			
-			if (Usuario.getNombre().isEmpty() || Usuario.getContraseña().isEmpty() || Usuario.getPermisos().isEmpty()) {
+			if (txtNombre.getText().isEmpty() || txtPass.getText().isEmpty() || cmbPermisos.getSelectedIndex() <0) {
 
 				// si los campos están vacíos
 				JOptionPane.showMessageDialog(this, "Rellena todos los campos para crear un usuario.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
 				
 			}
 			
-			else if (listaUsuarios.contains(Usuario.getNombre())) {
+			else if (existeUsuario(Usuario.getNombre())) {
 				
+				// si existe un usuario con ese nombre
+				JOptionPane.showMessageDialog(this, "Ya existe un usuario con este nombre.","Error, inserción de usuario fallida", JOptionPane.ERROR_MESSAGE, null);
 				
 				
 			}
 			
 			else {
 				
+				em.getTransaction().begin();
+				em.persist(Usuario);
+				em.getTransaction().commit();
+				JOptionPane.showMessageDialog(this,"Usuario '"+Usuario.getNombre()+"' creado correctamente.","Creación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
+				
+				//si lo ha insertado correctamente en la base de datos
+				//lo inserto en la tabla
+				fila = new Vector<String>();
+				fila.add(Usuario.getNombre());
+				fila.add(Usuario.getPermisos());
+				fila.add("\n\n\n\n\n\n\n");
+				dtmTablaUsuarios.addRow(fila);
 				
 				
 			}
@@ -450,7 +464,59 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 
 		else if (o == btnActualizar) {
 
+			int filas = tablaUsuarios.getSelectedRow();
+			
+			if (filas == 0) { // compruebo que haya algun Usuario seleccionado en la tabla
+				// si no hay ningun elemento seleccionado
+				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
+
+			}
+			
+			else if (txtNombre.getText().isEmpty() || txtPass.getText().isEmpty() || cmbPermisos.getSelectedIndex() <0) {
+
+				// si los campos están vacíos
+				JOptionPane.showMessageDialog(this, "Rellena todos los campos para modificar un usuario.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
+				
+			}
+			
+			else {
+				
+				//Se crean variables que guardan los datos de los campos para poder manipular correctamente con estos
+				Query q;
+				String consulta;
+				String NombreAntes = (String) dtmTablaUsuarios.getValueAt(filas, 0);
+				String Nombre = txtNombre.getText();
+				String Pass = txtPass.getText();
+				String Permisos = (String) cmbPermisos.getSelectedItem();
+				
+				// Se conecta a la base de datos
+				// crea una base de datos si todavia no existe
+				EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
+				EntityManager em = emf.createEntityManager();
+				
+				em.getTransaction().begin();
+				
+				//lo actualizo en la base de datos
+				consulta = "UPDATE Usuario u SET Nombre = '"+Nombre+"', Contraseña = '"+Pass+"', Permisos = '"+Permisos+"', Correo ='"+Nombre+"@gmail.com' WHERE u.Nombre = '"+NombreAntes+"'";
+				q = em.createQuery(consulta);
+				q.executeUpdate();
+				//lo actualizo la tabla
+				dtmTablaUsuarios.setValueAt(Nombre, filas, 0);
+				dtmTablaUsuarios.setValueAt(Permisos,filas , 1);
+				
+				em.getTransaction().commit();
+				JOptionPane.showMessageDialog(this,"Usuario '"+NombreAntes+"' ha sido modificado correctamente.","Modificación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
+				
+				em.close();
+				emf.close();
+				
+			}
+			
+			
+			
+			
 		}
+		
 
 	}
 
@@ -471,4 +537,13 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 		((JComponent) o).setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	}
 
+	public boolean existeUsuario(String nombre) {
+        for (Usuario usuario : listaUsuarios) {
+            if (usuario.getNombre().equals(nombre)) {
+                return true;
+            }
+        }
+        return false;
+    }
+	
 }

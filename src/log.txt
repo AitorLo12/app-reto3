@@ -398,3 +398,41 @@ abr 23, 2024 10:13:19 A. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
 abr 23, 2024 10:14:14 A. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 11:46:43 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 11:55:58 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 11:59:46 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:01:32 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:11:01 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:12:12 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: hola ha iniciado sesion
+abr 23, 2024 12:13:17 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:16:36 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:46:02 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:48:55 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:49:55 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:53:08 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:54:43 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:55:25 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 12:57:19 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 1:00:31 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 1:32:46 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 1:47:27 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+abr 23, 2024 1:49:35 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion

@@ -7,6 +7,7 @@ public class Usuario {
 	private String Nombre;
 	private String Contraseña; 
 	private String Permisos;
+	private String Correo;
 	
 	
 	//Constructor por defecto
@@ -15,6 +16,7 @@ public class Usuario {
 		Nombre = "admin";
 		Contraseña = "1234";
 		Permisos = "Admin";
+		Correo = "admin@gmail.com";
 		
 	}
 	
@@ -25,14 +27,16 @@ public class Usuario {
 		Nombre = U;
 		Contraseña = C;
 		Permisos = P;
+		Correo = U+"@gmail.com";
 		
 	}
-		//O
+	
 	public Usuario (String U, String C) {
 		//Constructor de creación de usuarios desde el registro con permisos de usuario
 		Nombre = U;
 		Contraseña = C;
 		Permisos = "Usuario";
+		Correo = U+"gmail.com";
 		
 		
 	}
@@ -61,6 +65,13 @@ public class Usuario {
 
 	public void setPermisos(String permisos) {
 		Permisos = permisos;
+	}
+	public String getCorreo() {
+		return Correo;
+	}
+
+	public void setCorreo(String correo) {
+		Correo = correo;
 	}
 	
 }

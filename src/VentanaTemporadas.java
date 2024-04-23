@@ -126,7 +126,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			while (rs.next()) {
 				// creo una nueva tempoarada por cada registro
-				String Fecha = rs.getString("Núm_Temp");
+				String Fecha = rs.getString("Num_Temp");
 				String Estado = rs.getString("Estado");
 				Temporada t = new Temporada (Fecha,Estado);
 				//lo añado a la lista donde están todas las temporadas
@@ -837,7 +837,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				//CONSULTA PARA COGER LAS TEMPORADAS
 				//creo el Statement para coger las temporadas que haya en la base de datos
 				Statement st = conexion.createStatement();
-				st.executeUpdate("DELETE FROM balonmano.temporadas WHERE Núm_Temp='"+temporada.getFecha()+"';");
+				st.executeUpdate("DELETE FROM balonmano.temporadas WHERE Num_Temp='"+temporada.getFecha()+"';");
 				
 				//Cierro el statement 
 				st.close();
