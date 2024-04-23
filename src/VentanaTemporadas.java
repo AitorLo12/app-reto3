@@ -315,7 +315,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		
 		//creamos y añadimos un JLabel con información de como introducir los datos para añadir una temporada nueva
-		lblInfoTemporada = new JLabel ("Introduzca datos de la siguiente manera: \"Año - Año\".");
+		lblInfoTemporada = new JLabel ("Introduzca el año de comienzo de la temporada.");
 		contentPane.add(lblInfoTemporada);
 		
 		//propiedades del JLabel
@@ -332,7 +332,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		//propiedades del JLabel
 		lblLog.setForeground(new Color (0,0,0));
 		lblLog.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblLog.setBounds(10, 15, 616, 13);
+		lblLog.setBounds(10, 15, 450, 13);
 		lblLog.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		
 		//añadimos el texto que queremos a la JLabel
@@ -376,7 +376,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		JlistTemporadas.setBounds(38, 206, 200, 137);
 		JlistTemporadas.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	    contentPane.add(JlistTemporadas);
-		//Añadimos los listeners necesarios
 	
 	    
 		
@@ -584,10 +583,10 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		contentPane.add(btnUsuarios);
 		
 		//propiedades del JButton
-		btnUsuarios.setBounds(280, 480, 30, 20);
+		btnUsuarios.setBounds(475, 15, 150, 20);
 		btnUsuarios.setForeground(new Color(0, 0, 0));
 		btnUsuarios.setBackground(new Color(192, 192, 192));
-		btnUsuarios.setFont(new Font("Arial Black", Font.BOLD, 12));
+		btnUsuarios.setFont(new Font("Arial Black", Font.BOLD, 10));
 		btnUsuarios.setBorder(null);
 		btnUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
@@ -759,6 +758,14 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	MoverEquiposIzquierda();
 	    	
 	    }
+	    
+	    else if (o == btnUsuarios) {
+	    	
+	    	VentanaUsuarios vu = new VentanaUsuarios();
+	    	vu.setVisible(true);
+	    	dispose();
+	    	
+	    }
 	}
 	
 	//Comprueba si existe la temporada en la lista de temporadas
@@ -868,6 +875,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				lblPanelEquipos2.setVisible(false);
 				scrollPane1.setVisible(false);
 				scrollPane2.setVisible(false);
+				btnUsuarios.setVisible(false);
 				
 				JlistTemporadas.setBounds(38,206,525,150);
 				btnSiguiente.setBounds(38,400,525,100);
@@ -887,6 +895,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				lblPanelEquipos2.setVisible(true);
 				scrollPane1.setVisible(true);
 				scrollPane2.setVisible(true);
+				btnUsuarios.setVisible(true);
+				
 				JlistTemporadas.setBounds(38, 206, 200, 137);
 				btnSiguiente.setBounds(290,300,269,45);
 				}
