@@ -7,17 +7,18 @@ public class Equipo {
 	
 	private String nombre;
 	private String iniciales;
+	private int ID;
 	private int temporada;
 	private int puntos;
 	private int pjugados;
 	private int	pganados;
 	private int	pperdidos;
-	private int	ptsfavor;
-	private int	ptscontra;
+	private int	golesfavor;
+	private int	golescontra;
 	private String imagenEscudo;
 	private String imagenEstadio;
-	private String descripcion;
-	private List<Persona> listaJugadores;
+	private String equipacion;
+	private List<Jugador> listaJugadores;
 	
 	
 	//Constructor por defecto (placeholder)
@@ -26,37 +27,78 @@ public class Equipo {
 		
 		nombre = null;
 		iniciales = null;
+		ID = 0;
 		temporada = 0;
 		puntos = 0;
 		pjugados = 0;
 		pganados = 0;
 		pperdidos = 0;
-		ptsfavor = 0;
-		ptscontra = 0;
+		golesfavor = 0;
+		golescontra = 0;
 		imagenEscudo = null;
 		imagenEstadio = null;
-		descripcion = null;
+		equipacion = null;
 		listaJugadores = new ArrayList<>();
 	
 	}
 	
+	//Constructor copia
+	public Equipo(Equipo c) {
+		
+		nombre = c.nombre;
+		iniciales = c.iniciales;
+		ID = c.ID;
+		temporada = c.temporada;
+		puntos = c.puntos;
+		pjugados = c.pjugados;
+		pganados = c.pganados;
+		pperdidos = c.pperdidos;
+		golesfavor = c.golesfavor;
+		golescontra = c.golescontra;
+		imagenEscudo = c.imagenEscudo;
+		imagenEstadio = c.imagenEstadio;
+		equipacion = c.equipacion;
+		listaJugadores = c.listaJugadores;
+		
+	}
+	
 	//Contructores personalizados
-		//Constructor para guardar la información de cada equipo que creemos
-	public Equipo (String N,String I, int T, String icn,String E,String D,List<Persona> J) {
+	//Constructor para guardar la información de cada equipo que creemos
+	public Equipo (String N,String I,int id, int T, String icn,String E,String eq) {
 		
 		nombre = N;
 		iniciales = I;
+		ID = id;
 		temporada = T;
 		imagenEscudo = icn;
 		imagenEstadio = E;
-		descripcion = D;
+		equipacion = eq;
+		listaJugadores = new ArrayList<Jugador>();
+		puntos = 0;
+		pjugados = 0;
+		pganados = 0;
+		pperdidos = 0;
+		golesfavor = 0;
+		golescontra = 0;
+		
+	}
+	//Constructor para guardar la información de cada equipo que creemos
+	public Equipo (String N,String I,int id, int T, String icn,String E,String eq,List<Jugador> J) {
+		
+		nombre = N;
+		iniciales = I;
+		ID = id;
+		temporada = T;
+		imagenEscudo = icn;
+		imagenEstadio = E;
+		equipacion = eq;
 		listaJugadores = J;
 		puntos = 0;
 		pjugados = 0;
 		pganados = 0;
 		pperdidos = 0;
-		ptsfavor = 0;
-		ptscontra = 0;
+		golesfavor = 0;
+		golescontra = 0;
 		
 	}
 		
@@ -130,20 +172,20 @@ public class Equipo {
 		this.pperdidos = pperdidos;
 	}
 
-	public int getPtsfavor() {
-		return ptsfavor;
+	public int getGolesfavor() {
+		return golesfavor;
 	}
 
-	public void setPtsfavor(int ptsfavor) {
-		this.ptsfavor = ptsfavor;
+	public void setGolesfavor(int golesfavor) {
+		this.golesfavor = golesfavor;
 	}
 
-	public int getPtscontra() {
-		return ptscontra;
+	public int getGolescontra() {
+		return golescontra;
 	}
 
-	public void setPtscontra(int ptscontra) {
-		this.ptscontra = ptscontra;
+	public void setGolescontra(int golescontra) {
+		this.golescontra = golescontra;
 	}
 
 	public String getImagenEscudo() {
@@ -162,20 +204,28 @@ public class Equipo {
 		this.imagenEstadio = imagenEstadio;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public List<Persona> getListaJugadores() {
+	public List<Jugador> getListaJugadores() {
 		return listaJugadores;
 	}
 
-	public void setListaJugadores(List<Persona> listaJugadores) {
+	public void setListaJugadores(List<Jugador> listaJugadores) {
 		this.listaJugadores = listaJugadores;
 	}
 
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
+	}
+
+	public String getEquipacion() {
+		return equipacion;
+	}
+
+	public void setEquipacion(String equipacion) {
+		this.equipacion = equipacion;
+	}
+	
 }

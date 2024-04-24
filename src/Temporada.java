@@ -9,13 +9,13 @@ public class Temporada {
 
 	private String fecha;
 	private String estado;
-	private List<Equipo> listaEquipos;
+	private List<Equipo> listaEquiposT;
 	
 	public Temporada () {
 		
 		fecha = "2023";
 		estado = "En progreso";
-		listaEquipos = new ArrayList<Equipo>();
+		listaEquiposT = new ArrayList<Equipo>();
 		
 		
 	}
@@ -25,7 +25,7 @@ public class Temporada {
 		
 		fecha = fe;
 		estado = "En progreso";
-		listaEquipos = new ArrayList<Equipo>();
+		listaEquiposT = new ArrayList<Equipo>();
 		
 	}
 	
@@ -33,19 +33,20 @@ public class Temporada {
 		
 		fecha = fe;
 		estado = E;
-		listaEquipos = new ArrayList<Equipo>();
+		listaEquiposT = new ArrayList<Equipo>();
 		
 	}
 	
 	public Temporada (String fe,Equipo A,Equipo B, Equipo C,Equipo D,Equipo E, Equipo F){
 		fecha = fe;
 		estado = "En progreso";
-		listaEquipos.add(A);
-		listaEquipos.add(B);
-		listaEquipos.add(C);
-		listaEquipos.add(D);
-		listaEquipos.add(E);
-		listaEquipos.add(F);	
+		listaEquiposT = new ArrayList<Equipo>();
+		listaEquiposT.add(A);
+		listaEquiposT.add(B);
+		listaEquiposT.add(C);
+		listaEquiposT.add(D);
+		listaEquiposT.add(E);
+		listaEquiposT.add(F);	
 	}
 
 	public String getFecha() {
@@ -65,11 +66,11 @@ public class Temporada {
 	}
 
 	public List<Equipo> getListaEquipos() {
-		return listaEquipos;
+		return listaEquiposT;
 	}
 
 	public void setListaEquipos(List<Equipo> listaEquipos) {
-		this.listaEquipos = listaEquipos;
+		this.listaEquiposT = listaEquipos;
 	}
 	
 	

@@ -125,12 +125,17 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			listaTemporadas = new ArrayList<Temporada>();
 			
 			while (rs.next()) {
+				
+				if (!rs.getString("Num_Temp").equals("0")) {
+					
 				// creo una nueva tempoarada por cada registro
 				String Fecha = rs.getString("Num_Temp");
 				String Estado = rs.getString("Estado");
 				Temporada t = new Temporada (Fecha,Estado);
+				
 				//lo añado a la lista donde están todas las temporadas
 				listaTemporadas.add(t);
+				}
 			}
 			
 			//CONSULTA PARA COGER LOS EQUIPOS
@@ -138,21 +143,30 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
 			//como es una query, creo un objeto ResultSet 
-			rs = st.executeQuery("SELECT Nom_Equipo FROM balonmano.equipos;");
+			rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+0+";");
 			
 			listaEquipos = new ArrayList<Equipo>();
 			
+			
 			while (rs.next()) {
-				// creo un nuevo Equipo por cada registro
+				//creo variables de todos los resultados por cada equipo para poder manipular los datos mejor
 				String Nombre = rs.getString("Nom_Equipo");
-				Equipo e = new Equipo (Nombre);
+				String Iniciales = Nombre.substring(0, Math.min(Nombre.length(), 3));
+				int ID = Integer.parseInt(rs.getString("ID_Equipo"));
+				int Temporada = Integer.parseInt(rs.getString("Num_Temp"));
+				String Escudo = rs.getString("Escudo");
+				String Estadio = rs.getString("Estadio");
+				String Equipacion = rs.getString("Equipacion");
+				
+				// creo un nuevo Equipo por cada registro
+				Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion);
 				//lo añado a la lista donde están todos los equipos
 				
 				listaEquipos.add(e);
 			}
 			
 			for (Equipo e : listaEquipos) {
-			
+				
 				dlmListaEquipos.addElement(e.getNombre());
 			
 			}
@@ -166,6 +180,29 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 			// cierro la conexion
 			conexion.close();
+			
+			
+			//comprobamos si la lista está vacía o si no existe y si lo está añadimos una temporada por defecto
+			if (listaTemporadas.isEmpty()) {
+				
+				//inicializamos tanto la lista donde guardamos las temporadas como el defaultlistmodel
+				listaTemporadas = new ArrayList<Temporada>();
+				dlmListaTemporadas = new DefaultListModel<String>();
+				
+				//creamos una temporada por defecto y la añadimos a la lista
+				Temporada t = new Temporada ("2023",listaEquipos.get(0),listaEquipos.get(1),listaEquipos.get(2),listaEquipos.get(3),listaEquipos.get(4),listaEquipos.get(5));
+				añadirTemporada(t);
+				
+			}
+			
+			else {
+			//recorremos la lista y vamos añadiendo todas las temporadas al defaultlistmodel
+			for (Temporada t : listaTemporadas) {
+				
+				dlmListaTemporadas.addElement(t.getFecha()+" - "+t.getEstado());
+				
+			}
+			}
 			
 			
 		}
@@ -182,29 +219,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		
 		/*-------------------------------------------------------------------------------------------------------------------------------------*/
-		
-		//comprobamos si la lista está vacía o si no existe y si lo está añadimos una temporada por defecto
-		if (listaTemporadas.isEmpty()) {
-			
-			
-			//inicializamos tanto la lista donde guardamos las temporadas como el defaultlistmodel
-			listaTemporadas = new ArrayList<Temporada>();
-			dlmListaTemporadas = new DefaultListModel<String>();
-			
-			//creamos una temporada por defecto y la añadimos a la lista
-			Temporada t = new Temporada ();
-			añadirTemporada(t);
-			
-		}
-		
-		else {
-		//recorremos la lista y vamos añadiendo todas las temporadas al defaultlistmodel
-		for (Temporada t : listaTemporadas) {
-			
-			dlmListaTemporadas.addElement(t.getFecha()+" - "+t.getEstado());
-			
-		}
-		}
+
 
 		//ubicación y tamaño de la ventana
 		setBounds(100, 100, 650, 600);
@@ -315,7 +330,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		
 		//creamos y añadimos un JLabel con información de como introducir los datos para añadir una temporada nueva
-		lblInfoTemporada = new JLabel ("Introduzca el año de comienzo de la temporada.");
+		lblInfoTemporada = new JLabel ("Introduzca el año de comienzo de la temporada. "
+				+ "(MAX: 8 números)");
 		contentPane.add(lblInfoTemporada);
 		
 		//propiedades del JLabel
@@ -664,7 +680,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	//creamos una variable donde almacenamos la fecha introducida en el textfield
 	    	String fechanueva = txtTemporada.getText();
 	    	
-	    	if (txtTemporada.getText().isEmpty()) {
+	    	if (txtTemporada.getText().isEmpty() || txtTemporada.getText().equals("0")) {
 	    		
 	    		JOptionPane.showMessageDialog(null, "No ha introducido ninguna fecha.", "Campos vacíos", JOptionPane.ERROR_MESSAGE);
 	    		
@@ -685,18 +701,16 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	else {		//si no existe ninguna temporada con esa fecha
 	    		
 	    		List<Equipo> Seleccionados = new ArrayList<>();
-	    		for (int i = 0; i < dlmListaTemporadas.size(); i++) {
+	    		for (int i = 0; i < dlmListaSeleccionados.size(); i++) {
 	    		    
-	    		    String nombre = dlmListaTemporadas.getElementAt(i);
+	    		    String nombre = dlmListaSeleccionados.getElementAt(i);
 	    		    
 	    		    for (Equipo equipo : listaEquipos) {
 	    		    	
-	    		    
 	    		        if (equipo.getNombre().equals(nombre)) {
-	    		        	
-	    		        }
-	    		            Seleccionados.add(equipo);
-	    		            break;
+	    		        	 Seleccionados.add(equipo);
+	    		        	 break;
+	    		        }     
 	    		            
 	    		}
 	    		            
@@ -707,11 +721,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		
 	    		//la añadimos a la lista y al defaultlistmodel
 	    		añadirTemporada(t);
-	    		System.out.println(t.getFecha());
-	    		System.out.println(t.getEstado());
 	    		for (Equipo eq : t.getListaEquipos()) {
 	    			
-	    			System.out.println(eq.getNombre());
 	    			
 	    		}
 	    		
@@ -731,7 +742,11 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		
 	    	}
 	    	
-	    	
+	    	else if (listaTemporadas.get(index).getEstado().equals("Finalizada")) {
+	    		
+	    		JOptionPane.showMessageDialog(null, "No se puede eliminar una temporada finalizada.", "No se ha podido eliminar", JOptionPane.ERROR_MESSAGE);
+	    		
+	    	}
 	    	
 	    	else {
 	    		
@@ -782,8 +797,11 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		//Añade la temporada a la lista de temporadas
 		public void añadirTemporada (Temporada temporada) {
+			
+
 		  	listaTemporadas.add(temporada);
 		  	dlmListaTemporadas.addElement(temporada.getFecha()+" - "+temporada.getEstado());
+			
 		  	
 		  //me intento conectar a la base de datos mysql para borrar la temporada seleccionada
 			try {
@@ -794,16 +812,24 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 
 				//CONSULTA PARA COGER LAS TEMPORADAS
 				//creo el Statement para coger las temporadas que haya en la base de datos
-				int numero = Integer.parseInt(temporada.getFecha()) - 2000;
 				Statement st = conexion.createStatement();
-				st.executeUpdate("INSERT INTO balonmano.temporadas VALUES ( '"+numero+"','"+temporada.getFecha()+"','"+temporada.getEstado()+"');");
+				st.executeUpdate("INSERT INTO balonmano.temporadas VALUES ("+temporada.getFecha()+",'"+temporada.getEstado()+"');");
+				
+				for (Equipo e : temporada.getListaEquipos()) { //por cada equipo, añado un nuevo equipo a la base de datos	
+					
+					e.setTemporada(Integer.parseInt(temporada.getFecha()));
+					e.setID(Integer.parseInt(e.getID()+""+e.getTemporada()));
+					
+				st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+e.getID()+","+e.getTemporada()+",'"+e.getNombre()+"',"+e.getPuntos()+",'Himno "+e.getNombre()+"','"+e.getEquipacion()+"','"+e.getImagenEstadio()+"',"+e.getGolesfavor()+","+e.getGolescontra()+",'"+e.getImagenEscudo()+"');");
+				st.executeUpdate("INSERT INTO balonmano.participaciones VALUES("+e.getTemporada()+","+e.getID()+");");
+				
+				}
 				
 				//Cierro el statement 
 				st.close();
 			
 				// cierro la conexion
 				conexion.close();
-				
 				
 			}
 		
@@ -837,6 +863,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				//CONSULTA PARA COGER LAS TEMPORADAS
 				//creo el Statement para coger las temporadas que haya en la base de datos
 				Statement st = conexion.createStatement();
+				
+
+				st.executeUpdate("DELETE FROM balonmano.participaciones WHERE Num_Temp='"+temporada.getFecha()+"';");
+				
+				st.executeUpdate("DELETE FROM balonmano.equipos WHERE Num_Temp='"+temporada.getFecha()+"';");
+				
 				st.executeUpdate("DELETE FROM balonmano.temporadas WHERE Num_Temp='"+temporada.getFecha()+"';");
 				
 				//Cierro el statement 
