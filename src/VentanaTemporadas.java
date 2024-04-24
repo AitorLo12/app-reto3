@@ -22,6 +22,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -131,12 +132,44 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				// creo una nueva tempoarada por cada registro
 				String Fecha = rs.getString("Num_Temp");
 				String Estado = rs.getString("Estado");
-				Temporada t = new Temporada (Fecha,Estado);
+				List<Equipo> listaEquiposTemporadas = new ArrayList<Equipo>();
+				rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+rs.getString("Num_Temp")+";");
+				
+				while (rs.next()) {
+					
+					//creo variables de todos los resultados por cada equipo para poder manipular los datos mejor
+					String Nombre = rs.getString("Nom_Equipo");
+					String Iniciales = Nombre.substring(0, Math.min(Nombre.length(), 3));
+					int ID = Integer.parseInt(rs.getString("ID_Equipo"));
+					int Temporada = Integer.parseInt(rs.getString("Num_Temp"));
+					String Escudo = rs.getString("Escudo");
+					String Estadio = rs.getString("Estadio");
+					String Equipacion = rs.getString("Equipacion");
+					
+					// creo un nuevo Equipo por cada registro
+					Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion);
+					listaEquiposTemporadas.add(e);
+					
+				}
+				
+				
+				Temporada t = new Temporada (Fecha,Estado,listaEquiposTemporadas.get(0),listaEquiposTemporadas.get(1),listaEquiposTemporadas.get(2),listaEquiposTemporadas.get(3),listaEquiposTemporadas.get(4),listaEquiposTemporadas.get(5));
 				
 				//lo añado a la lista donde están todas las temporadas
+				
+				
 				listaTemporadas.add(t);
+				
+
+
+				
+				
 				}
+				
+				
+				
 			}
+			
 			
 			//CONSULTA PARA COGER LOS EQUIPOS
 			//creo el Statement para coger los equipos
@@ -170,7 +203,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				dlmListaEquipos.addElement(e.getNombre());
 			
 			}
-			
 			
 			//Cierro el resultset
 			rs.close();
@@ -339,7 +371,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		lblInfoTemporada.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblInfoTemporada.setBounds(290, 242, 359, 18);
 		
-		
+	
 		
 		//creamos y añadimos un JLabel para mostrar con qué usuario ha iniciado sesión
 		lblLog = new JLabel("");
@@ -396,18 +428,19 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    
 		
 		//creamos y añadimos un botón para volver al inicio
-		btnAtras = new JButton("ATRAS");
+		btnAtras = new JButton();
 		contentPane.add(btnAtras);
 		
 		//propiedades del JButton
 		btnAtras.setBackground(null);
 		btnAtras.setBorder(null);
 		btnAtras.setBounds(576, 517, 30, 30);
+        btnAtras.setIcon(new ImageIcon("src/img/atras.png"));
+		btnAtras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		//añadimos los listeners necesarios
 		btnAtras.addFocusListener(this);
 		btnAtras.addActionListener(this);
-		btnAtras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAtras.addMouseListener(new MouseAdapter(){
 			
 			@Override
@@ -758,6 +791,19 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    
 	    else if (o == btnSiguiente) {
 	    	
+	    	if (JlistTemporadas.getSelectedIndex() == -1)	{			
+				JOptionPane.showMessageDialog(this, "Error al seleccionar temporada. No hay ninguna temporada seleccionada.", "Ninguna temporada seleccionada", JOptionPane.ERROR_MESSAGE);
+			}	
+	    	
+	    	else {
+
+		    	int index = JlistTemporadas.getSelectedIndex();
+				temporadaSeleccionada = listaTemporadas.get(index);				
+				VentanaInicio vi = new VentanaInicio();
+				vi.setVisible(true);
+				dispose();	
+	    		
+	    	}
 	    	
 	    }
 	    

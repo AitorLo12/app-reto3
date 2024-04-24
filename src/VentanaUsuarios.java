@@ -19,6 +19,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -160,6 +161,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 		btnAtras.setBorder(null);
 		btnAtras.setBounds(576, 517, 30, 30);
 		btnAtras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAtras.setIcon(new ImageIcon("src/img/atras.png"));
 
 		// añadimos los listeners necesarios
 		btnAtras.addActionListener(this);

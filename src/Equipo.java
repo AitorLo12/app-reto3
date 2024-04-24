@@ -63,7 +63,7 @@ public class Equipo {
 	}
 	
 	//Contructores personalizados
-	//Constructor para guardar la información de cada equipo que creemos
+	//Constructor para guardar la información de cada equipo que creemos cogiendo los datos desde la base de datos
 	public Equipo (String N,String I,int id, int T, String icn,String E,String eq) {
 		
 		nombre = N;

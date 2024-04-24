@@ -48,6 +48,18 @@ public class Temporada {
 		listaEquiposT.add(E);
 		listaEquiposT.add(F);	
 	}
+	
+	public Temporada (String fe,String es, Equipo A,Equipo B, Equipo C,Equipo D,Equipo E, Equipo F){
+		fecha = fe;
+		estado = es;
+		listaEquiposT = new ArrayList<Equipo>();
+		listaEquiposT.add(A);
+		listaEquiposT.add(B);
+		listaEquiposT.add(C);
+		listaEquiposT.add(D);
+		listaEquiposT.add(E);
+		listaEquiposT.add(F);	
+	}
 
 	public String getFecha() {
 		return fecha;
