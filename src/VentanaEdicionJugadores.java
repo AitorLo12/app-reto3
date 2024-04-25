@@ -36,7 +36,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class VentanaUsuarios extends JFrame implements ActionListener, FocusListener {
+public class VentanaEdicionJugadores extends JFrame implements ActionListener, FocusListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -64,7 +64,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaUsuarios frame = new VentanaUsuarios();
+					VentanaEdicionJugadores frame = new VentanaEdicionJugadores();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -76,7 +76,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 	/**
 	 * Create the frame.
 	 */
-	public VentanaUsuarios() {
+	public VentanaEdicionJugadores() {
 
 		// establecemos título e icono de la aplicación
 		setTitle("Real Federación EspaÑola de Balonmano");
@@ -278,7 +278,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 		});
 
 		// creamos y añadimos un Jlabel para indicar el textfield de nombre de usuario
-		lblNombre = new JLabel("Nombre de Usuario:");
+		lblNombre = new JLabel("Nombre de Usuario");
 		contentPane.add(lblNombre);
 
 		// propiedades del JLabel
@@ -299,8 +299,8 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 		// Añadimos los listeners necesarios
 		txtNombre.addFocusListener(this);
 		
-		// creamos y añadimos un Jlabel para indicar el textfield de la contraseña
-		lblPass = new JLabel("Contraseña:");
+		// creamos y añadimos un Jlabel para indicar el textfield de nombre de usuario
+		lblPass = new JLabel("Contraseña");
 		contentPane.add(lblPass);
 
 		// propiedades del JLabel
@@ -321,7 +321,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 		// Añadimos los listeners necesarios
 		txtPass.addFocusListener(this);
 
-		// creamos y añadimos un Jlabel para indicar la JCombobox de los permisos
+		// creamos y añadimos un Jlabel para indicar el textfield de nombre de usuario
 		lblPermisos = new JLabel("Permisos");
 		contentPane.add(lblPermisos);
 

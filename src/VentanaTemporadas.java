@@ -63,6 +63,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private JButton btnDerecha;
 	private JButton btnIzquierda;
 	private JButton btnUsuarios;
+	private JButton btnEquipos;
+	private JButton btnJugadores;
 	
 	private JScrollPane scrollPane1;
 	private JScrollPane scrollPane2;
@@ -649,6 +651,69 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		});
 		
 		
+		//creamos y añadimos un botón para acceder a la administración de los usuarios
+		btnEquipos = new JButton ("Administrar equipos");
+		contentPane.add(btnEquipos);
+				
+		//propiedades del JButton
+		btnEquipos.setBounds(475, 55, 150, 20);
+		btnEquipos.setForeground(new Color(0, 0, 0));
+		btnEquipos.setBackground(new Color(192, 192, 192));
+		btnEquipos.setFont(new Font("Arial Black", Font.BOLD, 10));
+		btnEquipos.setBorder(null);
+		btnEquipos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			
+		//añadimos los listeners necesarios
+		btnEquipos.addActionListener(this);
+		btnEquipos.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseEntered(MouseEvent me) {
+				//cuando de pasa el ratón por encima
+				btnEquipos.setBackground(new Color(128,128,128));
+				btnEquipos.setForeground(new Color (255,255,255));
+			}
+			@Override
+			public void mouseExited(MouseEvent me) {
+				//Cuando el raton no esta por encima
+				btnEquipos.setBackground(new Color (192, 192, 192));
+				btnEquipos.setForeground(new Color (0,0,0));
+			}
+					
+					
+		});
+				
+		
+		
+		//creamos y añadimos un botón para acceder a la administración de los usuarios
+		btnJugadores = new JButton ("Administrar jugadores");
+		contentPane.add(btnJugadores);
+		
+		//propiedades del JButton
+		btnJugadores.setBounds(475, 95, 150, 20);
+		btnJugadores.setForeground(new Color(0, 0, 0));
+		btnJugadores.setBackground(new Color(192, 192, 192));
+		btnJugadores.setFont(new Font("Arial Black", Font.BOLD, 10));
+		btnJugadores.setBorder(null);
+		btnJugadores.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				
+		//añadimos los listeners necesarios
+		btnJugadores.addActionListener(this);
+		btnJugadores.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseEntered(MouseEvent me) {
+				//cuando de pasa el ratón por encima
+				btnJugadores.setBackground(new Color(128,128,128));
+				btnJugadores.setForeground(new Color (255,255,255));
+			}
+			@Override
+			public void mouseExited(MouseEvent me) {
+				//Cuando el raton no esta por encima
+				btnJugadores.setBackground(new Color (192, 192, 192));
+				btnJugadores.setForeground(new Color (0,0,0));
+			}
+							
+							
+		});
 		
 		//creamos un JLabel que indique los equipos
 		lblPanelEquipos = new JLabel("Equipos disponibles.");
@@ -698,7 +763,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	public void actionPerformed(ActionEvent e) {
 	    Object o = e.getSource();
 	    
-	    if (o == btnAñadir) { //al pulsar el boton añadir
+	    if (o == btnAñadir || o == txtTemporada) { //al pulsar el boton añadir
 	    	
 	    	//creamos una variable donde almacenamos la fecha introducida en el textfield
 	    	String fechanueva = txtTemporada.getText();
@@ -744,10 +809,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		
 	    		//la añadimos a la lista y al defaultlistmodel
 	    		añadirTemporada(t);
-	    		for (Equipo eq : t.getListaEquipos()) {
-	    			
-	    			
-	    		}
 	    		
 	    		JOptionPane.showMessageDialog(null, "Temporada creada con éxito.", "Temporada añadida", JOptionPane.INFORMATION_MESSAGE,null);
 				
@@ -814,6 +875,22 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	
 	    	VentanaUsuarios vu = new VentanaUsuarios();
 	    	vu.setVisible(true);
+	    	dispose();
+	    	
+	    }
+	    
+	    else if (o == btnEquipos) {
+	    	
+	    	VentanaEdicionEquipos ve = new VentanaEdicionEquipos();
+	    	ve.setVisible(true);
+	    	dispose();
+	    	
+	    }
+	    
+	    else if (o == btnJugadores) {
+	    	
+	    	VentanaEdicionJugadores vj = new VentanaEdicionJugadores();
+	    	vj.setVisible(true);
 	    	dispose();
 	    	
 	    }
