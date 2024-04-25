@@ -32,6 +32,7 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
     private JPanel contentPane;
     private JLabel lblEquipos;
     private JLabel lblLog;
+    private JLabel lblEquipo;
     private JButton btnAtras;
     JLabel lblTemporada;
     JButton btnEquipo;
@@ -123,33 +124,30 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
         	
         	
 
-            //creamos y añadimos un botón para acceder a la página de el primer equipo
+            //creamos y añadimos un botón para poner la imagen del equipo
             btnEquipo = new JButton("");
             contentPane.add(btnEquipo);
-            btnEquipo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
             //propiedades del JButton
             btnEquipo.setBounds(68 + (equipoIndex % 3) * 200, 175 + (equipoIndex / 3) * 150, 100, 100);
             btnEquipo.setBackground(null);
-            btnEquipo.setIcon(new ImageIcon(("src/"+equipo.getImagenEscudo())));
+            btnEquipo.setBorder(null);
+            btnEquipo.setIcon(new ImageIcon(("src/img/"+equipo.getImagenEscudo())));
+        
+            
+            
+            //creamos y añadimos un JLabel para indicar el nombre del equipo
+            lblEquipo = new JLabel(equipo.getNombre());
+            contentPane.add(lblEquipo);
+        
+            //propiedades del JLabel
+            lblEquipo.setBounds(68 + (equipoIndex % 3) * 200, 250 + (equipoIndex/3) * 150, 100, 100);
+            lblEquipo.setForeground(new Color(0,0,0));
+            lblEquipo.setFont(new Font("Arial", Font.BOLD, 15));
+            lblEquipo.setHorizontalAlignment(SwingConstants.CENTER);
+            
             equipoIndex++;
-
-            //añadimos los listeners necesarios
-            btnEquipo.addActionListener(this);
-            btnEquipo.addMouseListener(new MouseAdapter() {
-            	
-            	@Override
-                public void mouseEntered(MouseEvent me) {
-                    //cuando de pasa el ratón por encima
-                    btnEquipo.setBackground(new Color(212, 212, 212));
-                }
-
-                @Override
-                public void mouseExited(MouseEvent me) {
-                    //Cuando el raton no esta por encima
-                    btnEquipo.setBackground(null);
-                }
-            });
+            
         }
         
         

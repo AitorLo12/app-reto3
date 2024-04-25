@@ -133,24 +133,29 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				String Fecha = rs.getString("Num_Temp");
 				String Estado = rs.getString("Estado");
 				List<Equipo> listaEquiposTemporadas = new ArrayList<Equipo>();
-				rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+rs.getString("Num_Temp")+";");
+				Statement st2 = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs2 = st2.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+rs.getString("Num_Temp")+";");
 				
-				while (rs.next()) {
+				
+				while (rs2.next()) {
 					
 					//creo variables de todos los resultados por cada equipo para poder manipular los datos mejor
-					String Nombre = rs.getString("Nom_Equipo");
+					String Nombre = rs2.getString("Nom_Equipo");
 					String Iniciales = Nombre.substring(0, Math.min(Nombre.length(), 3));
-					int ID = Integer.parseInt(rs.getString("ID_Equipo"));
-					int Temporada = Integer.parseInt(rs.getString("Num_Temp"));
-					String Escudo = rs.getString("Escudo");
-					String Estadio = rs.getString("Estadio");
-					String Equipacion = rs.getString("Equipacion");
+					int ID = Integer.parseInt(rs2.getString("ID_Equipo"));
+					int Temporada = Integer.parseInt(rs2.getString("Num_Temp"));
+					String Escudo = rs2.getString("Escudo");
+					String Estadio = rs2.getString("Estadio");
+					String Equipacion = rs2.getString("Equipacion");
 					
 					// creo un nuevo Equipo por cada registro
 					Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion);
 					listaEquiposTemporadas.add(e);
 					
 				}
+
+				rs2.close();
+				st2.close();
 				
 				
 				Temporada t = new Temporada (Fecha,Estado,listaEquiposTemporadas.get(0),listaEquiposTemporadas.get(1),listaEquiposTemporadas.get(2),listaEquiposTemporadas.get(3),listaEquiposTemporadas.get(4),listaEquiposTemporadas.get(5));
@@ -362,8 +367,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		
 		//creamos y añadimos un JLabel con información de como introducir los datos para añadir una temporada nueva
-		lblInfoTemporada = new JLabel ("Introduzca el año de comienzo de la temporada. "
-				+ "(MAX: 8 números)");
+		lblInfoTemporada = new JLabel ("Introduzca el año de comienzo de la temporada.");
 		contentPane.add(lblInfoTemporada);
 		
 		//propiedades del JLabel
@@ -385,22 +389,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		//añadimos el texto que queremos a la JLabel
 		lblLog.setText("Has iniciado sesión como: " + VentanaRegistro.getNombre() + ".");
+
 		
-		//creamos y añadimos un JLabel para indicar el estado de la temporada seleccionada
-		lblEstado = new JLabel();
-		contentPane.add(lblEstado);
-		
-		//propiedades del JLabel
-		lblEstado.setForeground(new Color(0, 0, 0));
-		lblEstado.setFont(new Font("Arial", Font.PLAIN, 14));
-		lblEstado.setBounds(250, 100, 616, 13);
-		lblEstado.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-		
-		//Ponemos el texto del estado de la temporada seleccionada
-		if (temporadaSeleccionada != null) {
-			
-		lblEstado.setText("Estado: "+temporadaSeleccionada.getEstado());
-		}
 		
 		//creamos y añadimos un JTextFiel donde ponemos la temporada que queremos introducir
 		txtTemporada = new JTextField();
@@ -713,9 +703,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	//creamos una variable donde almacenamos la fecha introducida en el textfield
 	    	String fechanueva = txtTemporada.getText();
 	    	
-	    	if (txtTemporada.getText().isEmpty() || txtTemporada.getText().equals("0")) {
+	    	if (txtTemporada.getText().isEmpty() || txtTemporada.getText().equals("0") || txtTemporada.getText().length() > 8) {
 	    		
-	    		JOptionPane.showMessageDialog(null, "No ha introducido ninguna fecha.", "Campos vacíos", JOptionPane.ERROR_MESSAGE);
+	    		JOptionPane.showMessageDialog(null, "No ha introducido ninguna fecha o ha introducido una fecha inválida.", "Fecha incorrecta", JOptionPane.ERROR_MESSAGE);
 	    		
 	    	}
 	    	

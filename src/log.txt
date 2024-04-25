@@ -582,3 +582,5 @@ abr 24, 2024 8:36:30 P. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
 abr 24, 2024 8:37:27 P. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
+abr 25, 2024 1:28:35 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
