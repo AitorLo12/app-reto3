@@ -144,6 +144,15 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 		tablaUsuarios = new JTable(dtmTablaUsuarios);
 		tablaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		contentPane.add(tablaUsuarios);
+		
+		//añado el Mouselistener para que ponga los datos seleccionados en los campos de texto
+		tablaUsuarios.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				cogerDatos();
+			}
+
+		});
 
 		// creo un scroll pane y le añado la tabla
 		JScrollPane scrollPane = new JScrollPane(tablaUsuarios);
@@ -397,6 +406,14 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 
 				// guardo los cambios de la base de datos
 				em.getTransaction().commit();
+				
+				//Ponemos los campos vacíos
+				txtNombre.setText("");
+				txtPass.setText("");
+				cmbPermisos.setSelectedIndex(-1);
+				
+				em.close();
+				emf.close();
 			}
 
 		}
@@ -417,14 +434,6 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 			String Permisos = (String) cmbPermisos.getSelectedItem();
 			Usuario Usuario = new Usuario (Nombre, Pass,Permisos);
 			
-			// Se conecta a la base de datos
-			// crea una base de datos si todavia no existe
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-			EntityManager em = emf.createEntityManager();
-			
-			// ejecuto la consulta para coger los nombres de los usuarios que tenemos en la base de datos
-			TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
-			listaUsuarios = tq1.getResultList();
 			
 			if (txtNombre.getText().isEmpty() || txtPass.getText().isEmpty() || cmbPermisos.getSelectedIndex() <0) {
 
@@ -443,6 +452,15 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 			
 			else {
 				
+				// Se conecta a la base de datos
+				// crea una base de datos si todavia no existe
+				EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
+				EntityManager em = emf.createEntityManager();
+				
+				// ejecuto la consulta para coger los nombres de los usuarios que tenemos en la base de datos
+				TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
+				listaUsuarios = tq1.getResultList();
+				
 				em.getTransaction().begin();
 				em.persist(Usuario);
 				em.getTransaction().commit();
@@ -456,12 +474,18 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 				fila.add("\n\n\n\n\n\n\n");
 				dtmTablaUsuarios.addRow(fila);
 				
+
+				em.close();
+				emf.close();
+				
+
+				//Ponemos los campos vacíos
+				txtNombre.setText("");
+				txtPass.setText("");
+				cmbPermisos.setSelectedIndex(-1);
 				
 			}
-			
-			em.close();
-			emf.close();
-
+		
 		}
 
 		else if (o == btnActualizar) {
@@ -512,6 +536,11 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 				em.close();
 				emf.close();
 				
+				//Ponemos los campos vacíos
+				txtNombre.setText("");
+				txtPass.setText("");
+				cmbPermisos.setSelectedIndex(-1);
+				
 			}
 			
 			
@@ -547,5 +576,37 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
         }
         return false;
     }
+	
+	public void cogerDatos() {
+		// sacamos en que fila se ha hecho click
+		int seleccion = tablaUsuarios.getSelectedRow();
+		// si se ha hecho click en una fila
+		if (seleccion >= 0) {
+			//cogemos el dato de permisos para ponerlo en la combobox de permisos
+			int Permisos = -1;
+			
+			if(dtmTablaUsuarios.getValueAt(seleccion, 1).equals("Usuario")) {
+				
+				Permisos = 0;
+				
+			}
+			else if (dtmTablaUsuarios.getValueAt(seleccion, 1).equals("Admin")) {
+				
+				Permisos = 1;
+				
+			}
+			
+			else {
+				
+				Permisos = 2;
+				
+			}
+			
+			// Establecemos los valores de los txt
+			txtNombre.setText((String) dtmTablaUsuarios.getValueAt(seleccion, 0));
+			txtPass.setText("");
+			cmbPermisos.setSelectedIndex(Permisos);
+		}
+	}
 	
 }

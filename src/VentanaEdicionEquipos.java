@@ -188,6 +188,16 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 		tablaEquipos = new JTable(dtmTablaEquipos);
 		tablaEquipos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		contentPane.add(tablaEquipos);
+		
+		//añado el Mouselistener para que ponga los datos seleccionados en los campos de texto
+		tablaEquipos.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				cogerDatos();
+			}
+
+		});
 
 		// creo un scroll pane y le añado la tabla
 		JScrollPane scrollPane = new JScrollPane(tablaEquipos);
@@ -423,50 +433,67 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 		Object o = e.getSource();
 		if (o == btnBorrar) {
 
-			// compruebo que haya algun Usuario seleccionado en la tabla
+			// compruebo que haya algun equipo seleccionado en la tabla
 			int filas = tablaEquipos.getSelectedRowCount();
-			if (filas == 0) {
+			if (filas <= 0) {
 				// si no hay ningun elemento seleccionado
 				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
 
 			}
 
-			else if (dtmTablaEquipos.getValueAt(tablaEquipos.getSelectedRow(), 1).equals("Admin")) {
-
-				// si el elemento seleccionado es un administrador
-				JOptionPane.showMessageDialog(this, "No se puede eliminar a un administrador.","Error al eliminar al usuario", JOptionPane.ERROR_MESSAGE, null);
-
-			}
-
 			else {
-				// Se conecta a la base de datos
-				// crea una base de datos si todavia no existe
-				EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-				EntityManager em = emf.createEntityManager();
-				em.getTransaction().begin();
-				// creo una consulta
-				Query q;
-				String consulta;
-				String nombre;
+				
+				//me intento conectar a la base de datos mysql para borrar el equipo seleccionado
+				try {
+					
+					int fila = tablaEquipos.getSelectedRow();
+					String Nombre = (String) dtmTablaEquipos.getValueAt(fila, 0);
+					//me conecto a la base de datos como root
+					Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
-				// obtengo la posicion a borrar en la tabla
-				int borrar = tablaEquipos.getSelectedRow();
 
-				// lo borro de la base de datos
-				nombre = (String) dtmTablaEquipos.getValueAt(borrar, 0);
-				consulta = "DELETE FROM Usuario u WHERE u.Nombre = '" + nombre + "'";
-				q = em.createQuery(consulta);
-				q.executeUpdate();
+					//CONSULTA PARA ELIMINAR EL EQUIPO SELECCIONADO
+					//creo el Statement para eliminar el equipo que esté seleccionado en la tabla
+					Statement st = conexion.createStatement();
+					
+					st.executeUpdate("DELETE FROM balonmano.equipos WHERE Num_Temp=0 AND Nom_Equipo = '"+Nombre+"';");
+					
+					//Cierro el statement 
+					st.close();
+				
+					// cierro la conexion
+					conexion.close();
+					
+					// lo borro de la tabla
+					dtmTablaEquipos.removeRow(fila);
 
-				// lo borro de la tabla
-				dtmTablaEquipos.removeRow(borrar);
+					// informamos del borrado
+					JOptionPane.showMessageDialog(this, "Se ha eliminado el equipo correctamente", "Equipo borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
 
-				// informamos del borrado
-				JOptionPane.showMessageDialog(this, "Se ha eliminado el usuario correctamente",
-						"Usuario borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
 
-				// guardo los cambios de la base de datos
-				em.getTransaction().commit();
+					// Establecemos los valores de los txt a campos vacíos
+					txtNombre.setText("");
+					txtHimno.setText("");
+					txtEquipacion.setText("");
+					txtEstadio.setText("");
+					
+					
+				}
+			
+					catch (SQLException er) {
+						// si se produce una excepción SQL
+						int errorcode = er.getErrorCode();
+						if (errorcode == 1062) {
+							// si es un error de clave duplicada
+							JOptionPane.showMessageDialog(this,"Error Clave Duplicada. Ya existe un registro con esa clave.","Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+						else {
+							//si se produce cualquier otro error sql
+							JOptionPane.showMessageDialog(this,"Error SQL Numero "+er.getErrorCode()+":"+er.getMessage(),"Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+				}
+
+				
 			}
 
 		}
@@ -492,7 +519,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 			
 			else if (existeEquipo(dtmTablaEquipos,txtNombre.getText(),0)) {
 				
-				// si existe un usuario con ese nombre
+				// si existe algun equipo con ese nombre
 				JOptionPane.showMessageDialog(this, "Ya existe un equipo con este nombre.","Error, inserción de equipo fallida", JOptionPane.ERROR_MESSAGE, null);
 				
 			}
@@ -504,30 +531,59 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 				String Himno = txtHimno.getText();
 				String Equipacion = txtEquipacion.getText();
 				String Estadio  = txtEstadio.getText();
-				//String Escudo =
+				String Escudo = null;
 				
-				//me intento conectar a la base de datos mysql para borrar la temporada seleccionada
+				//me intento conectar a la base de datos mysql para añadir el equipo deseado
 				try {
 					
 					//me conecto a la base de datos como root
 					Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
 
-					//CONSULTA PARA COGER LAS TEMPORADAS
-					//creo el Statement para coger las temporadas que haya en la base de datos
+					//CONSULTA PARA AÑADIR UN EQUIPO NUEVO
+					//creo el Statement para coger la id mas grande que haya en la base de datos para crear una nueva id
 					Statement st = conexion.createStatement();
-					ResultSet rs = st.executeQuery("SELECT MAX(ID_Equipo) balonmano.equipos WHERE Num_Temp=0;");
-					System.out.println(rs.getString("MAX(ID_Equipo)"));
+					ResultSet rs = st.executeQuery("SELECT MAX(ID_Equipo) FROM balonmano.equipos WHERE Num_Temp=0;");
+					int id = 0;
 					
-					//"INSERT INTO balonmano.equipos VALUES ("+e.getID()+","+e.getTemporada()+",'"+e.getNombre()+"',"+e.getPuntos()+",'Himno "+e.getNombre()+"','"+e.getEquipacion()+"','"+e.getImagenEstadio()+"',"+e.getGolesfavor()+","+e.getGolescontra()+",'"+e.getImagenEscudo()+"');
+					while (rs.next()) {
+						
+						id = Integer.parseInt(rs.getString("MAX(ID_Equipo)"));
+						id = id + 1;
 					
+					}
 					
+					st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+id+",0,'"+Nombre+"',0,'"+Himno+"','"+Equipacion+"','"+Estadio+"',0,0,'"+Escudo+"');");
+					
+					//Cierro el resultset
+					rs.close();
 					
 					//Cierro el statement 
 					st.close();
 				
 					// cierro la conexion
 					conexion.close();
+					
+
+					//si lo ha insertado correctamente en la base de datos
+					//lo inserto en la tabla
+					fila = new Vector<String>();
+					fila.add(Nombre);
+					fila.add(Himno);
+					fila.add(Equipacion);
+					fila.add(Estadio);
+					fila.add(Escudo);
+					fila.add("\n\n\n\n\n\n\n");
+					dtmTablaEquipos.addRow(fila);
+					
+					JOptionPane.showMessageDialog(this,"Equipo '"+Nombre+"' creado correctamente.","Creación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
+					
+
+					// Establecemos los valores de los txt a campos vacíos
+					txtNombre.setText("");
+					txtHimno.setText("");
+					txtEquipacion.setText("");
+					txtEstadio.setText("");
 					
 				}
 			
@@ -545,20 +601,6 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 				}
 				
 				
-				//si lo ha insertado correctamente en la base de datos
-				//lo inserto en la tabla
-				fila = new Vector<String>();
-				fila.add(Nombre);
-				fila.add(Himno);
-				fila.add(Equipacion);
-				fila.add(Estadio);
-				fila.add("");
-				fila.add("\n\n\n\n\n\n\n");
-				dtmTablaEquipos.addRow(fila);
-				
-				JOptionPane.showMessageDialog(this,"Equipo '"+Nombre+"' creado correctamente.","Creación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
-				
-				
 				
 			}
 
@@ -568,7 +610,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 
 			int filas = tablaEquipos.getSelectedRow();
 			
-			if (filas == 0) { // compruebo que haya algun Usuario seleccionado en la tabla
+			if (filas <= 0) { // compruebo que haya algun Equipo seleccionado en la tabla
 				// si no hay ningun elemento seleccionado
 				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
 
@@ -589,8 +631,56 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 				String Himno = txtHimno.getText();
 				String Equipacion = txtEquipacion.getText();
 				String Estadio  = txtEstadio.getText();
-				//String Escudo =
+				String Escudo = null;
 				
+				//me intento conectar a la base de datos mysql para actualizar el equipo deseado
+				try {
+					
+					//me conecto a la base de datos como root
+					Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
+
+
+					//CONSULTA PARA ACTUALIZAR EL EQUIPO SELECCIONADO
+					//creo el Statement para actualizar todos los datos que podemos introducir en el equipo seleccionado
+					Statement st = conexion.createStatement();
+					st.executeUpdate("UPDATE balonmano.equipos SET Nom_Equipo='"+Nombre+"',Himno='"+Himno+"',Equipacion='"+Equipacion+"',Estadio='"+Estadio+"',Escudo='"+Escudo+"' WHERE Nom_Equipo='"+NombreAntes+"' AND Num_Temp = 0;");
+					
+					//Cierro el statement 
+					st.close();
+				
+					// cierro la conexion
+					conexion.close();
+					
+					JOptionPane.showMessageDialog(this,"Equipo '"+NombreAntes+"' actualizado correctamente.","Actualización exitosa",JOptionPane.INFORMATION_MESSAGE,null);
+					
+					//lo actualizamos en la tabla
+					dtmTablaEquipos.setValueAt(Nombre, filas, 0);
+					dtmTablaEquipos.setValueAt(Himno, filas, 1);
+					dtmTablaEquipos.setValueAt(Equipacion, filas, 2);
+					dtmTablaEquipos.setValueAt(Estadio, filas, 3);
+					dtmTablaEquipos.setValueAt(Escudo, filas, 4);
+					
+
+					// Establecemos los valores de los txt a campos vacíos
+					txtNombre.setText("");
+					txtHimno.setText("");
+					txtEquipacion.setText("");
+					txtEstadio.setText("");
+					
+				}
+			
+					catch (SQLException er) {
+						// si se produce una excepción SQL
+						int errorcode = er.getErrorCode();
+						if (errorcode == 1062) {
+							// si es un error de clave duplicada
+							JOptionPane.showMessageDialog(this,"Error Clave Duplicada. Ya existe un registro con esa clave.","Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+						else {
+							//si se produce cualquier otro error sql
+							JOptionPane.showMessageDialog(this,"Error SQL Numero "+er.getErrorCode()+":"+er.getMessage(),"Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+				}
 				
 			}
 			
@@ -631,5 +721,17 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
         }
         return false; // No se encontró el string en la columna
     }
-	
+    
+    public void cogerDatos() {
+		// sacamos en que fila se ha hecho click
+		int seleccion = tablaEquipos.getSelectedRow();
+		// si se ha hecho click en una fila
+		if (seleccion >= 0) {
+			// Establecemos los valores de los txt
+			txtNombre.setText((String) dtmTablaEquipos.getValueAt(seleccion, 0));
+			txtHimno.setText((String) dtmTablaEquipos.getValueAt(seleccion, 1));
+			txtEquipacion.setText((String) dtmTablaEquipos.getValueAt(seleccion, 2));
+			txtEstadio.setText((String) dtmTablaEquipos.getValueAt(seleccion, 3));
+		}
+	}
 }
