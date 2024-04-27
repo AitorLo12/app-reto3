@@ -190,7 +190,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
+		// creamos y añadimos un botón para borrar el usuario seleccionado en la tabla
 		btnBorrar = new JButton("Borrar usuario");
 		contentPane.add(btnBorrar);
 
@@ -222,7 +222,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
+		// creamos y añadimos un botón para añadir un usuario con los datos introducidos
 		btnAñadir = new JButton("Añadir usuario");
 		contentPane.add(btnAñadir);
 
@@ -254,7 +254,7 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
+		// creamos y añadimos un botón para actualizar el equipo con los nuevos datos
 		btnActualizar = new JButton("Actualizar usuario");
 		contentPane.add(btnActualizar);
 

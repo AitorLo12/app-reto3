@@ -10,6 +10,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -19,6 +24,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,21 +47,23 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblTitulo;
-	private Vector<Vector<String>> datosTablaUsuarios = new Vector<Vector<String>>();
+	private Vector<Vector<String>> datosTablaJugadores = new Vector<Vector<String>>();
 	private Vector<String> fila;
-	private JTable tablaUsuarios;
-	private DefaultTableModel dtmTablaUsuarios;
+	private JTable tablaJugadores;
+	private DefaultTableModel dtmTablaJugadores;
 	private JButton btnAtras;
 	private JButton btnBorrar;
 	private JButton btnAñadir;
 	private JButton btnActualizar;
 	private JLabel lblNombre;
 	private JTextField txtNombre;
-	private JLabel lblPass;
-	private JTextField txtPass;
-	private JLabel lblPermisos;
-	private JComboBox<String> cmbPermisos;
-	private List<Usuario> listaUsuarios = new ArrayList<Usuario>();
+	private JLabel lblLocalidad;
+	private JTextField txtLocalidad;
+	private JLabel lblAñoNac;
+	private JTextField txtAñoNac;
+	private JLabel lblPosicion;
+	private JTextField txtPosicion;
+	private JLabel lblEquipo;
 
 	/**
 	 * Launch the application.
@@ -64,7 +72,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaEdicionJugadores frame = new VentanaEdicionJugadores();
+					VentanaEdicionEquipos frame = new VentanaEdicionEquipos();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -84,7 +92,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// ubicación y tamaño de la ventana
-		setBounds(100, 100, 650, 600);
+		setBounds(100, 100, 1000, 600);
 		setLocationRelativeTo(null);
 
 		// quita el redimensionado de la ventana
@@ -95,59 +103,109 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		// creamos y añadimos un Jlabel para el título de Usuarios
-		lblTitulo = new JLabel("Usuarios");
+		// creamos y añadimos un Jlabel para el título de Jugadores
+		lblTitulo = new JLabel("Jugadores");
 		contentPane.add(lblTitulo);
 
 		// propiedades del JLabel
 		lblTitulo.setForeground(new Color(0, 0, 0));
 		lblTitulo.setFont(new Font("Arial Black", Font.BOLD, 30));
-		lblTitulo.setBounds(241, 20, 154, 30);
+		lblTitulo.setBounds(402, 20, 180, 30);
 		lblTitulo.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
-		// Se conecta a la base de datos
-		// crea una base de datos si todavia no existe
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-		EntityManager em = emf.createEntityManager();
+/*-----------------------------------------------BASE DE DATOS MYSQL---------------------------------------------------------------------*/
+		
+		//me intento conectar a la base de datos mysql para coger los datos de los jugadores y de los equipos de la base de datos mysql
+		try {
+			
+			//me conecto a la base de datos como root
+			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
-		// si se ha conectado correctamente
-		Vector<String> columnas = new Vector<String>();
-		columnas.add("Usuarios");
-		columnas.add("Permisos");
 
-		// creo el vector para los datos de la tabla
-		datosTablaUsuarios = new Vector<Vector<String>>();
+			//CONSULTA PARA COGER LOS DATOS DE LOS JUGADORES
+			//creo el Statement para coger las temporadas que haya en la base de datos
+			Statement st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			//como es una query, creo un objeto ResultSet 
+			ResultSet rs = st.executeQuery("SELECT * FROM balonmano.jugadores WHERE ID_Equipo<1000;");
 
-		// ejecuto la consulta
-		TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
-		List<Usuario> results = tq1.getResultList();
+			// si se ha conectado correctamente
+			Vector<String> columnas = new Vector<String>();
+			columnas.add("Nombre");
+			columnas.add("Localidad");
+			columnas.add("Año Nacimiento");
+			columnas.add("Posición");
+			columnas.add("Equipo");
+			columnas.add("Capitán");
+			columnas.add("Imagen");
+			
 
-		for (Usuario u : results) {
+			// creo el vector para los datos de la tabla
+			datosTablaJugadores = new Vector<Vector<String>>();
+			
+			while (rs.next()) {
+				
+				fila = new Vector<String>();
+				fila.add(rs.getString("Nombre"));
+				fila.add(rs.getString("Localidad"));
+				fila.add(rs.getString("Año_Nacimiento"));
+				fila.add(rs.getString("Posicion"));
+				fila.add(rs.getString("ID_Equipo"));
+				fila.add(rs.getString("Capitan"));
+				fila.add(rs.getString("Imagen"));
+				fila.add("\n\n\n\n\n\n\n");
+				datosTablaJugadores.add(fila);
+				
+				
+				}
 
-			fila = new Vector<String>();
-			fila.add(u.getNombre());
-			fila.add(u.getPermisos());
-			fila.add("\n\n\n\n\n\n\n");
-			datosTablaUsuarios.add(fila);
-		}
-
-		// Cierro el EntityManager
-		em.close();
-
-		// Cierro el EntityManagerFactory
-		emf.close();
-
-		// creo el DefaultTableModel de la JTable
-		dtmTablaUsuarios = new DefaultTableModel(datosTablaUsuarios, columnas);
-
+			// creo el DefaultTableModel de la JTable
+			dtmTablaJugadores= new DefaultTableModel(datosTablaJugadores, columnas);
+				
+			
+			
+			//Cierro el resultset
+			rs.close();
+			
+			//Cierro el statement 
+			st.close();
+		
+			// cierro la conexion
+			conexion.close();
+			
+			
+			}
+			
+			catch (SQLException e) {
+				// si se produce una excepción SQL
+				int errorcode = e.getErrorCode();
+				
+				//si se produce cualquier error sql
+				 System.out.println("Error SQL Numero "+e.getErrorCode()+":"+e.getMessage());
+				
+				
+			}
+		
+		
+		/*-------------------------------------------------------------------------------------------------------------------------------------*/
 		// creo una tabla y le añado el modelo por defecto
-		tablaUsuarios = new JTable(dtmTablaUsuarios);
-		tablaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		contentPane.add(tablaUsuarios);
+		tablaJugadores = new JTable(dtmTablaJugadores);
+		tablaJugadores.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		contentPane.add(tablaJugadores);
+		
+		//añado el Mouselistener para que ponga los datos seleccionados en los campos de texto
+		tablaJugadores.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				cogerDatos();
+			}
+
+		});
 
 		// creo un scroll pane y le añado la tabla
-		JScrollPane scrollPane = new JScrollPane(tablaUsuarios);
-		scrollPane.setBounds(25, 100, 583, 400);
+		JScrollPane scrollPane = new JScrollPane(tablaJugadores);
+		scrollPane.setBounds(25, 100, 940, 400);
 
 		// añado el scroll pane al panel principal
 		contentPane.add(scrollPane);
@@ -159,7 +217,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		// propiedades del JButton
 		btnAtras.setBackground(null);
 		btnAtras.setBorder(null);
-		btnAtras.setBounds(576, 517, 30, 30);
+		btnAtras.setBounds(935, 511, 30, 30);
 		btnAtras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAtras.setIcon(new ImageIcon("src/img/atras.png"));
 
@@ -181,16 +239,16 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
-		btnBorrar = new JButton("Borrar usuario");
+		// creamos y añadimos un botón para borrar el jugador seleccionado en la tabla
+		btnBorrar = new JButton("Borrar equipo");
 		contentPane.add(btnBorrar);
 
 		// propiedades del JButton
 		btnBorrar.setBackground(new Color(192, 192, 192));
 		btnBorrar.setForeground(new Color(0, 0, 0));
 		btnBorrar.setBorder(null);
-		btnBorrar.setBounds(250, 510, 140, 30);
-		btnBorrar.setFont(new Font("Arial Black", Font.BOLD, 12));
+		btnBorrar.setBounds(392, 510, 200, 30);
+		btnBorrar.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnBorrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		// añadimos los listeners necesarios
@@ -213,16 +271,16 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
-		btnAñadir = new JButton("Añadir usuario");
+		// creamos y añadimos un botón para añadir un jugador con los datos introducidos
+		btnAñadir = new JButton("Añadir equipo");
 		contentPane.add(btnAñadir);
 
 		// propiedades del JButton
 		btnAñadir.setBackground(new Color(192, 192, 192));
 		btnAñadir.setForeground(new Color(0, 0, 0));
 		btnAñadir.setBorder(null);
-		btnAñadir.setBounds(100, 510, 140, 30);
-		btnAñadir.setFont(new Font("Arial Black", Font.BOLD, 12));
+		btnAñadir.setBounds(172, 510, 200, 30);
+		btnAñadir.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnAñadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		// añadimos los listeners necesarios
@@ -245,16 +303,16 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
-		btnActualizar = new JButton("Actualizar usuario");
+		// creamos y añadimos un botón para actualizar el jugador con los nuevos datos
+		btnActualizar = new JButton("Actualizar equipo");
 		contentPane.add(btnActualizar);
 
 		// propiedades del JButton
 		btnActualizar.setBackground(new Color(192, 192, 192));
 		btnActualizar.setForeground(new Color(0, 0, 0));
 		btnActualizar.setBorder(null);
-		btnActualizar.setBounds(400, 510, 140, 30);
-		btnActualizar.setFont(new Font("Arial Black", Font.BOLD, 12));
+		btnActualizar.setBounds(612, 510, 200, 30);
+		btnActualizar.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnActualizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		// añadimos los listeners necesarios
@@ -277,75 +335,101 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 		});
 
-		// creamos y añadimos un Jlabel para indicar el textfield de nombre de usuario
-		lblNombre = new JLabel("Nombre de Usuario");
+		// creamos y añadimos un Jlabel para indicar el textfield de nombre del jugador
+		lblNombre = new JLabel("Nombre:");
 		contentPane.add(lblNombre);
 
 		// propiedades del JLabel
 		lblNombre.setForeground(new Color(0, 0, 0));
 		lblNombre.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblNombre.setBounds(25, 65, 120, 20);
+		lblNombre.setBounds(25, 65, 50, 20);
 		lblNombre.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
-		// creamos y añadimos un JTextField donde pondremos el nombre de usuario nuevo que queramos introducir
+		// creamos y añadimos un JTextField donde pondremos el nombre del jugador que queramos introducir
 		txtNombre = new JTextField();
 		contentPane.add(txtNombre);
 
 		// propiedades del JTextField
-		txtNombre.setBounds(140, 65, 100, 20);
+		txtNombre.setBounds(75, 65, 100, 20);
 		txtNombre.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		txtNombre.setColumns(10);
 
 		// Añadimos los listeners necesarios
 		txtNombre.addFocusListener(this);
 		
-		// creamos y añadimos un Jlabel para indicar el textfield de nombre de usuario
-		lblPass = new JLabel("Contraseña");
-		contentPane.add(lblPass);
+		// creamos y añadimos un Jlabel para indicar el textfield del himno
+		lblLocalidad = new JLabel("Localidad:");
+		contentPane.add(lblLocalidad);
 
 		// propiedades del JLabel
-		lblPass.setForeground(new Color(0, 0, 0));
-		lblPass.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblPass.setBounds(250, 65, 80, 20);
-		lblPass.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		lblLocalidad.setForeground(new Color(0, 0, 0));
+		lblLocalidad.setFont(new Font("Arial Black", Font.PLAIN, 10));
+		lblLocalidad.setBounds(185, 65, 65, 20);
+		lblLocalidad.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
-		// creamos y añadimos un JTextField donde pondremos la contraseña nueva que queramos introducir
-		txtPass = new JTextField();
-		contentPane.add(txtPass);
+		// creamos y añadimos un JTextField donde pondremos el himno que queramos introducir
+		txtLocalidad= new JTextField();
+		contentPane.add(txtLocalidad);
 
 		// propiedades del JTextField
-		txtPass.setBounds(320, 65, 100, 20);
-		txtPass.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		txtPass.setColumns(10);
+		txtLocalidad.setBounds(250, 65, 100, 20);
+		txtLocalidad.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		txtLocalidad.setColumns(10);
 
 		// Añadimos los listeners necesarios
-		txtPass.addFocusListener(this);
+		txtLocalidad.addFocusListener(this);
 
-		// creamos y añadimos un Jlabel para indicar el textfield de nombre de usuario
-		lblPermisos = new JLabel("Permisos");
-		contentPane.add(lblPermisos);
+		// creamos y añadimos un Jlabel para indicar el textfield de la equipacion
+		lblAñoNac = new JLabel("Año Nacimiento:");
+		contentPane.add(lblAñoNac);
 
 		// propiedades del JLabel
-		lblPermisos.setForeground(new Color(0, 0, 0));
-		lblPermisos.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblPermisos.setBounds(430, 65, 70, 20);
-		lblPermisos.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		lblAñoNac.setForeground(new Color(0, 0, 0));
+		lblAñoNac.setFont(new Font("Arial Black", Font.PLAIN, 10));
+		lblAñoNac.setBounds(350, 65, 95, 20);
+		lblAñoNac.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		
-		// creamos y añadimos una JComboBox nueva que nos mostrara los distintos permisos que queramos introducir
-		// creo una variable donde guardo las opciones de la combobox
-		String[] Permisos = {"Usuario","Admin","Arbitro"};
-		cmbPermisos = new JComboBox<>(Permisos);
-		contentPane.add(cmbPermisos);
+
+		// creamos y añadimos un JTextField donde pondremos la equipacion que queramos introducir
+		txtAñoNac = new JTextField();
+		contentPane.add(txtAñoNac);
+
+		// propiedades del JTextField
+		txtAñoNac.setBounds(445, 65, 100, 20);
+		txtAñoNac.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		txtAñoNac.setColumns(10);
 		
-		//propiedades de la JComboBox
-		cmbPermisos.setBounds(490,65,100,20);
-		cmbPermisos.setBorder(new TitledBorder(null,"",TitledBorder.LEADING,TitledBorder.TOP,null,null));
-		cmbPermisos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		cmbPermisos.setBackground(new Color(192,192,192));
-		cmbPermisos.setSelectedIndex(-1);
+		// creamos y añadimos un Jlabel para indicar el textfield del estadio
+		lblPosicion = new JLabel("Posición:");
+		contentPane.add(lblPosicion);
+
+		// propiedades del JLabel
+		lblPosicion.setForeground(new Color(0, 0, 0));
+		lblPosicion.setFont(new Font("Arial Black", Font.PLAIN, 10));
+		lblPosicion.setBounds(545, 65, 55, 20);
+		lblPosicion.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+				
+
+		// creamos y añadimos un JTextField donde pondremos el estadio que queramos introducir
+		txtPosicion = new JTextField();
+		contentPane.add(txtPosicion);
+
+		// propiedades del JTextField
+		txtPosicion.setBounds(600, 65, 100, 20);
+		txtPosicion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		txtPosicion.setColumns(10);
 		
-		//añadimos los listeners necesarios
-		cmbPermisos.addFocusListener(this);
+		// creamos y añadimos un Jlabel para indicar el textfield de la equipacion
+		lblEquipo = new JLabel("Equipo:");
+		contentPane.add(lblEquipo);
+
+		// propiedades del JLabel
+		lblEquipo.setForeground(new Color(0, 0, 0));
+		lblEquipo.setFont(new Font("Arial Black", Font.PLAIN, 10));
+		lblEquipo.setBounds(700, 65, 45, 20);
+		lblEquipo.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+
+
 	}
 
 	@Override
@@ -353,50 +437,67 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		Object o = e.getSource();
 		if (o == btnBorrar) {
 
-			// compruebo que haya algun Usuario seleccionado en la tabla
-			int filas = tablaUsuarios.getSelectedRowCount();
-			if (filas == 0) {
+			// compruebo que haya algun jugador seleccionado en la tabla
+			int filas = tablaJugadores.getSelectedRowCount();
+			if (filas <= 0) {
 				// si no hay ningun elemento seleccionado
 				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
 
 			}
 
-			else if (dtmTablaUsuarios.getValueAt(tablaUsuarios.getSelectedRow(), 1).equals("Admin")) {
-
-				// si el elemento seleccionado es un administrador
-				JOptionPane.showMessageDialog(this, "No se puede eliminar a un administrador.","Error al eliminar al usuario", JOptionPane.ERROR_MESSAGE, null);
-
-			}
-
 			else {
-				// Se conecta a la base de datos
-				// crea una base de datos si todavia no existe
-				EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-				EntityManager em = emf.createEntityManager();
-				em.getTransaction().begin();
-				// creo una consulta
-				Query q;
-				String consulta;
-				String nombre;
+				
+				//me intento conectar a la base de datos mysql para borrar el jugador seleccionado
+				try {
+					
+					int fila = tablaJugadores.getSelectedRow();
+					String Nombre = (String) dtmTablaJugadores.getValueAt(fila, 0);
+					//me conecto a la base de datos como root
+					Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
-				// obtengo la posicion a borrar en la tabla
-				int borrar = tablaUsuarios.getSelectedRow();
 
-				// lo borro de la base de datos
-				nombre = (String) dtmTablaUsuarios.getValueAt(borrar, 0);
-				consulta = "DELETE FROM Usuario u WHERE u.Nombre = '" + nombre + "'";
-				q = em.createQuery(consulta);
-				q.executeUpdate();
+					//CONSULTA PARA ELIMINAR EL JUGADOR SELECCIONADO
+					//creo el Statement para eliminar el jugador que esté seleccionado en la tabla
+					Statement st = conexion.createStatement();
+					
+					st.executeUpdate("DELETE FROM balonmano.equipos WHERE Num_Temp=0 AND Nom_Equipo = '"+Nombre+"';");
+					
+					//Cierro el statement 
+					st.close();
+				
+					// cierro la conexion
+					conexion.close();
+					
+					// lo borro de la tabla
+					dtmTablaJugadores.removeRow(fila);
 
-				// lo borro de la tabla
-				dtmTablaUsuarios.removeRow(borrar);
+					// informamos del borrado
+					JOptionPane.showMessageDialog(this, "Se ha eliminado el jugador correctamente", "Jugador borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
 
-				// informamos del borrado
-				JOptionPane.showMessageDialog(this, "Se ha eliminado el usuario correctamente",
-						"Usuario borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
 
-				// guardo los cambios de la base de datos
-				em.getTransaction().commit();
+					// Establecemos los valores de los txt a campos vacíos
+					txtNombre.setText("");
+					txtLocalidad.setText("");
+					txtAñoNac.setText("");
+					txtPosicion.setText("");
+					
+					
+				}
+			
+					catch (SQLException er) {
+						// si se produce una excepción SQL
+						int errorcode = er.getErrorCode();
+						if (errorcode == 1062) {
+							// si es un error de clave duplicada
+							JOptionPane.showMessageDialog(this,"Error Clave Duplicada. Ya existe un registro con esa clave.","Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+						else {
+							//si se produce cualquier otro error sql
+							JOptionPane.showMessageDialog(this,"Error SQL Numero "+er.getErrorCode()+":"+er.getMessage(),"Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+				}
+
+				
 			}
 
 		}
@@ -411,106 +512,179 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 		else if (o == btnAñadir) {
 			
-			//Se crean variables que guardan los datos de los campos para poder manipular correctamente con estos
-			String Nombre = txtNombre.getText();
-			String Pass = txtPass.getText();
-			String Permisos = (String) cmbPermisos.getSelectedItem();
-			Usuario Usuario = new Usuario (Nombre, Pass,Permisos);
 			
-			// Se conecta a la base de datos
-			// crea una base de datos si todavia no existe
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-			EntityManager em = emf.createEntityManager();
 			
-			// ejecuto la consulta para coger los nombres de los usuarios que tenemos en la base de datos
-			TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
-			listaUsuarios = tq1.getResultList();
-			
-			if (txtNombre.getText().isEmpty() || txtPass.getText().isEmpty() || cmbPermisos.getSelectedIndex() <0) {
+			if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || txtPosicion.getText().isEmpty()) {
 
 				// si los campos están vacíos
-				JOptionPane.showMessageDialog(this, "Rellena todos los campos para crear un usuario.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
+				JOptionPane.showMessageDialog(this, "Rellena todos los campos para crear un jugador nuevo.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
 				
 			}
 			
-			else if (existeUsuario(Usuario.getNombre())) {
+			else if (existeEquipo(dtmTablaJugadores,txtNombre.getText(),0)) {
 				
-				// si existe un usuario con ese nombre
-				JOptionPane.showMessageDialog(this, "Ya existe un usuario con este nombre.","Error, inserción de usuario fallida", JOptionPane.ERROR_MESSAGE, null);
-				
-				
-			}
-			
-			else {
-				
-				em.getTransaction().begin();
-				em.persist(Usuario);
-				em.getTransaction().commit();
-				JOptionPane.showMessageDialog(this,"Usuario '"+Usuario.getNombre()+"' creado correctamente.","Creación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
-				
-				//si lo ha insertado correctamente en la base de datos
-				//lo inserto en la tabla
-				fila = new Vector<String>();
-				fila.add(Usuario.getNombre());
-				fila.add(Usuario.getPermisos());
-				fila.add("\n\n\n\n\n\n\n");
-				dtmTablaUsuarios.addRow(fila);
-				
-				
-			}
-			
-			em.close();
-			emf.close();
-
-		}
-
-		else if (o == btnActualizar) {
-
-			int filas = tablaUsuarios.getSelectedRow();
-			
-			if (filas == 0) { // compruebo que haya algun Usuario seleccionado en la tabla
-				// si no hay ningun elemento seleccionado
-				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
-
-			}
-			
-			else if (txtNombre.getText().isEmpty() || txtPass.getText().isEmpty() || cmbPermisos.getSelectedIndex() <0) {
-
-				// si los campos están vacíos
-				JOptionPane.showMessageDialog(this, "Rellena todos los campos para modificar un usuario.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
+				// si existe algun jugador con ese nombre
+				JOptionPane.showMessageDialog(this, "Ya existe un jugador con este nombre.","Error, inserción de equipo fallida", JOptionPane.ERROR_MESSAGE, null);
 				
 			}
 			
 			else {
 				
 				//Se crean variables que guardan los datos de los campos para poder manipular correctamente con estos
-				Query q;
-				String consulta;
-				String NombreAntes = (String) dtmTablaUsuarios.getValueAt(filas, 0);
 				String Nombre = txtNombre.getText();
-				String Pass = txtPass.getText();
-				String Permisos = (String) cmbPermisos.getSelectedItem();
+				String Himno = txtLocalidad.getText();
+				String Equipacion = txtAñoNac.getText();
+				String Estadio  = txtPosicion.getText();
+				String Escudo = null;
 				
-				// Se conecta a la base de datos
-				// crea una base de datos si todavia no existe
-				EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
-				EntityManager em = emf.createEntityManager();
+				//me intento conectar a la base de datos mysql para añadir el jugador deseado
+				try {
+					
+					//me conecto a la base de datos como root
+					Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
+
+
+					//CONSULTA PARA AÑADIR UN JUGADOR NUEVO
+					//creo el Statement para coger la id mas grande que haya en la base de datos para crear una nueva id
+					Statement st = conexion.createStatement();
+					ResultSet rs = st.executeQuery("SELECT MAX(ID_Equipo) FROM balonmano.equipos WHERE Num_Temp=0;");
+					int id = 0;
+					
+					while (rs.next()) {
+						
+						id = Integer.parseInt(rs.getString("MAX(ID_Equipo)"));
+						id = id + 1;
+					
+					}
+					
+					st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+id+",0,'"+Nombre+"',0,'"+Himno+"','"+Equipacion+"','"+Estadio+"',0,0,'"+Escudo+"');");
+					
+					//Cierro el resultset
+					rs.close();
+					
+					//Cierro el statement 
+					st.close();
 				
-				em.getTransaction().begin();
+					// cierro la conexion
+					conexion.close();
+					
+
+					//si lo ha insertado correctamente en la base de datos
+					//lo inserto en la tabla
+					fila = new Vector<String>();
+					fila.add(Nombre);
+					fila.add(Himno);
+					fila.add(Equipacion);
+					fila.add(Estadio);
+					fila.add(Escudo);
+					fila.add("\n\n\n\n\n\n\n");
+					dtmTablaJugadores.addRow(fila);
+					
+					JOptionPane.showMessageDialog(this,"Jugador '"+Nombre+"' creado correctamente.","Creación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
+					
+
+					// Establecemos los valores de los txt a campos vacíos
+					txtNombre.setText("");
+					txtLocalidad.setText("");
+					txtAñoNac.setText("");
+					txtPosicion.setText("");
+					
+				}
+			
+					catch (SQLException er) {
+						// si se produce una excepción SQL
+						int errorcode = er.getErrorCode();
+						if (errorcode == 1062) {
+							// si es un error de clave duplicada
+							JOptionPane.showMessageDialog(this,"Error Clave Duplicada. Ya existe un registro con esa clave.","Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+						else {
+							//si se produce cualquier otro error sql
+							JOptionPane.showMessageDialog(this,"Error SQL Numero "+er.getErrorCode()+":"+er.getMessage(),"Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+				}
 				
-				//lo actualizo en la base de datos
-				consulta = "UPDATE Usuario u SET Nombre = '"+Nombre+"', Contraseña = '"+Pass+"', Permisos = '"+Permisos+"', Correo ='"+Nombre+"@gmail.com' WHERE u.Nombre = '"+NombreAntes+"'";
-				q = em.createQuery(consulta);
-				q.executeUpdate();
-				//lo actualizo la tabla
-				dtmTablaUsuarios.setValueAt(Nombre, filas, 0);
-				dtmTablaUsuarios.setValueAt(Permisos,filas , 1);
 				
-				em.getTransaction().commit();
-				JOptionPane.showMessageDialog(this,"Usuario '"+NombreAntes+"' ha sido modificado correctamente.","Modificación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
 				
-				em.close();
-				emf.close();
+			}
+
+		}
+
+		else if (o == btnActualizar) {
+
+			int filas = tablaJugadores.getSelectedRow();
+			
+			if (filas <= 0) { // compruebo que haya algun jugador seleccionado en la tabla
+				// si no hay ningun elemento seleccionado
+				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
+
+			}
+			
+			else if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || txtPosicion.getText().isEmpty()) {
+
+				// si los campos están vacíos
+				JOptionPane.showMessageDialog(this, "Rellena todos los campos para modificar un jugador.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
+				
+			}
+			
+			else {
+				
+				//Se crean variables que guardan los datos de los campos para poder manipular correctamente con estos
+				String NombreAntes = (String) dtmTablaJugadores.getValueAt(filas, 0);
+				String Nombre = txtNombre.getText();
+				String Himno = txtLocalidad.getText();
+				String Equipacion = txtAñoNac.getText();
+				String Estadio  = txtPosicion.getText();
+				String Escudo = null;
+				
+				//me intento conectar a la base de datos mysql para actualizar el jugador deseado
+				try {
+					
+					//me conecto a la base de datos como root
+					Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
+
+
+					//CONSULTA PARA ACTUALIZAR EL JUGADOR SELECCIONADO
+					//creo el Statement para actualizar todos los datos que podemos introducir en el jugador seleccionado
+					Statement st = conexion.createStatement();
+					st.executeUpdate("UPDATE balonmano.equipos SET Nom_Equipo='"+Nombre+"',Himno='"+Himno+"',Equipacion='"+Equipacion+"',Estadio='"+Estadio+"',Escudo='"+Escudo+"' WHERE Nom_Equipo='"+NombreAntes+"' AND Num_Temp = 0;");
+					
+					//Cierro el statement 
+					st.close();
+				
+					// cierro la conexion
+					conexion.close();
+					
+					JOptionPane.showMessageDialog(this,"Jugador '"+NombreAntes+"' actualizado correctamente.","Actualización exitosa",JOptionPane.INFORMATION_MESSAGE,null);
+					
+					//lo actualizamos en la tabla
+					dtmTablaJugadores.setValueAt(Nombre, filas, 0);
+					dtmTablaJugadores.setValueAt(Himno, filas, 1);
+					dtmTablaJugadores.setValueAt(Equipacion, filas, 2);
+					dtmTablaJugadores.setValueAt(Estadio, filas, 3);
+					dtmTablaJugadores.setValueAt(Escudo, filas, 4);
+					
+
+					// Establecemos los valores de los txt a campos vacíos
+					txtNombre.setText("");
+					txtLocalidad.setText("");
+					txtAñoNac.setText("");
+					txtPosicion.setText("");
+					
+				}
+			
+					catch (SQLException er) {
+						// si se produce una excepción SQL
+						int errorcode = er.getErrorCode();
+						if (errorcode == 1062) {
+							// si es un error de clave duplicada
+							JOptionPane.showMessageDialog(this,"Error Clave Duplicada. Ya existe un registro con esa clave.","Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+						else {
+							//si se produce cualquier otro error sql
+							JOptionPane.showMessageDialog(this,"Error SQL Numero "+er.getErrorCode()+":"+er.getMessage(),"Clave duplicada",JOptionPane.ERROR_MESSAGE,null);
+						}
+				}
 				
 			}
 			
@@ -539,13 +713,29 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		((JComponent) o).setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	}
 
-	public boolean existeUsuario(String nombre) {
-        for (Usuario usuario : listaUsuarios) {
-            if (usuario.getNombre().equals(nombre)) {
-                return true;
+	// Función para comprobar si un DefaultTableModel contiene un string específico en una columna específica
+    public static boolean existeEquipo(DefaultTableModel dtm, String nombre, int columna) {
+    	
+        int Filas = dtm.getRowCount();
+        for (int i = 0; i < Filas; i++) {
+            Object valorEnFila = dtm.getValueAt(i, columna);
+            if (valorEnFila != null && valorEnFila.toString().equals(nombre)) {
+                return true; // Se encontró el string en la columna
             }
         }
-        return false;
+        return false; // No se encontró el string en la columna
     }
-	
+    
+    public void cogerDatos() {
+		// sacamos en que fila se ha hecho click
+		int seleccion = tablaJugadores.getSelectedRow();
+		// si se ha hecho click en una fila
+		if (seleccion >= 0) {
+			// Establecemos los valores de los txt
+			txtNombre.setText((String) dtmTablaJugadores.getValueAt(seleccion, 0));
+			txtLocalidad.setText((String) dtmTablaJugadores.getValueAt(seleccion, 1));
+			txtAñoNac.setText((String) dtmTablaJugadores.getValueAt(seleccion, 2));
+			txtPosicion.setText((String) dtmTablaJugadores.getValueAt(seleccion, 3));
+		}
+	}
 }

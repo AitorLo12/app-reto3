@@ -64,7 +64,6 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 	private JLabel lblEstadio;
 	private JTextField txtEstadio;
 	private JLabel lblEscudo;
-	private List<Usuario> listaUsuarios = new ArrayList<Usuario>();
 
 	/**
 	 * Launch the application.
@@ -104,7 +103,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		// creamos y añadimos un Jlabel para el título de Usuarios
+		// creamos y añadimos un Jlabel para el título de Equipos
 		lblTitulo = new JLabel("Equipos");
 		contentPane.add(lblTitulo);
 
@@ -116,14 +115,14 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 
 /*-----------------------------------------------BASE DE DATOS MYSQL---------------------------------------------------------------------*/
 		
-		//me intento conectar a la base de datos mysql para coger los datos de temporadas y equipos de la base de datos mysql
+		//me intento conectar a la base de datos mysql para coger los datos de los equipos de la base de datos mysql
 		try {
 			
 			//me conecto a la base de datos como root
 			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
 
-			//CONSULTA PARA COGER LAS TEMPORADAS
+			//CONSULTA PARA COGER LOS DATOS DE LOS EQUIPOS
 			//creo el Statement para coger las temporadas que haya en la base de datos
 			Statement st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -235,7 +234,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
+		// creamos y añadimos un botón para borrar el equipo seleccionado en la tabla
 		btnBorrar = new JButton("Borrar equipo");
 		contentPane.add(btnBorrar);
 
@@ -267,7 +266,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
+		// creamos y añadimos un botón para añadir un equipo con los datos introducidos
 		btnAñadir = new JButton("Añadir equipo");
 		contentPane.add(btnAñadir);
 
@@ -299,7 +298,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 
 		});
 
-		// creamos y añadimos un botón para volver a la ventanatemporadas
+		// creamos y añadimos un botón para actualizar el equipo con los nuevos datos
 		btnActualizar = new JButton("Actualizar equipo");
 		contentPane.add(btnActualizar);
 
@@ -619,7 +618,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 			else if (txtNombre.getText().isEmpty() || txtHimno.getText().isEmpty() || txtEquipacion.getText().isEmpty() || txtEstadio.getText().isEmpty()) {
 
 				// si los campos están vacíos
-				JOptionPane.showMessageDialog(this, "Rellena todos los campos para modificar un usuario.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
+				JOptionPane.showMessageDialog(this, "Rellena todos los campos para modificar un equipo.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
 				
 			}
 			
