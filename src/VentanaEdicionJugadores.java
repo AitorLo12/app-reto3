@@ -131,6 +131,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 			// si se ha conectado correctamente
 			Vector<String> columnas = new Vector<String>();
+			columnas.add("ID Jugador");
 			columnas.add("Nombre");
 			columnas.add("Localidad");
 			columnas.add("Año Nacimiento");
@@ -146,16 +147,33 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 			while (rs.next()) {
 				
 				fila = new Vector<String>();
+				fila.add(rs.getString("ID_Jugador"));
 				fila.add(rs.getString("Nombre"));
 				fila.add(rs.getString("Localidad"));
 				fila.add(rs.getString("Año_Nacimiento"));
 				fila.add(rs.getString("Posicion"));
+
+				//CONSULTA PARA COGER EL NOMBRE DEL EQUIPO AL QUE PERTENECE EL JUGADOR
+				//creo el Statement para coger las temporadas que haya en la base de datos
+				Statement st2 = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				
+				//como es una query, creo un objeto ResultSet 
+				ResultSet rs2 = st2.executeQuery("SELECT Nom_Equipo FROM balonmano.equipos WHERE ID_Equipo="+rs.getString("ID_Equipo")+";");
+				
+				while(rs2.next()) {
+					
+					fila.add(rs2.getString("Nom_Equipo"));	
+				}
+				
+				
 				fila.add(rs.getString("ID_Equipo"));
 				fila.add(rs.getString("Capitan"));
 				fila.add(rs.getString("Imagen"));
 				fila.add("\n\n\n\n\n\n\n");
 				datosTablaJugadores.add(fila);
-				
+
+				rs2.close();
+				st2.close();
 				
 				}
 

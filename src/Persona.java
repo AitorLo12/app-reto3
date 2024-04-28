@@ -2,8 +2,8 @@ public class Persona {
 
 	//Definimos las variables necesarias para la clase
 	
+	private int ID;
 	private String nombre;
-	private String apellido;
 	private String imagen;
 	
 	
@@ -11,27 +11,27 @@ public class Persona {
 	
 	public Persona () {
 		
+		ID = 0;
 		nombre = null;
-		apellido = null;
 		imagen = null;
 		
 	}
 	
 	//Constructores personalizados
-		//Jugadores
-	public Persona (String N,String A,String I,String P) {
+	public Persona (int id,String N,String I) {
 		
+		ID = id;
 		nombre = N;
-		apellido = A;
 		imagen = I;
 		
 	}
-		//Entrenadores
-	public Persona (String N,String A,String I) {
+	
+	//Constructor copia
+	public Persona (Persona p) {
 		
-		nombre = N;
-		apellido = A;
-		imagen = I;
+		nombre = p.nombre;
+		imagen = p.imagen;
+		
 	}
 
 	public String getNombre() {
@@ -42,20 +42,20 @@ public class Persona {
 		this.nombre = nombre;
 	}
 
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-
 	public String getImagen() {
 		return imagen;
 	}
 
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		ID = iD;
 	}
 	
 }

@@ -118,7 +118,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
 
-			//CONSULTA PARA COGER LAS TEMPORADAS
+			//CONSULTA PARA RECOGER LOS DATOS DE TODAS LAS TEMPORADAS
 			//creo el Statement para coger las temporadas que haya en la base de datos
 			Statement st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			
@@ -135,6 +135,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				String Fecha = rs.getString("Num_Temp");
 				String Estado = rs.getString("Estado");
 				List<Equipo> listaEquiposTemporadas = new ArrayList<Equipo>();
+				
+				//CONSULTA PARA RECOGER LOS DATOS DE TODOS LOS EQUIPOS DE LA TEMPORADA ACTUAL
 				Statement st2 = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs2 = st2.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+rs.getString("Num_Temp")+";");
 				
@@ -149,13 +151,40 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 					String Escudo = rs2.getString("Escudo");
 					String Estadio = rs2.getString("Estadio");
 					String Equipacion = rs2.getString("Equipacion");
+					List<Jugador> listaJugadoresEquipo = new ArrayList<Jugador>();
+					
+					//CONSULTA PARA RECOGER LOS DATOS DE TODOS LOS JUGADORES DEL EQUIPO ACTUAL
+					Statement st3 = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+					ResultSet rs3 = st3.executeQuery("SELECT * FROM balonmano.jugadores WHERE ID_Equipo="+ID+";");
+					
+					
+					while (rs3.next()) {
+						
+						int idJ = Integer.parseInt(rs3.getString("ID_Jugador"));
+						String NombreJ = rs3.getString("Nombre");
+						String Imagen = rs3.getString("Imagen");
+						String Posicion = rs3.getString("Posicion");
+						String Localidad = rs3.getString("Localidad");
+						int nacimiento = Integer.parseInt(rs3.getString("Año_Nacimiento"));
+						int idEquipo = ID;
+						String capitan = rs3.getString("Capitan");
+						
+						Jugador j = new Jugador (idJ, NombreJ, Imagen, Posicion, Localidad, nacimiento, idEquipo, capitan);
+						listaJugadoresEquipo.add(j);
+						
+					}
+					
+					rs3.close();
+					st3.close();
 					
 					// creo un nuevo Equipo por cada registro
-					Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion);
+					Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion, listaJugadoresEquipo);
 					listaEquiposTemporadas.add(e);
 					
+					
+					
 				}
-
+				
 				rs2.close();
 				st2.close();
 				
@@ -174,7 +203,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				}
 				
 				
-				
 			}
 			
 			
@@ -189,6 +217,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			
 			while (rs.next()) {
+				
 				//creo variables de todos los resultados por cada equipo para poder manipular los datos mejor
 				String Nombre = rs.getString("Nom_Equipo");
 				String Iniciales = Nombre.substring(0, Math.min(Nombre.length(), 3));
@@ -197,9 +226,37 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				String Escudo = rs.getString("Escudo");
 				String Estadio = rs.getString("Estadio");
 				String Equipacion = rs.getString("Equipacion");
+				List<Jugador> listaJugadoresEquipo = new ArrayList<Jugador>();
+				
+				//CONSULTA PARA RECOGER LOS DATOS DE TODOS LOS JUGADORES DEL EQUIPO ACTUAL
+				Statement st4 = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs4 = st4.executeQuery("SELECT * FROM balonmano.jugadores WHERE ID_Equipo="+ID+";");
+				
+				
+				while (rs4.next()) {
+					
+					int idJ = Integer.parseInt(rs4.getString("ID_Jugador"));
+					String NombreJ = rs4.getString("Nombre");
+					String Imagen = rs4.getString("Imagen");
+					String Posicion = rs4.getString("Posicion");
+					String Localidad = rs4.getString("Localidad");
+					int nacimiento = Integer.parseInt(rs4.getString("Año_Nacimiento"));
+					int idEquipo = ID;
+					String capitan = rs4.getString("Capitan");
+					
+					Jugador j = new Jugador (idJ, NombreJ, Imagen, Posicion, Localidad, nacimiento, idEquipo, capitan);
+					listaJugadoresEquipo.add(j);
+					
+				}
+				
+				rs4.close();
+				st4.close();
+				
 				
 				// creo un nuevo Equipo por cada registro
-				Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion);
+				Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion,listaJugadoresEquipo);
+
+				
 				//lo añado a la lista donde están todos los equipos
 				
 				listaEquipos.add(e);
@@ -936,7 +993,17 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+e.getID()+","+e.getTemporada()+",'"+e.getNombre()+"',"+e.getPuntos()+",'Himno "+e.getNombre()+"','"+e.getEquipacion()+"','"+e.getImagenEstadio()+"',"+e.getGolesfavor()+","+e.getGolescontra()+",'"+e.getImagenEscudo()+"');");
 				st.executeUpdate("INSERT INTO balonmano.participaciones VALUES("+e.getTemporada()+","+e.getID()+");");
 				
+					for (Jugador j : e.getListaJugadores()) { //por cada jugador dentro del equipo lo inserto en la base de datos
+					
+						j.setID(Integer.parseInt(j.getID()+""+temporada.getFecha()));
+						j.setIdequipo(e.getID());
+						
+					st.executeUpdate("INSERT INTO balonmano.jugadores VALUES ("+j.getID()+",'"+j.getNombre()+"','"+j.getPosicion()+"','"+j.getLocalidad()+"',"+j.getAño()+","+j.getIdequipo()+",'"+j.getCapitan()+"','"+j.getImagen()+"');");	
+					
+					}
+				
 				}
+				
 				
 				//Cierro el statement 
 				st.close();
@@ -977,8 +1044,14 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				//creo el Statement para coger las temporadas que haya en la base de datos
 				Statement st = conexion.createStatement();
 				
+				for (Equipo e : temporada.getListaEquipos()) {
+					
+					st.executeUpdate("DELETE FROM balonmano.jugadores WHERE ID_Equipo="+e.getID()+";");
+					
+				}
 
 				st.executeUpdate("DELETE FROM balonmano.participaciones WHERE Num_Temp='"+temporada.getFecha()+"';");
+				
 				
 				st.executeUpdate("DELETE FROM balonmano.equipos WHERE Num_Temp='"+temporada.getFecha()+"';");
 				
