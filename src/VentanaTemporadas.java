@@ -1094,6 +1094,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				scrollPane1.setVisible(false);
 				scrollPane2.setVisible(false);
 				btnUsuarios.setVisible(false);
+				btnEquipos.setVisible(false);
+				btnJugadores.setVisible(false);
 				
 				JlistTemporadas.setBounds(38,206,525,150);
 				btnSiguiente.setBounds(38,400,525,100);
@@ -1114,6 +1116,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				scrollPane1.setVisible(true);
 				scrollPane2.setVisible(true);
 				btnUsuarios.setVisible(true);
+				btnEquipos.setVisible(true);
+				btnJugadores.setVisible(true);
 				
 				JlistTemporadas.setBounds(38, 206, 200, 137);
 				btnSiguiente.setBounds(290,300,269,45);
@@ -1140,6 +1144,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				dlmListaEquipos.addElement(s);
 				dlmListaSeleccionados.removeElement(s);				
 			}
+		}
+		
+		public void CrearJornadas() {
+			
+			
+			
 		}
 }
 
