@@ -10,6 +10,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -29,6 +34,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,6 +43,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -62,8 +69,15 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 	private JLabel lblAñoNac;
 	private JTextField txtAñoNac;
 	private JLabel lblPosicion;
-	private JTextField txtPosicion;
+	private JComboBox cmbPosicion;
 	private JLabel lblEquipo;
+	private JComboBox cmbEquipo;
+	private JLabel lblCapitan;
+	private JTextField txtCapitan;
+	private JLabel lblImagen;
+	private JTextField txtImagen;
+	private JButton btnImagen;
+	private List<String> Equipos;
 
 	/**
 	 * Launch the application.
@@ -84,6 +98,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings("unchecked")
 	public VentanaEdicionJugadores() {
 
 		// establecemos título e icono de la aplicación
@@ -92,7 +107,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// ubicación y tamaño de la ventana
-		setBounds(100, 100, 1000, 600);
+		setBounds(100, 100, 1400, 600);
 		setLocationRelativeTo(null);
 
 		// quita el redimensionado de la ventana
@@ -110,7 +125,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		// propiedades del JLabel
 		lblTitulo.setForeground(new Color(0, 0, 0));
 		lblTitulo.setFont(new Font("Arial Black", Font.BOLD, 30));
-		lblTitulo.setBounds(402, 20, 180, 30);
+		lblTitulo.setBounds(603, 20, 180, 30);
 		lblTitulo.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
 /*-----------------------------------------------BASE DE DATOS MYSQL---------------------------------------------------------------------*/
@@ -165,8 +180,6 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					fila.add(rs2.getString("Nom_Equipo"));	
 				}
 				
-				
-				fila.add(rs.getString("ID_Equipo"));
 				fila.add(rs.getString("Capitan"));
 				fila.add(rs.getString("Imagen"));
 				fila.add("\n\n\n\n\n\n\n");
@@ -179,6 +192,16 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 			// creo el DefaultTableModel de la JTable
 			dtmTablaJugadores= new DefaultTableModel(datosTablaJugadores, columnas);
+			
+			rs = st.executeQuery("SELECT Nom_Equipo FROM balonmano.equipos WHERE Num_Temp= 0");
+			
+			Equipos = new ArrayList<>();
+			
+			while(rs.next()) {
+				
+			Equipos.add(rs.getString("Nom_Equipo"));
+				
+			}
 				
 			
 			
@@ -223,7 +246,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 		// creo un scroll pane y le añado la tabla
 		JScrollPane scrollPane = new JScrollPane(tablaJugadores);
-		scrollPane.setBounds(25, 100, 940, 400);
+		scrollPane.setBounds(25, 100, 1340, 400);
 
 		// añado el scroll pane al panel principal
 		contentPane.add(scrollPane);
@@ -235,7 +258,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		// propiedades del JButton
 		btnAtras.setBackground(null);
 		btnAtras.setBorder(null);
-		btnAtras.setBounds(935, 511, 30, 30);
+		btnAtras.setBounds(1335, 511, 30, 30);
 		btnAtras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAtras.setIcon(new ImageIcon("src/img/atras.png"));
 
@@ -258,14 +281,14 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		});
 
 		// creamos y añadimos un botón para borrar el jugador seleccionado en la tabla
-		btnBorrar = new JButton("Borrar equipo");
+		btnBorrar = new JButton("Borrar jugador");
 		contentPane.add(btnBorrar);
 
 		// propiedades del JButton
 		btnBorrar.setBackground(new Color(192, 192, 192));
 		btnBorrar.setForeground(new Color(0, 0, 0));
 		btnBorrar.setBorder(null);
-		btnBorrar.setBounds(392, 510, 200, 30);
+		btnBorrar.setBounds(593, 510, 200, 30);
 		btnBorrar.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnBorrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -290,14 +313,14 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		});
 
 		// creamos y añadimos un botón para añadir un jugador con los datos introducidos
-		btnAñadir = new JButton("Añadir equipo");
+		btnAñadir = new JButton("Añadir jugador");
 		contentPane.add(btnAñadir);
 
 		// propiedades del JButton
 		btnAñadir.setBackground(new Color(192, 192, 192));
 		btnAñadir.setForeground(new Color(0, 0, 0));
 		btnAñadir.setBorder(null);
-		btnAñadir.setBounds(172, 510, 200, 30);
+		btnAñadir.setBounds(343, 510, 200, 30);
 		btnAñadir.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnAñadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -322,14 +345,14 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		});
 
 		// creamos y añadimos un botón para actualizar el jugador con los nuevos datos
-		btnActualizar = new JButton("Actualizar equipo");
+		btnActualizar = new JButton("Actualizar jugador");
 		contentPane.add(btnActualizar);
 
 		// propiedades del JButton
 		btnActualizar.setBackground(new Color(192, 192, 192));
 		btnActualizar.setForeground(new Color(0, 0, 0));
 		btnActualizar.setBorder(null);
-		btnActualizar.setBounds(612, 510, 200, 30);
+		btnActualizar.setBounds(843, 510, 200, 30);
 		btnActualizar.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnActualizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -404,7 +427,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		// propiedades del JLabel
 		lblAñoNac.setForeground(new Color(0, 0, 0));
 		lblAñoNac.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblAñoNac.setBounds(350, 65, 95, 20);
+		lblAñoNac.setBounds(355, 65, 95, 20);
 		lblAñoNac.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		
 
@@ -413,41 +436,108 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		contentPane.add(txtAñoNac);
 
 		// propiedades del JTextField
-		txtAñoNac.setBounds(445, 65, 100, 20);
+		txtAñoNac.setBounds(450, 65, 100, 20);
 		txtAñoNac.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		txtAñoNac.setColumns(10);
+		txtAñoNac.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		// creamos y añadimos un Jlabel para indicar el textfield del estadio
+		// creamos y añadimos un Jlabel para indicar la JComboBox de las posiciones
 		lblPosicion = new JLabel("Posición:");
 		contentPane.add(lblPosicion);
 
 		// propiedades del JLabel
 		lblPosicion.setForeground(new Color(0, 0, 0));
 		lblPosicion.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblPosicion.setBounds(545, 65, 55, 20);
+		lblPosicion.setBounds(555, 65, 55, 20);
 		lblPosicion.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 				
 
-		// creamos y añadimos un JTextField donde pondremos el estadio que queramos introducir
-		txtPosicion = new JTextField();
-		contentPane.add(txtPosicion);
+		// creamos y añadimos una JComboBox donde pondremos las posiciones que queramos introducir
+		String[] Posiciones = {"Portero","Central","Lateral Izquierdo","Lateral Derecho","Mediocentro","Pivote","Mediocentro Ofensivo","Delantero","Extremo Izquierdo","Extremo Derecho"};
+		cmbPosicion = new JComboBox<>(Posiciones);
+		contentPane.add(cmbPosicion);
 
-		// propiedades del JTextField
-		txtPosicion.setBounds(600, 65, 100, 20);
-		txtPosicion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		txtPosicion.setColumns(10);
+		// propiedades de la JComboBox
+		cmbPosicion.setBounds(610, 65, 100, 20);
+		cmbPosicion.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		cmbPosicion.setSelectedIndex(-1);
 		
-		// creamos y añadimos un Jlabel para indicar el textfield de la equipacion
+		// creamos y añadimos un Jlabel para indicar la JComboBox de los equipos
 		lblEquipo = new JLabel("Equipo:");
 		contentPane.add(lblEquipo);
 
 		// propiedades del JLabel
 		lblEquipo.setForeground(new Color(0, 0, 0));
 		lblEquipo.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblEquipo.setBounds(700, 65, 45, 20);
+		lblEquipo.setBounds(715, 65, 45, 20);
 		lblEquipo.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		
+		//creamos y añadimos una JComboBox donde pondremos todos los nombres de los equipos disponibles
+		cmbEquipo = new JComboBox<String>();
+		contentPane.add(cmbEquipo);
 
+		// propiedades de la JComboBox
+		cmbEquipo.setBounds(760, 65, 100, 20);
+		cmbEquipo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		//añadimos todos los equipos que hemos recogido antes desde la consulta 
+		for (int i = 0; i < Equipos.size(); i++) {
+            cmbEquipo.addItem(Equipos.get(i));
+        }
+		cmbEquipo.setSelectedIndex(-1);
+		
+		// creamos y añadimos un Jlabel para indicar el textfield del capitán
+		lblCapitan = new JLabel("Capitán:");
+		contentPane.add(lblCapitan);
 
+		// propiedades del JLabel
+		lblCapitan.setForeground(new Color(0, 0, 0));
+		lblCapitan.setFont(new Font("Arial Black", Font.PLAIN, 10));
+		lblCapitan.setBounds(865, 65, 50, 20);
+		lblCapitan.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		
+
+		// creamos y añadimos un JTextField donde pondremos el capitan que queramos introducir
+		txtCapitan = new JTextField();
+		contentPane.add(txtCapitan);
+
+		// propiedades del JTextField
+		txtCapitan.setBounds(915, 65, 100, 20);
+		txtCapitan.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		txtCapitan.setColumns(10);
+		
+		// creamos y añadimos un Jlabel para indicar el textfield del capitán
+		lblImagen = new JLabel("Foto:");
+		contentPane.add(lblImagen);
+
+		// propiedades del JLabel
+		lblImagen.setForeground(new Color(0, 0, 0));
+		lblImagen.setFont(new Font("Arial Black", Font.PLAIN, 10));
+		lblImagen.setBounds(1020, 65, 30, 20);
+		lblImagen.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		
+		// creamos y añadimos un JTextField donde pondremos el path de la imagen del jugador que queramos introducir
+		txtImagen = new JTextField();
+		contentPane.add(txtImagen);
+
+		// propiedades del JTextField
+		txtImagen.setBounds(1055, 65, 100, 20);
+		txtImagen.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		txtImagen.setColumns(10);
+		txtImagen.setEditable(false);
+		
+		//creamos y añadimos un boton para abrir el navegador de archivos para poder subir una imagen
+		btnImagen = new JButton("Seleccionar imagen");
+		btnImagen.setFont(new Font("Arial", Font.PLAIN, 11));
+		contentPane.add(btnImagen);
+		
+		//propiedades del JButton
+		btnImagen.setBounds(1155, 65, 135, 20);
+		btnImagen.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		//añado los listeners necesarios
+		btnImagen.addActionListener(this);
+		
 	}
 
 	@Override
@@ -469,7 +559,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 				try {
 					
 					int fila = tablaJugadores.getSelectedRow();
-					String Nombre = (String) dtmTablaJugadores.getValueAt(fila, 0);
+					String ID = (String) dtmTablaJugadores.getValueAt(fila, 0);
 					//me conecto a la base de datos como root
 					Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
@@ -478,7 +568,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					//creo el Statement para eliminar el jugador que esté seleccionado en la tabla
 					Statement st = conexion.createStatement();
 					
-					st.executeUpdate("DELETE FROM balonmano.equipos WHERE Num_Temp=0 AND Nom_Equipo = '"+Nombre+"';");
+					st.executeUpdate("DELETE FROM balonmano.jugadores WHERE ID_Jugador="+ID+" ;");
 					
 					//Cierro el statement 
 					st.close();
@@ -497,7 +587,10 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					txtNombre.setText("");
 					txtLocalidad.setText("");
 					txtAñoNac.setText("");
-					txtPosicion.setText("");
+					cmbPosicion.setSelectedIndex(-1);
+					cmbEquipo.setSelectedIndex(-1);
+					txtCapitan.setText("");
+					txtImagen.setText("");
 					
 					
 				}
@@ -532,7 +625,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 			
 			
 			
-			if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || txtPosicion.getText().isEmpty()) {
+			if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || cmbPosicion.getSelectedIndex() <0 || cmbEquipo.getSelectedIndex() <0 || txtCapitan.getText().isEmpty() || txtImagen.getText().isEmpty() ) {
 
 				// si los campos están vacíos
 				JOptionPane.showMessageDialog(this, "Rellena todos los campos para crear un jugador nuevo.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
@@ -550,10 +643,12 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 				
 				//Se crean variables que guardan los datos de los campos para poder manipular correctamente con estos
 				String Nombre = txtNombre.getText();
-				String Himno = txtLocalidad.getText();
-				String Equipacion = txtAñoNac.getText();
-				String Estadio  = txtPosicion.getText();
-				String Escudo = null;
+				String Localidad = txtLocalidad.getText();
+				String Nacimiento = txtAñoNac.getText();
+				String Posicion  = (String)cmbPosicion.getSelectedItem();
+				String Equipo = (String)cmbEquipo.getSelectedItem();
+				String Capitan = txtCapitan.getText();
+				String Imagen = txtImagen.getText();
 				
 				//me intento conectar a la base de datos mysql para añadir el jugador deseado
 				try {
@@ -565,17 +660,26 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					//CONSULTA PARA AÑADIR UN JUGADOR NUEVO
 					//creo el Statement para coger la id mas grande que haya en la base de datos para crear una nueva id
 					Statement st = conexion.createStatement();
-					ResultSet rs = st.executeQuery("SELECT MAX(ID_Equipo) FROM balonmano.equipos WHERE Num_Temp=0;");
-					int id = 0;
+					ResultSet rs = st.executeQuery("SELECT MAX(ID_Jugador) FROM balonmano.jugadores WHERE ID_Jugador < 10000;");
+					int idJ = 0;
+					int idE = 0;
 					
 					while (rs.next()) {
 						
-						id = Integer.parseInt(rs.getString("MAX(ID_Equipo)"));
-						id = id + 1;
-					
+						idJ = Integer.parseInt(rs.getString("MAX(ID_Jugador)"));
+						idJ = idJ + 1;
+						
 					}
 					
-					st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+id+",0,'"+Nombre+"',0,'"+Himno+"','"+Equipacion+"','"+Estadio+"',0,0,'"+Escudo+"');");
+					rs = st.executeQuery("SELECT ID_Equipo FROM balonmano.equipos WHERE Num_Temp=0 AND Nom_Equipo ='"+Equipo+"';");
+					
+					while (rs.next()) {
+						
+						idE = Integer.parseInt(rs.getString("ID_Equipo"));
+						
+					}
+					
+					st.executeUpdate("INSERT INTO balonmano.jugadores VALUES ("+idJ+",'"+Nombre+"','"+Posicion+"','"+Localidad+"','"+Nacimiento+"',"+idE+",'"+Capitan+"','"+Imagen+"');");
 					
 					//Cierro el resultset
 					rs.close();
@@ -586,15 +690,19 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					// cierro la conexion
 					conexion.close();
 					
+					
 
 					//si lo ha insertado correctamente en la base de datos
 					//lo inserto en la tabla
 					fila = new Vector<String>();
+					fila.add(""+idJ);
 					fila.add(Nombre);
-					fila.add(Himno);
-					fila.add(Equipacion);
-					fila.add(Estadio);
-					fila.add(Escudo);
+					fila.add(Localidad);
+					fila.add(Nacimiento);
+					fila.add(Posicion);
+					fila.add(Equipo);
+					fila.add(Capitan);
+					fila.add(Imagen);
 					fila.add("\n\n\n\n\n\n\n");
 					dtmTablaJugadores.addRow(fila);
 					
@@ -605,7 +713,10 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					txtNombre.setText("");
 					txtLocalidad.setText("");
 					txtAñoNac.setText("");
-					txtPosicion.setText("");
+					cmbPosicion.setSelectedIndex(-1);
+					cmbEquipo.setSelectedIndex(-1);
+					txtCapitan.setText("");
+					txtImagen.setText("");
 					
 				}
 			
@@ -638,7 +749,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 			}
 			
-			else if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || txtPosicion.getText().isEmpty()) {
+			else if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || cmbPosicion.getSelectedIndex() <0 || cmbEquipo.getSelectedIndex() <0 || txtCapitan.getText().isEmpty() || txtImagen.getText().isEmpty()) {
 
 				// si los campos están vacíos
 				JOptionPane.showMessageDialog(this, "Rellena todos los campos para modificar un jugador.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
@@ -648,12 +759,17 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 			else {
 				
 				//Se crean variables que guardan los datos de los campos para poder manipular correctamente con estos
-				String NombreAntes = (String) dtmTablaJugadores.getValueAt(filas, 0);
 				String Nombre = txtNombre.getText();
-				String Himno = txtLocalidad.getText();
-				String Equipacion = txtAñoNac.getText();
-				String Estadio  = txtPosicion.getText();
-				String Escudo = null;
+				String Localidad = txtLocalidad.getText();
+				String Nacimiento = txtAñoNac.getText();
+				String Posicion  = (String)cmbPosicion.getSelectedItem();
+				String Equipo = (String)cmbEquipo.getSelectedItem();
+				String Capitan = txtCapitan.getText();
+				String Imagen = txtImagen.getText();
+				String id = (String)dtmTablaJugadores.getValueAt(filas, 0);
+				String NombreAntes = (String) dtmTablaJugadores.getValueAt(filas, 1);
+				int idE = 0;
+				int idJ = Integer.parseInt(id);
 				
 				//me intento conectar a la base de datos mysql para actualizar el jugador deseado
 				try {
@@ -661,11 +777,21 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					//me conecto a la base de datos como root
 					Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
+					Statement st = conexion.createStatement();
+					ResultSet rs = st.executeQuery("SELECT ID_Equipo FROM balonmano.equipos WHERE Num_Temp=0 AND Nom_Equipo ='"+Equipo+"';");
+					
+					while (rs.next()) {
+						
+						idE = Integer.parseInt(rs.getString("ID_Equipo"));
+						
+					}
 
 					//CONSULTA PARA ACTUALIZAR EL JUGADOR SELECCIONADO
 					//creo el Statement para actualizar todos los datos que podemos introducir en el jugador seleccionado
-					Statement st = conexion.createStatement();
-					st.executeUpdate("UPDATE balonmano.equipos SET Nom_Equipo='"+Nombre+"',Himno='"+Himno+"',Equipacion='"+Equipacion+"',Estadio='"+Estadio+"',Escudo='"+Escudo+"' WHERE Nom_Equipo='"+NombreAntes+"' AND Num_Temp = 0;");
+					st.executeUpdate("UPDATE balonmano.jugadores SET Nombre='"+Nombre+"',Posicion='"+Posicion+"',Localidad='"+Localidad+"',Año_Nacimiento='"+Nacimiento+"',Equipo='"+idE+"',Capitan='"+Capitan+"',Imagen='"+Imagen+"' WHERE ID_Jugador="+idJ+";");
+					
+					//cierro el resultset
+					rs.close();
 					
 					//Cierro el statement 
 					st.close();
@@ -676,18 +802,23 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					JOptionPane.showMessageDialog(this,"Jugador '"+NombreAntes+"' actualizado correctamente.","Actualización exitosa",JOptionPane.INFORMATION_MESSAGE,null);
 					
 					//lo actualizamos en la tabla
-					dtmTablaJugadores.setValueAt(Nombre, filas, 0);
-					dtmTablaJugadores.setValueAt(Himno, filas, 1);
-					dtmTablaJugadores.setValueAt(Equipacion, filas, 2);
-					dtmTablaJugadores.setValueAt(Estadio, filas, 3);
-					dtmTablaJugadores.setValueAt(Escudo, filas, 4);
+					dtmTablaJugadores.setValueAt(Nombre, filas, 1);
+					dtmTablaJugadores.setValueAt(Localidad, filas, 2);
+					dtmTablaJugadores.setValueAt(Nacimiento, filas, 3);
+					dtmTablaJugadores.setValueAt(Posicion, filas, 4);
+					dtmTablaJugadores.setValueAt(Equipo, filas, 5);
+					dtmTablaJugadores.setValueAt(Capitan, filas, 6);
+					dtmTablaJugadores.setValueAt(Imagen, filas, 7);
 					
 
 					// Establecemos los valores de los txt a campos vacíos
 					txtNombre.setText("");
 					txtLocalidad.setText("");
 					txtAñoNac.setText("");
-					txtPosicion.setText("");
+					cmbPosicion.setSelectedIndex(-1);
+					cmbEquipo.setSelectedIndex(-1);
+					txtCapitan.setText("");
+					txtImagen.setText("");
 					
 				}
 			
@@ -708,6 +839,19 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 			
 			
 			
+			
+		}
+		
+		else if (o == btnImagen) {
+			
+			JFileChooser fileChooser = new JFileChooser();
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String fileName = selectedFile.getName(); // Obtener solo el nombre del archivo
+                txtImagen.setText(fileName);
+                guardarImagen(selectedFile);
+            }
 			
 		}
 		
@@ -750,10 +894,30 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		// si se ha hecho click en una fila
 		if (seleccion >= 0) {
 			// Establecemos los valores de los txt
-			txtNombre.setText((String) dtmTablaJugadores.getValueAt(seleccion, 0));
-			txtLocalidad.setText((String) dtmTablaJugadores.getValueAt(seleccion, 1));
-			txtAñoNac.setText((String) dtmTablaJugadores.getValueAt(seleccion, 2));
-			txtPosicion.setText((String) dtmTablaJugadores.getValueAt(seleccion, 3));
+			txtNombre.setText((String) dtmTablaJugadores.getValueAt(seleccion, 1));
+			txtLocalidad.setText((String) dtmTablaJugadores.getValueAt(seleccion, 2));
+			txtAñoNac.setText((String) dtmTablaJugadores.getValueAt(seleccion, 3));
+			cmbPosicion.setSelectedItem(dtmTablaJugadores.getValueAt(seleccion, 4));
+			cmbEquipo.setSelectedItem(dtmTablaJugadores.getValueAt(seleccion, 5));
+			txtCapitan.setText((String)dtmTablaJugadores.getValueAt(seleccion, 6));
+			txtImagen.setText((String)dtmTablaJugadores.getValueAt(seleccion, 7));
 		}
 	}
+    
+    private void guardarImagen(File imageFile) {
+        try {
+            // Define la carpeta donde se guardarán las imágenes
+            String folderPath = "src/img/jugadores/";
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+            // Copia el archivo de la imagen seleccionada a la carpeta
+            Path sourcePath = imageFile.toPath();
+            Path targetPath = Paths.get(folderPath + imageFile.getName());
+            Files.copy(sourcePath, targetPath);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "La imagen ya existe por lo que se usará la imagen ya almacenada.");
+        }
+    }
 }

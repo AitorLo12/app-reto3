@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,11 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -29,6 +35,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -64,6 +71,8 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 	private JLabel lblEstadio;
 	private JTextField txtEstadio;
 	private JLabel lblEscudo;
+	private JTextField txtEscudo;
+	private JButton btnEscudo;
 
 	/**
 	 * Launch the application.
@@ -421,8 +430,30 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 		// propiedades del JLabel
 		lblEscudo.setForeground(new Color(0, 0, 0));
 		lblEscudo.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblEscudo.setBounds(680, 65, 50, 20);
+		lblEscudo.setBounds(675, 65, 50, 20);
 		lblEscudo.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		
+		// creamos y añadimos un JTextField donde pondremos el path del escudo que queramos introducir
+		txtEscudo = new JTextField();
+		contentPane.add(txtEscudo);
+
+		// propiedades del JTextField
+		txtEscudo.setBounds(725, 65, 100, 20);
+		txtEscudo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		txtEscudo.setColumns(10);
+		txtEscudo.setEditable(false);
+		
+		//creamos y añadimos un boton para abrir el navegador de archivos para poder subir una imagen
+		btnEscudo = new JButton("Seleccionar imagen");
+		btnEscudo.setFont(new Font("Arial", Font.PLAIN, 11));
+		contentPane.add(btnEscudo);
+		
+		//propiedades del JButton
+		btnEscudo.setBounds(830, 65, 135, 20);
+		btnEscudo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		//añado los listeners necesarios
+		btnEscudo.addActionListener(this);
 
 
 	}
@@ -434,7 +465,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 
 			// compruebo que haya algun equipo seleccionado en la tabla
 			int filas = tablaEquipos.getSelectedRowCount();
-			if (filas <= 0) {
+			if (filas < 0) {
 				// si no hay ningun elemento seleccionado
 				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
 
@@ -475,6 +506,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 					txtHimno.setText("");
 					txtEquipacion.setText("");
 					txtEstadio.setText("");
+					txtEscudo.setText("");
 					
 					
 				}
@@ -509,7 +541,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 			
 			
 			
-			if (txtNombre.getText().isEmpty() || txtHimno.getText().isEmpty() || txtEquipacion.getText().isEmpty() || txtEstadio.getText().isEmpty()) {
+			if (txtNombre.getText().isEmpty() || txtHimno.getText().isEmpty() || txtEquipacion.getText().isEmpty() || txtEstadio.getText().isEmpty() || txtEscudo.getText().isEmpty()) {
 
 				// si los campos están vacíos
 				JOptionPane.showMessageDialog(this, "Rellena todos los campos para crear un equipo nuevo.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
@@ -530,7 +562,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 				String Himno = txtHimno.getText();
 				String Equipacion = txtEquipacion.getText();
 				String Estadio  = txtEstadio.getText();
-				String Escudo = null;
+				String Escudo = txtEscudo.getText();
 				
 				//me intento conectar a la base de datos mysql para añadir el equipo deseado
 				try {
@@ -583,6 +615,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 					txtHimno.setText("");
 					txtEquipacion.setText("");
 					txtEstadio.setText("");
+					txtEscudo.setText("");
 					
 				}
 			
@@ -609,13 +642,13 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 
 			int filas = tablaEquipos.getSelectedRow();
 			
-			if (filas <= 0) { // compruebo que haya algun Equipo seleccionado en la tabla
+			if (filas < 0) { // compruebo que haya algun Equipo seleccionado en la tabla
 				// si no hay ningun elemento seleccionado
 				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
 
 			}
 			
-			else if (txtNombre.getText().isEmpty() || txtHimno.getText().isEmpty() || txtEquipacion.getText().isEmpty() || txtEstadio.getText().isEmpty()) {
+			else if (txtNombre.getText().isEmpty() || txtHimno.getText().isEmpty() || txtEquipacion.getText().isEmpty() || txtEstadio.getText().isEmpty() || txtEscudo.getText().isEmpty()) {
 
 				// si los campos están vacíos
 				JOptionPane.showMessageDialog(this, "Rellena todos los campos para modificar un equipo.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
@@ -630,7 +663,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 				String Himno = txtHimno.getText();
 				String Equipacion = txtEquipacion.getText();
 				String Estadio  = txtEstadio.getText();
-				String Escudo = null;
+				String Escudo = txtEscudo.getText();
 				
 				//me intento conectar a la base de datos mysql para actualizar el equipo deseado
 				try {
@@ -665,6 +698,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 					txtHimno.setText("");
 					txtEquipacion.setText("");
 					txtEstadio.setText("");
+					txtEscudo.setText("");
 					
 				}
 			
@@ -685,6 +719,19 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 			
 			
 			
+			
+		}
+		
+		else if (o == btnEscudo) {
+			
+			JFileChooser fileChooser = new JFileChooser();
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String fileName = selectedFile.getName(); // Obtener solo el nombre del archivo
+                txtEscudo.setText(fileName);
+                guardarImagen(selectedFile);
+            }
 			
 		}
 		
@@ -731,6 +778,25 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 			txtHimno.setText((String) dtmTablaEquipos.getValueAt(seleccion, 1));
 			txtEquipacion.setText((String) dtmTablaEquipos.getValueAt(seleccion, 2));
 			txtEstadio.setText((String) dtmTablaEquipos.getValueAt(seleccion, 3));
+			txtEscudo.setText((String)dtmTablaEquipos.getValueAt(seleccion, 4));
 		}
 	}
+
+    private void guardarImagen(File imageFile) {
+        try {
+            // Define la carpeta donde se guardarán las imágenes
+            String folderPath = "src/img/";
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+            // Copia el archivo de la imagen seleccionada a la carpeta
+            Path sourcePath = imageFile.toPath();
+            Path targetPath = Paths.get(folderPath + imageFile.getName());
+            Files.copy(sourcePath, targetPath);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "La imagen ya existe por lo que se usará la imagen ya almacenada.");
+        }
+    }
+    
 }
