@@ -788,7 +788,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 					//CONSULTA PARA ACTUALIZAR EL JUGADOR SELECCIONADO
 					//creo el Statement para actualizar todos los datos que podemos introducir en el jugador seleccionado
-					st.executeUpdate("UPDATE balonmano.jugadores SET Nombre='"+Nombre+"',Posicion='"+Posicion+"',Localidad='"+Localidad+"',Año_Nacimiento='"+Nacimiento+"',Equipo='"+idE+"',Capitan='"+Capitan+"',Imagen='"+Imagen+"' WHERE ID_Jugador="+idJ+";");
+					st.executeUpdate("UPDATE balonmano.jugadores SET Nombre='"+Nombre+"',Posicion='"+Posicion+"',Localidad='"+Localidad+"',Año_Nacimiento='"+Nacimiento+"',ID_Equipo='"+idE+"',Capitan='"+Capitan+"',Imagen='"+Imagen+"' WHERE ID_Jugador="+idJ+";");
 					
 					//cierro el resultset
 					rs.close();

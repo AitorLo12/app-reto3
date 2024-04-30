@@ -206,76 +206,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			}
 			
 			
-			//CONSULTA PARA COGER LOS EQUIPOS
-			//creo el Statement para coger los equipos
-			st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			
-			//como es una query, creo un objeto ResultSet 
-			rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+0+";");
-			
-			listaEquipos = new ArrayList<Equipo>();
-			
-			
-			while (rs.next()) {
-				
-				//creo variables de todos los resultados por cada equipo para poder manipular los datos mejor
-				String Nombre = rs.getString("Nom_Equipo");
-				String Iniciales = Nombre.substring(0, Math.min(Nombre.length(), 3));
-				int ID = Integer.parseInt(rs.getString("ID_Equipo"));
-				int Temporada = Integer.parseInt(rs.getString("Num_Temp"));
-				String Escudo = rs.getString("Escudo");
-				String Estadio = rs.getString("Estadio");
-				String Equipacion = rs.getString("Equipacion");
-				List<Jugador> listaJugadoresEquipo = new ArrayList<Jugador>();
-				
-				//CONSULTA PARA RECOGER LOS DATOS DE TODOS LOS JUGADORES DEL EQUIPO ACTUAL
-				Statement st4 = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				ResultSet rs4 = st4.executeQuery("SELECT * FROM balonmano.jugadores WHERE ID_Equipo="+ID+";");
-				
-				
-				while (rs4.next()) {
-					
-					int idJ = Integer.parseInt(rs4.getString("ID_Jugador"));
-					String NombreJ = rs4.getString("Nombre");
-					String Imagen = rs4.getString("Imagen");
-					String Posicion = rs4.getString("Posicion");
-					String Localidad = rs4.getString("Localidad");
-					int nacimiento = Integer.parseInt(rs4.getString("Año_Nacimiento"));
-					int idEquipo = ID;
-					String capitan = rs4.getString("Capitan");
-					
-					Jugador j = new Jugador (idJ, NombreJ, Imagen, Posicion, Localidad, nacimiento, idEquipo, capitan);
-					listaJugadoresEquipo.add(j);
-					
-				}
-				
-				rs4.close();
-				st4.close();
-				
-				
-				// creo un nuevo Equipo por cada registro
-				Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion,listaJugadoresEquipo);
-
-				
-				//lo añado a la lista donde están todos los equipos
-				
-				listaEquipos.add(e);
-			}
+			TemporadasBase();
 			
 			for (Equipo e : listaEquipos) {
-				
 				dlmListaEquipos.addElement(e.getNombre());
-			
 			}
 			
-			//Cierro el resultset
-			rs.close();
-			
-			//Cierro el statement 
-			st.close();
-		
-			// cierro la conexion
-			conexion.close();
 			
 			
 			//comprobamos si la lista está vacía o si no existe y si lo está añadimos una temporada por defecto
@@ -286,7 +222,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				dlmListaTemporadas = new DefaultListModel<String>();
 				
 				//creamos una temporada por defecto y la añadimos a la lista
-				Temporada t = new Temporada ("2023",listaEquipos.get(0),listaEquipos.get(1),listaEquipos.get(2),listaEquipos.get(3),listaEquipos.get(4),listaEquipos.get(5));
+				Temporada t = new Temporada ("2023",new Equipo(listaEquipos.get(0)),new Equipo(listaEquipos.get(1)),new Equipo(listaEquipos.get(2)),new Equipo(listaEquipos.get(3)),new Equipo(listaEquipos.get(4)),new Equipo(listaEquipos.get(5)));
 				añadirTemporada(t);
 				
 			}
@@ -845,7 +781,10 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	
 	    	else {		//si no existe ninguna temporada con esa fecha
 	    		
+	    		
 	    		List<Equipo> Seleccionados = new ArrayList<>();
+	    		TemporadasBase();
+	    		
 	    		for (int i = 0; i < dlmListaSeleccionados.size(); i++) {
 	    		    
 	    		    String nombre = dlmListaSeleccionados.getElementAt(i);
@@ -853,8 +792,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		    for (Equipo equipo : listaEquipos) {
 	    		    	
 	    		        if (equipo.getNombre().equals(nombre)) {
-	    		        	 Seleccionados.add(equipo);
-	    		        	 break;
+	    		        	
+	    		        	Seleccionados.add(equipo);
+	    		        	break;
 	    		        }     
 	    		            
 	    		}
@@ -863,6 +803,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		
 	    		//Creamos una nueva temporada con la fecha y los equipos introducidos
 	    		Temporada t = new Temporada(fechanueva,Seleccionados.get(0),Seleccionados.get(1),Seleccionados.get(2),Seleccionados.get(3),Seleccionados.get(4),Seleccionados.get(5));
+	    		
 	    		
 	    		//la añadimos a la lista y al defaultlistmodel
 	    		añadirTemporada(t);
@@ -953,6 +894,87 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    }
 	}
 	
+	public void TemporadasBase () {
+		
+		try {
+		
+		//CONSULTA PARA COGER LOS EQUIPOS
+			
+		//me conecto a la base de datos como root
+		Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
+		
+		//creo el Statement para coger los equipos
+		Statement st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		
+		//como es una query, creo un objeto ResultSet 
+		ResultSet rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+0+";");
+		
+		listaEquipos = new ArrayList<Equipo>();
+		
+		
+		while (rs.next()) {
+			
+			//creo variables de todos los resultados por cada equipo para poder manipular los datos mejor
+			String Nombre = rs.getString("Nom_Equipo");
+			String Iniciales = Nombre.substring(0, Math.min(Nombre.length(), 3));
+			int ID = Integer.parseInt(rs.getString("ID_Equipo"));
+			int Temporada = Integer.parseInt(rs.getString("Num_Temp"));
+			String Escudo = rs.getString("Escudo");
+			String Estadio = rs.getString("Estadio");
+			String Equipacion = rs.getString("Equipacion");
+			List<Jugador> listaJugadoresEquipo = new ArrayList<Jugador>();
+			
+			//CONSULTA PARA RECOGER LOS DATOS DE TODOS LOS JUGADORES DEL EQUIPO ACTUAL
+			Statement st4 = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs4 = st4.executeQuery("SELECT * FROM balonmano.jugadores WHERE ID_Equipo="+ID+";");
+			
+			
+			while (rs4.next()) {
+				
+				int idJ = Integer.parseInt(rs4.getString("ID_Jugador"));
+				String NombreJ = rs4.getString("Nombre");
+				String Imagen = rs4.getString("Imagen");
+				String Posicion = rs4.getString("Posicion");
+				String Localidad = rs4.getString("Localidad");
+				int nacimiento = Integer.parseInt(rs4.getString("Año_Nacimiento"));
+				int idEquipo = ID;
+				String capitan = rs4.getString("Capitan");
+				
+				Jugador j = new Jugador (idJ, NombreJ, Imagen, Posicion, Localidad, nacimiento, idEquipo, capitan);
+				listaJugadoresEquipo.add(j);
+				
+			}
+			
+			rs4.close();
+			st4.close();
+			
+			
+			// creo un nuevo Equipo por cada registro
+			Equipo e = new Equipo (Nombre,Iniciales,ID,Temporada,Escudo,Estadio,Equipacion,listaJugadoresEquipo);
+
+			
+			//lo añado a la lista donde están todos los equipos
+			
+			listaEquipos.add(e);
+		
+		}
+		
+		rs.close();
+		st.close();
+		
+		}
+		
+		catch (SQLException e) {
+			// si se produce una excepción SQL
+			int errorcode = e.getErrorCode();
+			
+			//si se produce cualquier error sql
+			 System.out.println("Error SQL Numero "+e.getErrorCode()+":"+e.getMessage());
+			
+			
+		}
+	}
+	
 	//Comprueba si existe la temporada en la lista de temporadas
 		public boolean existeTemporada (String fecha) {
 			boolean existe = false;
@@ -968,7 +990,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		//Añade la temporada a la lista de temporadas
 		public void añadirTemporada (Temporada temporada) {
 			
-
+			CrearJornadas(temporada);
 		  	listaTemporadas.add(temporada);
 		  	dlmListaTemporadas.addElement(temporada.getFecha()+" - "+temporada.getEstado());
 			
@@ -987,6 +1009,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				
 				for (Equipo e : temporada.getListaEquipos()) { //por cada equipo, añado un nuevo equipo a la base de datos	
 					
+					
 					e.setTemporada(Integer.parseInt(temporada.getFecha()));
 					e.setID(Integer.parseInt(e.getID()+""+e.getTemporada()));
 					
@@ -1002,6 +1025,21 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 					
 					}
 				
+				}
+				
+				
+				//INSERTO TODAS LAS JORNADAS Y LOS PARTIDOS EN LA BASE DE DATOS
+				for (Jornada j : temporada.getListaJornadas()) {
+					
+					st.executeUpdate("INSERT INTO balonmano.jornadas VALUES ("+temporada.getFecha()+","+j.getID()+");");
+					
+					for (Partido p : j.getListaPartidos()) {
+
+						
+						st.executeUpdate("INSERT INTO balonmano.partidos VALUES ("+p.getID()+","+j.getID()+",'"+p.getEquipoLocal().getNombre()+"',"+p.getPtsLocal()+",'"+p.getEquipoVisit().getNombre()+"',"+p.getPtsVisit()+",101);");
+						
+					}
+					
 				}
 				
 				
@@ -1028,7 +1066,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 		}
 		
-		public void borrarTemporada (Temporada temporada ) {
+		public void borrarTemporada (Temporada temporada) {
 			
 			listaTemporadas.remove(temporada);
 			dlmListaTemporadas.remove(JlistTemporadas.getSelectedIndex());
@@ -1043,6 +1081,13 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				//CONSULTA PARA COGER LAS TEMPORADAS
 				//creo el Statement para coger las temporadas que haya en la base de datos
 				Statement st = conexion.createStatement();
+				
+				
+					
+				st.execute("DELETE FROM partidos WHERE ID_Jornada IN (SELECT ID_Jornada FROM jornadas WHERE Num_Temp="+temporada.getFecha()+" );");
+				
+				
+				st.execute("DELETE FROM balonmano.jornadas WHERE Num_Temp="+temporada.getFecha());
 				
 				for (Equipo e : temporada.getListaEquipos()) {
 					
@@ -1146,9 +1191,126 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			}
 		}
 		
-		public void CrearJornadas() {
+		public void CrearJornadas(Temporada temporada) {
+			
+			//Creo una lista donde se guardaran las jornadas
+			List<Jornada>listaJornadas = new ArrayList<Jornada>();
+			
+			//Creamos jornada por jornada con numeros de las listas de equipos predeterminadas, al cambiar los equipos y su orden entre temporadas, las jornadas y los partidos serán aletorios
 			
 			
+			//JORNADA 1
+			List<Partido>listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+1),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(3),0);
+			Partido p2j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+2),2,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(5),0);
+			Partido p3j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+3),3,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(1),0);
+			listaPartidosActual.add(p1j1);
+			listaPartidosActual.add(p2j1);
+			listaPartidosActual.add(p3j1);
+			Jornada j1 = new Jornada (Integer.parseInt(temporada.getFecha()+""+1),1,listaPartidosActual);
+			listaJornadas.add(j1);
+			
+			//JORNADA 2
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+4),1,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(2),0);
+			Partido p2j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+5),2,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(0),0);
+			Partido p3j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+6),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(3),0);
+			listaPartidosActual.add(p1j2);
+			listaPartidosActual.add(p2j2);
+			listaPartidosActual.add(p3j2);
+			Jornada j2 = new Jornada (Integer.parseInt(temporada.getFecha()+""+2),2,listaPartidosActual);
+			listaJornadas.add(j2);
+			
+			//JORNADA 3
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+7),1,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(5),0);
+			Partido p2j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+8),2,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(4),0);
+			Partido p3j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+9),3,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(3),0);
+			listaPartidosActual.add(p1j3);
+			listaPartidosActual.add(p2j3);
+			listaPartidosActual.add(p3j3);
+			Jornada j3 = new Jornada (Integer.parseInt(temporada.getFecha()+""+3),3,listaPartidosActual);
+			listaJornadas.add(j3);
+			
+			//JORNADA 4
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+10),1,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(1),0);
+			Partido p2j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+11),2,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(0),0);
+			Partido p3j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+12),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(4),0);
+			listaPartidosActual.add(p1j4);
+			listaPartidosActual.add(p2j4);
+			listaPartidosActual.add(p3j4);
+			Jornada j4 = new Jornada (Integer.parseInt(temporada.getFecha()+""+4),4,listaPartidosActual);
+			listaJornadas.add(j4);
+			
+			//JORNADA 5
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+13),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(5),0);
+			Partido p2j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+14),2,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(3),0);
+			Partido p3j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+15),3,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(2),0);
+			listaPartidosActual.add(p1j5);
+			listaPartidosActual.add(p2j5);
+			listaPartidosActual.add(p3j5);
+			Jornada j5 = new Jornada (Integer.parseInt(temporada.getFecha()+""+5),5,listaPartidosActual);
+			listaJornadas.add(j5);
+			
+			//JORNADA 6
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+16),1,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(0),0);
+			Partido p2j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+17),2,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(4),0);
+			Partido p3j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+18),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(2),0);
+			listaPartidosActual.add(p1j6);
+			listaPartidosActual.add(p2j6);
+			listaPartidosActual.add(p3j6);
+			Jornada j6 = new Jornada (Integer.parseInt(temporada.getFecha()+""+6),6,listaPartidosActual);
+			listaJornadas.add(j6);
+			
+			//JORNADA 7
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+19),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(1),0);
+			Partido p2j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+20),2,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(5),0);
+			Partido p3j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+21),3,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(4),0);
+			listaPartidosActual.add(p1j7);
+			listaPartidosActual.add(p2j7);
+			listaPartidosActual.add(p3j7);
+			Jornada j7 = new Jornada (Integer.parseInt(temporada.getFecha()+""+7),7,listaPartidosActual);
+			listaJornadas.add(j7);
+			
+			//JORNADA 8
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+22),1,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(1),0);
+			Partido p2j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+23),2,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(2),0);
+			Partido p3j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+24),3,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(0),0);
+			listaPartidosActual.add(p1j8);
+			listaPartidosActual.add(p2j8);
+			listaPartidosActual.add(p3j8);
+			Jornada j8 = new Jornada (Integer.parseInt(temporada.getFecha()+""+8),8,listaPartidosActual);
+			listaJornadas.add(j8);
+			
+			//JORNADA 9
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+25),1,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(5),0);
+			Partido p2j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+26),2,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(2),0);
+			Partido p3j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+27),3,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(3),0);
+			listaPartidosActual.add(p1j9);
+			listaPartidosActual.add(p2j9);
+			listaPartidosActual.add(p3j9);
+			Jornada j9 = new Jornada (Integer.parseInt(temporada.getFecha()+""+9),9,listaPartidosActual);
+			listaJornadas.add(j9);
+			
+			//JORNADA 10
+			listaPartidosActual = new ArrayList<Partido>();
+			Partido p1j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+28),1,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(1),0);
+			Partido p2j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+29),2,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(0),0);
+			Partido p3j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+30),3,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(4),0);
+			listaPartidosActual.add(p1j10);
+			listaPartidosActual.add(p2j10);
+			listaPartidosActual.add(p3j10);
+			Jornada j10 = new Jornada (Integer.parseInt(temporada.getFecha()+""+10),10,listaPartidosActual);
+			listaJornadas.add(j10);
+			
+			//Una vez creadas todas las jornadas y todos los partidods se lo añadimos a la temporada que hemos introducido
+			temporada.setListaJornadas(listaJornadas);
 			
 		}
 }
