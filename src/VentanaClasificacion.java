@@ -5,16 +5,24 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 import java.awt.Image;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -26,22 +34,24 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.BorderFactory;
 
-public class VentanaEquipos extends JFrame implements FocusListener, ActionListener {
+public class VentanaClasificacion extends JFrame implements FocusListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JLabel lblEquipos;
-    private JLabel lblLog;
-    private JLabel lblEquipo;
-    private JButton btnAtras;
+    private JLabel lblClasificacion;
     private JLabel lblTemporada;
-    private JButton btnEquipo;
+    private JLabel lblLog;
+    private JButton btnAtras;
+	private Vector<Vector<String>> datosTablaClasificacion = new Vector<Vector<String>>();
+	private Vector<String> fila;
+	private JTable tablaClasificacion;
+	private DefaultTableModel dtmTablaClasificacion;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    VentanaEquipos frame = new VentanaEquipos();
+                    VentanaClasificacion frame = new VentanaClasificacion();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -53,13 +63,13 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
     /**
      * Create the frame.
      */
-    public VentanaEquipos() {
+    public VentanaClasificacion() {
 
         //establecemos título e icono de la aplicación
         setTitle("NSLA");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEquipos.class.getResource("img/logo.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaClasificacion.class.getResource("img/logo.png")));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        
         //ubicación y tamaño de la ventana
         setBounds(100, 100, 650, 600);
         setLocationRelativeTo(null);
@@ -76,18 +86,16 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
 
         // asignamos el panel del menú como predeterminado
         setContentPane(contentPane);
-
-        //------------------------------------------------------------Panel Normal----------------------------------------------------------------------//
         
         //creamos y añadimos un JLabel de título
-        lblEquipos = new JLabel("Equipos");
-        contentPane.add(lblEquipos);
+        lblClasificacion = new JLabel("Clasificación");
+        contentPane.add(lblClasificacion);
 
         //propiedades del JLabel
-        lblEquipos.setForeground(new Color(0, 0, 0));
-        lblEquipos.setFont(new Font("Arial Black", Font.BOLD, 30));
-        lblEquipos.setBounds(248, 45, 137, 36);
-        lblEquipos.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        lblClasificacion.setForeground(new Color(0, 0, 0));
+        lblClasificacion.setFont(new Font("Arial Black", Font.BOLD, 30));
+        lblClasificacion.setBounds(204, 45, 225, 36);
+        lblClasificacion.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
         //creamos y añadimos un Jlabel para marcar la temporada
         lblTemporada = new JLabel();
@@ -116,39 +124,6 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
       	//añadimos el texto que queremos a la JLabel
       	lblLog.setText("Has iniciado sesión como: " + VentanaRegistro.getNombre() + ".");
 
-      	
-      	
-        int equipoIndex = 0;
-        
-        for (Equipo equipo : VentanaTemporadas.temporadaSeleccionada.getListaEquipos()) { 
-        	
-        	
-
-            //creamos y añadimos un botón para poner la imagen del equipo
-            btnEquipo = new JButton("");
-            contentPane.add(btnEquipo);
-
-            //propiedades del JButton
-            btnEquipo.setBounds(68 + (equipoIndex % 3) * 200, 175 + (equipoIndex / 3) * 150, 100, 100);
-            btnEquipo.setBackground(null);
-            btnEquipo.setBorder(null);
-            btnEquipo.setIcon(new ImageIcon(("src/img/"+equipo.getImagenEscudo())));
-        
-            
-            
-            //creamos y añadimos un JLabel para indicar el nombre del equipo
-            lblEquipo = new JLabel(equipo.getNombre());
-            contentPane.add(lblEquipo);
-        
-            //propiedades del JLabel
-            lblEquipo.setBounds(68 + (equipoIndex % 3) * 200, 250 + (equipoIndex/3) * 150, 100, 100);
-            lblEquipo.setForeground(new Color(0,0,0));
-            lblEquipo.setFont(new Font("Arial", Font.BOLD, 15));
-            lblEquipo.setHorizontalAlignment(SwingConstants.CENTER);
-            
-            equipoIndex++;
-            
-        }
         
         
         //creamos y añadimos un botón para volver al inicio
@@ -213,5 +188,84 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
     public void actionPerformed(ActionEvent e) {
 
     }
+    	
+    public void crearClasificacion () {
+    	
+/*-----------------------------------------------BASE DE DATOS MYSQL---------------------------------------------------------------------*/
+		
+		//me intento conectar a la base de datos mysql para coger los datos de los equipos de la base de datos mysql
+		try {
+			
+			//me conecto a la base de datos como root
+			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
+
+
+			//CONSULTA PARA COGER LOS DATOS DE LOS EQUIPOS
+			//creo el Statement para coger las temporadas que haya en la base de datos
+			Statement st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			//como es una query, creo un objeto ResultSet 
+			ResultSet rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
+
+			// si se ha conectado correctamente
+			Vector<String> columnas = new Vector<String>();
+			columnas.add("Posición");
+			columnas.add("Nombre");
+			columnas.add("Puntos");
+			columnas.add("PJ");
+			columnas.add("PG");
+			columnas.add("PP");
+			columnas.add("PtsF");
+			columnas.add("PtsC");
+
+			// creo el vector para los datos de la tabla
+			datosTablaClasificacion = new Vector<Vector<String>>();
+			
+			while (rs.next()) {
+				
+				fila = new Vector<String>();
+				fila.add(rs.getString(""));
+				fila.add(rs.getString("Nom_Equipo"));
+				fila.add(rs.getString("Puntos"));
+				fila.add(rs.getString("Equipacion"));
+				fila.add(rs.getString("Estadio"));
+				fila.add(rs.getString("Escudo"));
+				fila.add("\n\n\n\n\n\n\n");
+				datosTablaClasificacion.add(fila);
+				
+				
+				}
+
+			// creo el DefaultTableModel de la JTable
+			dtmTablaClasificacion= new DefaultTableModel(datosTablaClasificacion, columnas);
+				
+		
+			//Cierro el resultset
+			rs.close();
+			
+			//Cierro el statement 
+			st.close();
+		
+			// cierro la conexion
+			conexion.close();
+			
+			
+			}
+			
+			catch (SQLException e) {
+				// si se produce una excepción SQL
+				int errorcode = e.getErrorCode();
+				
+				//si se produce cualquier error sql
+				 System.out.println("Error SQL Numero "+e.getErrorCode()+":"+e.getMessage());
+				
+				
+			}
+		
+		
+		/*-------------------------------------------------------------------------------------------------------------------------------------*/
+    	
+    }
+    
 
 }

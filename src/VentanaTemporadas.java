@@ -848,8 +848,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 
 		    	int index = JlistTemporadas.getSelectedIndex();
 				temporadaSeleccionada = listaTemporadas.get(index);				
-				VentanaInicio vi = new VentanaInicio();
-				vi.setVisible(true);
+				VentanaClasificacion vc = new VentanaClasificacion();
+				vc.setVisible(true);
 				dispose();	
 	    		
 	    	}

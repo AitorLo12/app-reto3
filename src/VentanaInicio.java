@@ -145,13 +145,6 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
         btnAtras.addMouseListener(new MouseAdapter(){
             
             @Override
-            public void mouseClicked(MouseEvent me) {
-                //cuando se pulsa el ratón encima cerramos la ventana actual y volvemos a la ventana de temporadas
-                VentanaTemporadas vt = new VentanaTemporadas();
-                vt.setVisible(true);
-                dispose();
-            }
-            @Override
             public void mouseEntered(MouseEvent me) {
                 //cuando de pasa el ratón por encima
                 btnAtras.setBackground(new Color(212,212,212));
@@ -179,17 +172,9 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
         btnClasificacion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         //Añadimos los listeners necesarios
+        btnClasificacion.addActionListener(this);
         btnClasificacion.addMouseListener(new MouseAdapter(){
             
-            @Override
-            public void mouseClicked(MouseEvent me) {
-                //cuando se pulsa el ratón encima cerramos la ventana actual y vamos a la ventana de cllasificación
-                
-                //VentanaClasificación vc = new VentanaClasificación();
-                //String temporada = temporada
-                //vc.setVisible(true);
-                //dispose();
-            }
             @Override
             public void mouseEntered(MouseEvent me) {
                 //cuando de pasa el ratón por encima
@@ -219,21 +204,9 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
         btnJornadas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         //Añadimos los listeners necesarios
+        btnJornadas.addActionListener(this);
         btnJornadas.addMouseListener(new MouseAdapter(){
             
-            @Override
-            public void mouseClicked(MouseEvent me) {
-                //cuando se pulsa el ratón encima cerramos la ventana actual y vamos a la ventana de jornadas
-
-            	//VentanaJornadas vj = new VentanaJornadas();
-                //vj.setVisible(true);
-                //vj.setLocation(100, 100);
-                //VentanaClasificación vc = new VentanaClasificación();
-                //vc.setVisible(true);
-                //vc.setLocation(750, 100);
-                //vc.setAlwaysOnTop(true);
-                dispose();
-            }
             @Override
             public void mouseEntered(MouseEvent me) {
                 //cuando de pasa el ratón por encima
@@ -264,17 +237,9 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
         btnEquipos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         //Añadimos los listeners necesarios
+        btnEquipos.addActionListener(this);
         btnEquipos.addMouseListener(new MouseAdapter(){
             
-            @Override
-            public void mouseClicked(MouseEvent me) {
-                //cuando se pulsa el ratón encima cerramos la ventana actual y vamos a la ventana de Equipos
-                
-                VentanaEquipos ve = new VentanaEquipos();
-                //String temporada = temporada
-                ve.setVisible(true);
-                dispose();
-            }
             @Override
             public void mouseEntered(MouseEvent me) {
                 //cuando de pasa el ratón por encima
@@ -312,7 +277,52 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
     
     @Override
     public void actionPerformed(ActionEvent e) {
+    	
+    	Object o = e.getSource();
+    	
+    	if (o == btnAtras) {
+    		
+    		//cuando se pulsa btnAtras cerramos la ventana actual y volvemos a la ventana de temporadas
+            VentanaTemporadas vt = new VentanaTemporadas();
+            vt.setVisible(true);
+            dispose();
+    		
+    	}
+    	
+    	else if (o == btnClasificacion) {
+    		
+    		//cuando se pulsa btnClasificacion cerramos la ventana actual y vamos a la ventana de cllasificación
+            
+            VentanaClasificacion vc = new VentanaClasificacion();
+            vc.setVisible(true);
+            dispose();
+    		
+    	}
         
+    	else if (o == btnJornadas) {
+    		
+            //cuando se pulsa btnJornadas cerramos la ventana actual y vamos a la ventana de jornadas
+
+        	//VentanaJornadas vj = new VentanaJornadas();
+            //vj.setVisible(true);
+            //vj.setLocation(100, 100);
+            //VentanaClasificación vc = new VentanaClasificación();
+            //vc.setVisible(true);
+            //vc.setLocation(750, 100);
+            //vc.setAlwaysOnTop(true);
+            dispose();
+    		
+    	}
+    	
+    	else if (o == btnEquipos) {
+    		
+    		 //cuando se pulsa btnEquipos cerramos la ventana actual y vamos a la ventana de Equipos
+            
+            VentanaEquipos ve = new VentanaEquipos();
+            ve.setVisible(true);
+            dispose();
+    		
+    	}
         
     }
 }
