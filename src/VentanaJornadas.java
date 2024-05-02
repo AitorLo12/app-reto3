@@ -26,11 +26,11 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.BorderFactory;
 
-public class VentanaEquipos extends JFrame implements FocusListener, ActionListener {
+public class VentanaJornadas extends JFrame implements FocusListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JLabel lblEquipos;
+    private JLabel lblJornadas;
     private JLabel lblLog;
     private JLabel lblEquipo;
     private JButton btnAtras;
@@ -41,7 +41,7 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    VentanaEquipos frame = new VentanaEquipos();
+                    VentanaJornadas frame = new VentanaJornadas();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -53,11 +53,11 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
     /**
      * Create the frame.
      */
-    public VentanaEquipos() {
+    public VentanaJornadas() {
 
         //establecemos título e icono de la aplicación
         setTitle("Real Federación EspaÑola de Balonmano");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEquipos.class.getResource("img/logo.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaJornadas.class.getResource("img/logo.png")));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //ubicación y tamaño de la ventana
@@ -80,14 +80,14 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
         //------------------------------------------------------------Panel Normal----------------------------------------------------------------------//
         
         //creamos y añadimos un JLabel de título
-        lblEquipos = new JLabel("Equipos");
-        contentPane.add(lblEquipos);
+        lblJornadas = new JLabel("Jornadas");
+        contentPane.add(lblJornadas);
 
         //propiedades del JLabel
-        lblEquipos.setForeground(new Color(0, 0, 0));
-        lblEquipos.setFont(new Font("Arial Black", Font.BOLD, 30));
-        lblEquipos.setBounds(248, 45, 137, 36);
-        lblEquipos.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        lblJornadas.setForeground(new Color(0, 0, 0));
+        lblJornadas.setFont(new Font("Arial Black", Font.BOLD, 30));
+        lblJornadas.setBounds(234, 45, 165, 36);
+        lblJornadas.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
         //creamos y añadimos un Jlabel para marcar la temporada
         lblTemporada = new JLabel();

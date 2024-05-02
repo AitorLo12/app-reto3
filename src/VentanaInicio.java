@@ -65,7 +65,7 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
         //}
         
         //establecemos título e icono de la aplicación
-        setTitle("NSLA");
+        setTitle("Real Federación EspaÑola de Balonmano");
         setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaInicio.class.getResource("/img/logo.png")));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -303,8 +303,8 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
     		
             //cuando se pulsa btnJornadas cerramos la ventana actual y vamos a la ventana de jornadas
 
-        	//VentanaJornadas vj = new VentanaJornadas();
-            //vj.setVisible(true);
+        	VentanaJornadas vj = new VentanaJornadas();
+            vj.setVisible(true);
             //vj.setLocation(100, 100);
             //VentanaClasificación vc = new VentanaClasificación();
             //vc.setVisible(true);

@@ -17,6 +17,16 @@ public class Partido {
 		PtsVisit = PV;
 		
 	}
+	
+	public Partido (int id,Equipo EL, int PL, Equipo EV, int PV) {
+		
+		ID = id;
+		EquipoLocal = EL;
+		PtsLocal = PL;
+		EquipoVisit = EV;
+		PtsVisit = PV;
+		
+	}
 
 	public int getID() {
 		return ID;

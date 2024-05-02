@@ -75,7 +75,7 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
     public VentanaClasificacion() {
 
         //establecemos título e icono de la aplicación
-        setTitle("NSLA");
+        setTitle("Real Federación EspaÑola de Balonmano");
         setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaClasificacion.class.getResource("img/logo.png")));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
