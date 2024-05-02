@@ -384,8 +384,7 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
 		try {
 
 
-
-			tablaClasificacion.print(JTable.PrintMode.FIT_WIDTH, header, footer);
+			tablaClasificacion.print(JTable.PrintMode.FIT_WIDTH, header, footer, !rootPaneCheckingEnabled, null, !rootPaneCheckingEnabled);
 
 			JOptionPane.showMessageDialog(this, "Se ha exportado el archivo PDF.","Clasificación exportada a PDF", JOptionPane.INFORMATION_MESSAGE, null);
 
@@ -393,8 +392,8 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
 
 		} catch (java.awt.print.PrinterException e) {
 
-			System.err.format("error al imprimir", e.getMessage());
-
+			JOptionPane.showMessageDialog(this, "Error al exportar el PDF, no se ha seleccionado ninguna ruta.","PDF no exportado",JOptionPane.ERROR_MESSAGE,null);
+			
 		}
 
 	}

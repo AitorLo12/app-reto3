@@ -32,7 +32,7 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JLabel lblInicio;
-    JLabel lblTemporada;
+    private JLabel lblTemporada;
     private JButton btnAtras;
     private JButton btnClasificacion;
     private JButton btnJornadas;

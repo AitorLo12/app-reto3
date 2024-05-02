@@ -414,3 +414,15 @@ may 02, 2024 12:32:38 P. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
 may 02, 2024 12:37:20 P. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
+may 02, 2024 12:52:11 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 02, 2024 12:52:31 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 02, 2024 12:52:56 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 02, 2024 12:59:18 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 02, 2024 1:00:16 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 02, 2024 1:01:42 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
