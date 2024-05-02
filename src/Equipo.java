@@ -16,7 +16,7 @@ public class Equipo {
 	private int	golesfavor;
 	private int	golescontra;
 	private String imagenEscudo;
-	private String imagenEstadio;
+	private String Estadio;
 	private String equipacion;
 	private List<Jugador> listaJugadores;
 	
@@ -36,7 +36,7 @@ public class Equipo {
 		golesfavor = 0;
 		golescontra = 0;
 		imagenEscudo = null;
-		imagenEstadio = null;
+		Estadio = null;
 		equipacion = null;
 		listaJugadores = new ArrayList<>();
 	
@@ -56,7 +56,7 @@ public class Equipo {
 		golesfavor = c.golesfavor;
 		golescontra = c.golescontra;
 		imagenEscudo = c.imagenEscudo;
-		imagenEstadio = c.imagenEstadio;
+		Estadio = c.Estadio;
 		equipacion = c.equipacion;
 		listaJugadores = c.listaJugadores;
 		
@@ -71,7 +71,7 @@ public class Equipo {
 		ID = id;
 		temporada = T;
 		imagenEscudo = icn;
-		imagenEstadio = E;
+		Estadio = E;
 		equipacion = eq;
 		listaJugadores = new ArrayList<Jugador>();
 		puntos = 0;
@@ -90,7 +90,7 @@ public class Equipo {
 		ID = id;
 		temporada = T;
 		imagenEscudo = icn;
-		imagenEstadio = E;
+		Estadio = E;
 		equipacion = eq;
 		listaJugadores = J;
 		puntos = 0;
@@ -100,6 +100,26 @@ public class Equipo {
 		golesfavor = 0;
 		golescontra = 0;
 		
+	}
+	
+	//Constructor para la tabla de la clasificacion
+	public Equipo(int id,String N,int T, int P, int PJ, int PG, int PP, int GF, int GC) {
+
+		ID = id;
+		nombre = N;
+		temporada = T;
+		puntos = P;
+		pjugados = PJ;
+		pganados = PG;
+		pperdidos = PP;
+		golesfavor = GF;
+		golescontra = GC;
+		iniciales = "";
+		imagenEscudo = "";
+		Estadio = "";
+		
+	
+	
 	}
 		
 		//Constructor para buscar solo el nombre del equipo
@@ -115,7 +135,6 @@ public class Equipo {
 
 	
 	//getters y setters de todos los parametros
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -196,12 +215,12 @@ public class Equipo {
 		this.imagenEscudo = imagenEscudo;
 	}
 
-	public String getImagenEstadio() {
-		return imagenEstadio;
+	public String getEstadio() {
+		return Estadio;
 	}
 
-	public void setImagenEstadio(String imagenEstadio) {
-		this.imagenEstadio = imagenEstadio;
+	public void setEstadio(String estadio) {
+		this.Estadio = estadio;
 	}
 
 	public List<Jugador> getListaJugadores() {

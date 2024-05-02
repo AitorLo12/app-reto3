@@ -584,7 +584,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 					
 					}
 					
-					st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+id+",0,'"+Nombre+"',0,'"+Himno+"','"+Equipacion+"','"+Estadio+"',0,0,'"+Escudo+"');");
+					st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+id+",0,'"+Nombre+"',0,'"+Himno+"','"+Equipacion+"','"+Estadio+"',0,0,0,0,0,'"+Escudo+"');");
 					
 					//Cierro el resultset
 					rs.close();

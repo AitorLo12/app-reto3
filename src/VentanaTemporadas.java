@@ -52,7 +52,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private JLabel lblInfoEquipos;
 	private JLabel lblInfoTemporada;
 	private JLabel lblLog;
-	private JLabel lblEstado;
 	private JLabel lblPanelEquipos;
 	private JLabel lblPanelEquipos2;
 	private JButton btnAtras;
@@ -65,6 +64,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	private JButton btnUsuarios;
 	private JButton btnEquipos;
 	private JButton btnJugadores;
+	private JButton btnXML;
 	
 	private JScrollPane scrollPane1;
 	private JScrollPane scrollPane2;
@@ -612,6 +612,38 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 					
 		});
 		
+
+		//creamos y añadimos un botón para exportar los datos a XML
+		btnXML = new JButton ("Exportar a XML");
+		contentPane.add(btnXML);
+				
+		//propiedades del JButton
+		btnXML.setBounds(10, 35, 100, 20);
+		btnXML.setForeground(new Color(0, 0, 0));
+		btnXML.setBackground(new Color(192, 192, 192));
+		btnXML.setFont(new Font("Arial Black", Font.BOLD, 10));
+		btnXML.setBorder(null);
+		btnXML.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			
+		//añadimos los listeners necesarios
+		btnXML.addActionListener(this);
+		btnXML.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseEntered(MouseEvent me) {
+				//cuando de pasa el ratón por encima
+				btnXML.setBackground(new Color(128,128,128));
+				btnXML.setForeground(new Color (255,255,255));
+			}
+			@Override
+			public void mouseExited(MouseEvent me) {
+				//Cuando el raton no esta por encima
+				btnXML.setBackground(new Color (192, 192, 192));
+				btnXML.setForeground(new Color (0,0,0));
+			}
+		});
+		
+		
+		
 		//creamos y añadimos un botón para acceder a la administración de los usuarios
 		btnUsuarios = new JButton ("Administrar usuarios");
 		contentPane.add(btnUsuarios);
@@ -892,6 +924,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	dispose();
 	    	
 	    }
+	    
+	    else if (o == btnXML) {
+	    	
+	    	
+	    	
+	    }
 	}
 	
 	public void TemporadasBase () {
@@ -1013,7 +1051,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 					e.setTemporada(Integer.parseInt(temporada.getFecha()));
 					e.setID(Integer.parseInt(e.getID()+""+e.getTemporada()));
 					
-				st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+e.getID()+","+e.getTemporada()+",'"+e.getNombre()+"',"+e.getPuntos()+",'Himno "+e.getNombre()+"','"+e.getEquipacion()+"','"+e.getImagenEstadio()+"',"+e.getGolesfavor()+","+e.getGolescontra()+",'"+e.getImagenEscudo()+"');");
+				st.executeUpdate("INSERT INTO balonmano.equipos VALUES ("+e.getID()+","+e.getTemporada()+",'"+e.getNombre()+"',"+e.getPuntos()+",'Himno "+e.getNombre()+"','"+e.getEquipacion()+"','"+e.getEstadio()+"',"+e.getPjugados()+","+e.getPganados()+","+e.getPperdidos()+","+e.getGolesfavor()+","+e.getGolescontra()+",'"+e.getImagenEscudo()+"');");
 				st.executeUpdate("INSERT INTO balonmano.participaciones VALUES("+e.getTemporada()+","+e.getID()+");");
 				
 					for (Jugador j : e.getListaJugadores()) { //por cada jugador dentro del equipo lo inserto en la base de datos
@@ -1141,6 +1179,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				btnUsuarios.setVisible(false);
 				btnEquipos.setVisible(false);
 				btnJugadores.setVisible(false);
+				btnXML.setVisible(false);
 				
 				JlistTemporadas.setBounds(38,206,525,150);
 				btnSiguiente.setBounds(38,400,525,100);
@@ -1163,6 +1202,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				btnUsuarios.setVisible(true);
 				btnEquipos.setVisible(true);
 				btnJugadores.setVisible(true);
+				btnXML.setVisible(true);
 				
 				JlistTemporadas.setBounds(38, 206, 200, 137);
 				btnSiguiente.setBounds(290,300,269,45);
@@ -1311,6 +1351,57 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//Una vez creadas todas las jornadas y todos los partidods se lo añadimos a la temporada que hemos introducido
 			temporada.setListaJornadas(listaJornadas);
+			
+		}
+		
+		public void generarXML () {
+			
+			//me intento conectar a la base de datos mysql para borrar la temporada seleccionada
+			try {
+				
+				//me conecto a la base de datos como root
+				Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
+
+
+				//CONSULTA PARA COGER LAS TEMPORADAS
+				//creo el Statement para coger las temporadas que haya en la base de datos
+				Statement st = conexion.createStatement();
+				
+				
+					
+				st.execute("DELETE FROM partidos WHERE ID_Jornada IN (SELECT ID_Jornada FROM jornadas WHERE Num_Temp="+temporada.getFecha()+" );");
+				
+				
+				st.execute("DELETE FROM balonmano.jornadas WHERE Num_Temp="+temporada.getFecha());
+				
+				for (Equipo e : temporada.getListaEquipos()) {
+					
+					st.executeUpdate("DELETE FROM balonmano.jugadores WHERE ID_Equipo="+e.getID()+";");
+					
+				}
+
+				st.executeUpdate("DELETE FROM balonmano.participaciones WHERE Num_Temp='"+temporada.getFecha()+"';");
+				
+				
+				st.executeUpdate("DELETE FROM balonmano.equipos WHERE Num_Temp='"+temporada.getFecha()+"';");
+				
+				st.executeUpdate("DELETE FROM balonmano.temporadas WHERE Num_Temp='"+temporada.getFecha()+"';");
+				
+				//Cierro el statement 
+				st.close();
+			
+				// cierro la conexion
+				conexion.close();
+				
+				
+			}
+		
+				catch (SQLException e) {
+					//si se produce una excepción SQL
+					System.out.println("Error SQL Numero "+e.getErrorCode()+":"+e.getMessage());
+					
+					
+				}
 			
 		}
 }

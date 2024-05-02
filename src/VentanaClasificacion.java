@@ -10,6 +10,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 import java.awt.Image;
 
@@ -19,14 +23,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import java.awt.Color;
 import java.awt.Cursor;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -42,6 +50,7 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
     private JLabel lblTemporada;
     private JLabel lblLog;
     private JButton btnAtras;
+    private JButton btnPDF;
 	private Vector<Vector<String>> datosTablaClasificacion = new Vector<Vector<String>>();
 	private Vector<String> fila;
 	private JTable tablaClasificacion;
@@ -87,6 +96,9 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
         // asignamos el panel del menú como predeterminado
         setContentPane(contentPane);
         
+        //Llamamos a la función que crea la clasificación
+        crearClasificacion();
+        
         //creamos y añadimos un JLabel de título
         lblClasificacion = new JLabel("Clasificación");
         contentPane.add(lblClasificacion);
@@ -94,7 +106,7 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
         //propiedades del JLabel
         lblClasificacion.setForeground(new Color(0, 0, 0));
         lblClasificacion.setFont(new Font("Arial Black", Font.BOLD, 30));
-        lblClasificacion.setBounds(204, 45, 225, 36);
+        lblClasificacion.setBounds(204, 45, 230, 36);
         lblClasificacion.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
         //creamos y añadimos un Jlabel para marcar la temporada
@@ -143,15 +155,6 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
         btnAtras.addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseClicked(MouseEvent me) {
-                //cuando se pulsa el ratón encima cerramos la ventana actual y volvemos a la ventana de inicio
-
-                VentanaInicio vi = new VentanaInicio();
-                vi.setVisible(true);
-                dispose();
-            }
-
-            @Override
             public void mouseEntered(MouseEvent me) {
                 //cuando de pasa el ratón por encima
                 btnAtras.setBackground(new Color(212, 212, 212));
@@ -161,6 +164,35 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
             public void mouseExited(MouseEvent me) {
                 //Cuando el raton no esta por encima
                 btnAtras.setBackground(null);
+            }
+
+        });
+        
+      //creamos y añadimos un botón para exportar la clasificación en PDF
+        btnPDF = new JButton("Exportar a PDF");
+        contentPane.add(btnPDF);
+
+        //propiedades del JButton
+		btnPDF.setBackground(new Color(192, 192, 192));
+		btnPDF.setForeground(new Color(0, 0, 0));
+        btnPDF.setBorder(null);
+        btnPDF.setBounds(506, 100, 100, 20);
+        btnPDF.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));        
+
+        //añadimos los listeners necesarios
+        btnPDF.addActionListener(this);
+        btnPDF.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+                //cuando de pasa el ratón por encima
+                btnPDF.setBackground(new Color(212, 212, 212));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+                //Cuando el raton no esta por encima
+                btnPDF.setBackground(new Color(192,192,192));
             }
 
         });
@@ -186,7 +218,21 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
 
     @Override
     public void actionPerformed(ActionEvent e) {
+    	
+    	Object o = e.getSource();
+    	
+    	if (o == btnAtras) {
+    		
+                VentanaInicio vi = new VentanaInicio();
+                vi.setVisible(true);
+                dispose();	
+    	}
 
+    	else if (o == btnPDF) {
+    		
+    		generarPDF();
+    		
+    	}
     }
     	
     public void crearClasificacion () {
@@ -207,34 +253,70 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
 			//como es una query, creo un objeto ResultSet 
 			ResultSet rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
 
+			List <Equipo> listaEquiposClasificacion = new ArrayList<Equipo>();
+			
 			// si se ha conectado correctamente
 			Vector<String> columnas = new Vector<String>();
-			columnas.add("Posición");
 			columnas.add("Nombre");
 			columnas.add("Puntos");
 			columnas.add("PJ");
 			columnas.add("PG");
 			columnas.add("PP");
-			columnas.add("PtsF");
-			columnas.add("PtsC");
+			columnas.add("GF");
+			columnas.add("GC");
 
 			// creo el vector para los datos de la tabla
 			datosTablaClasificacion = new Vector<Vector<String>>();
 			
 			while (rs.next()) {
 				
+				//creo variables de todos los resultados por cada equipo para poder manipular los datos mejor
+				int ID = Integer.parseInt(rs.getString("ID_Equipo"));
+				String Nombre = rs.getString("Nom_Equipo");
+				int TempEquipo = Integer.parseInt(rs.getString("Num_Temp"));
+				int Puntos = Integer.parseInt(rs.getString("Puntos"));
+				int PJ = Integer.parseInt(rs.getString("Partidos_Jugados"));
+				int PG = Integer.parseInt(rs.getString("Partidos_Ganados"));
+				int PP = Integer.parseInt(rs.getString("Partidos_Perdidos"));
+				int GF = Integer.parseInt(rs.getString("GF"));
+				int GC = Integer.parseInt(rs.getString("GC"));
+				
+				// creo un nuevo Equipo por cada registro
+				Equipo e = new Equipo (ID,Nombre,TempEquipo,Puntos,PJ,PG,PP,GF,GC);
+
+				
+				//lo añado a la lista donde están todos los equipos
+				
+				listaEquiposClasificacion.add(e);
+				
+				// Ordenar la lista de equipos
+			    Collections.sort(listaEquiposClasificacion, (e2, e1) -> {
+			        if (e1.getPuntos() != e2.getPuntos()) {
+			            return Integer.compare(e1.getPuntos(), e2.getPuntos());
+			        } else {
+			            int setsfavor1 = e1.getGolesfavor() - e1.getGolescontra();
+			            int setsfavor2 = e2.getGolesfavor()- e2.getGolescontra();
+			            return Integer.compare(setsfavor1, setsfavor2);
+			        }
+			    });
+				
+				}
+			
+			for (Equipo e : listaEquiposClasificacion) {
+				
 				fila = new Vector<String>();
-				fila.add(rs.getString(""));
-				fila.add(rs.getString("Nom_Equipo"));
-				fila.add(rs.getString("Puntos"));
-				fila.add(rs.getString("Equipacion"));
-				fila.add(rs.getString("Estadio"));
-				fila.add(rs.getString("Escudo"));
+				fila.add(e.getNombre());
+				fila.add(""+e.getPuntos());
+				fila.add(""+e.getPjugados());
+				fila.add(""+e.getPganados());
+				fila.add(""+e.getPperdidos());
+				fila.add(""+e.getGolesfavor());
+				fila.add(""+e.getGolescontra());
 				fila.add("\n\n\n\n\n\n\n");
 				datosTablaClasificacion.add(fila);
 				
-				
-				}
+			}
+			
 
 			// creo el DefaultTableModel de la JTable
 			dtmTablaClasificacion= new DefaultTableModel(datosTablaClasificacion, columnas);
@@ -248,6 +330,30 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
 		
 			// cierro la conexion
 			conexion.close();
+			
+			// creo una tabla y le añado el modelo por defecto
+			tablaClasificacion = new JTable(dtmTablaClasificacion);
+			tablaClasificacion.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			contentPane.add(tablaClasificacion);
+			tablaClasificacion.setRowHeight(60);
+			
+			//asignamos el ancho que nosotros queramos a cada columna
+	        tablaClasificacion.getColumnModel().getColumn(0).setPreferredWidth(80);
+	        tablaClasificacion.getColumnModel().getColumn(1).setPreferredWidth(40); 
+	        tablaClasificacion.getColumnModel().getColumn(2).setPreferredWidth(40);
+	        tablaClasificacion.getColumnModel().getColumn(3).setPreferredWidth(40);
+	        tablaClasificacion.getColumnModel().getColumn(4).setPreferredWidth(40);
+	        tablaClasificacion.getColumnModel().getColumn(5).setPreferredWidth(40);
+	        tablaClasificacion.getColumnModel().getColumn(6).setPreferredWidth(40);
+			
+			// creo un scroll pane y le añado la tabla
+			JScrollPane scrollPane = new JScrollPane(tablaClasificacion);
+			scrollPane.setBounds(25, 125, 583, 384);
+
+			// añado el scroll pane al panel principal
+			contentPane.add(scrollPane);
+			
+			
 			
 			
 			}
@@ -267,5 +373,30 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
     	
     }
     
+    private void generarPDF() {
+
+		MessageFormat header = new MessageFormat("Clasificación de la temporada " + VentanaTemporadas.temporadaSeleccionada.getFecha());
+
+		MessageFormat footer = new MessageFormat("Real Federación EspaÑola de Balonmano");
+
+
+
+		try {
+
+
+
+			tablaClasificacion.print(JTable.PrintMode.FIT_WIDTH, header, footer);
+
+			JOptionPane.showMessageDialog(this, "Se ha exportado el archivo PDF.","Clasificación exportada a PDF", JOptionPane.INFORMATION_MESSAGE, null);
+
+
+
+		} catch (java.awt.print.PrinterException e) {
+
+			System.err.format("error al imprimir", e.getMessage());
+
+		}
+
+	}
 
 }
