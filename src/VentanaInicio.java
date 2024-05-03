@@ -303,13 +303,13 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
     		
             //cuando se pulsa btnJornadas cerramos la ventana actual y vamos a la ventana de jornadas
 
-        	VentanaJornadas vj = new VentanaJornadas();
-            vj.setVisible(true);
-            //vj.setLocation(100, 100);
-            //VentanaClasificación vc = new VentanaClasificación();
-            //vc.setVisible(true);
-            //vc.setLocation(750, 100);
-            //vc.setAlwaysOnTop(true);
+        	VentanaResultados vr = new VentanaResultados();
+            vr.setVisible(true);
+            vr.setLocation(100, 100);
+            VentanaClasificacion vc = new VentanaClasificacion();
+            vc.setVisible(true);
+            vc.setLocation(750, 100);
+            vc.setAlwaysOnTop(true);
             dispose();
     		
     	}
