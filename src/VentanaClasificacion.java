@@ -55,6 +55,7 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
 	private Vector<String> fila;
 	private JTable tablaClasificacion;
 	private DefaultTableModel dtmTablaClasificacion;
+	private VentanaResultados vr;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -225,6 +226,11 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
     		
                 VentanaInicio vi = new VentanaInicio();
                 vi.setVisible(true);
+                if(!(vr == null)) {
+                	
+                	vr.dispose();
+                }
+                
                 dispose();	
     	}
 

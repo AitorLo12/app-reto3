@@ -10,6 +10,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -71,6 +72,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 	private JButton btnUltimo;
 	private JButton btnInsertar;
 	private JButton btnFinalizar;
+	private VentanaClasificacion vc;
 
 	/**
 	 * Launch the application.
@@ -99,8 +101,13 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// ubicación y tamaño de la ventana
-		setBounds(100, 100, 650, 600);
-		setLocationRelativeTo(null);
+        setBounds(100, 100, 650, 600);
+        setLocationRelativeTo(null);
+		
+		vc = new VentanaClasificacion();
+        vc.setVisible(true);
+        vc.setLocation(750, 100);
+        vc.setAlwaysOnTop(true);
 
 		// quita el redimensionado de la ventana
 		setResizable(false);
@@ -497,7 +504,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 			
 			int filas = tablaPartidos.getSelectedRow();
 			
-			if (filas <= 0) { // compruebo que haya algun partido seleccionado en la tabla
+			if (filas < 0) { // compruebo que haya algun partido seleccionado en la tabla
 				// si no hay ningun elemento seleccionado
 				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
 
@@ -531,12 +538,100 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 					//creo el Statement para actualizar los datos del partido seleccionado
 					st.executeUpdate("UPDATE balonmano.partidos SET goles_equipo_loc="+GolesL+",goles_equipo_vis="+GolesV+" WHERE cod_partido="+Cod+";");
 					
-					//CONSULTA PARA COGER LOS PARTIDOS Y PUNTOS DE LOS EQUIPOS DEL PARTIDO
+					//lo actualizamos en la tabla
+					dtmTablaPartidos.setValueAt(GolesL, filas, 2);
+					dtmTablaPartidos.setValueAt(GolesV, filas, 4);
 					
+					int IDL = 0;
+					int PtsL = 0;
+					int PJL = 0;
+					int PGL = 0;
+					int PPL = 0;
+					int GFL = 0;
+					int GCL = 0;
 					
+					int IDV = 0;
+					int PtsV = 0;
+					int PJV = 0;
+					int PGV = 0;
+					int PPV = 0;
+					int GFV = 0;
+					int GCV = 0;
+					
+					//CONSULTA PARA COGER LOS PARTIDOS Y PUNTOS DEL EQUIPO LOCAL DEL PARTIDO
+					ResultSet rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Nom_Equipo='"+EquipoL+"' AND Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
+					
+					while(rs.next()) {
+						
+						IDL = Integer.parseInt(rs.getString("ID_Equipo"));
+						PtsL = Integer.parseInt(rs.getString("Puntos"));
+						PJL = Integer.parseInt(rs.getString("Partidos_Jugados"));
+						PGL = Integer.parseInt(rs.getString("Partidos_Ganados"));
+						PPL = Integer.parseInt(rs.getString("Partidos_Perdidos"));
+						GFL = Integer.parseInt(rs.getString("GF"));
+						GCL = Integer.parseInt(rs.getString("GC"));
+						
+					}
+					
+					//CONSULTA PARA COGER LOS PARTIDOS Y PUNTOS DEL EQUIPO VISITANTE DEL PARTIDO
+					rs = st.executeQuery("SELECT * FROM balonmano.equipos WHERE Nom_Equipo='"+EquipoV+"' AND Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
+					
+					while (rs.next()) {
+						
+						IDV = Integer.parseInt(rs.getString("ID_Equipo"));
+						PtsV = Integer.parseInt(rs.getString("Puntos"));
+						PJV = Integer.parseInt(rs.getString("Partidos_Jugados"));
+						PGV = Integer.parseInt(rs.getString("Partidos_Ganados"));
+						PPV = Integer.parseInt(rs.getString("Partidos_Perdidos"));
+						GFV = Integer.parseInt(rs.getString("GF"));
+						GCV = Integer.parseInt(rs.getString("GC"));
+						
+					}
+					
+					if (GolesL > GolesV) {
+						
+						PtsL = PtsL + 3;
+						PJL = PJL + 1;
+						PJV = PJV + 1;
+						PGL = PGL + 1;
+						PPV = PPV + 1;
+						GFL = GFL + GolesL;
+						GCL = GCL + GolesV;
+						GFV = GFV + GolesV;
+						GCV = GCV + GolesL;
+						
+					}
+					
+					else if (GolesL < GolesV) {
+						
+						PtsV = PtsV + 3;
+						PJL = PJL + 1;
+						PJV = PJV + 1;
+						PGV = PGV + 1;
+						PPL = PPL + 1;
+						GFL = GFL + GolesL;
+						GCL = GCL + GolesV;
+						GFV = GFV + GolesV;
+						GCV = GCV + GolesL;
+						
+					}
+					
+					else {
+						
+						PtsL = PtsL + 1;
+						PtsV = PtsV + 1;
+						PJL = PJL + 1;
+						PJV = PJV + 1;
+						GFL = GFL + GolesL;
+						GCL = GCL + GolesV;
+						GFV = GFV + GolesV;
+						GCV = GCV + GolesL;
+						
+					}
 					
 					//CONSULTA PARA ACTUALIZAR LOS EQUIPOS CON LOS GOLES Y LOS PARTIDOS JUGADOS
-					
+					st.executeUpdate("UPDATE balonmano.equipos SET Puntos="+PtsL+",Partidos_Jugados="+PJL+",Partidos_Ganados="+PGL+",Partidos_Perdidos="+PPL+",GF="+GFL+",GC="+GCL+" WHERE Nom_Equipo='"+EquipoL+"' AND Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
+					st.executeUpdate("UPDATE balonmano.equipos SET Puntos="+PtsV+",Partidos_Jugados="+PJV+",Partidos_Ganados="+PGV+",Partidos_Perdidos="+PPV+",GF="+GFV+",GC="+GCV+" WHERE Nom_Equipo='"+EquipoV+"' AND Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
 					
 					//Cierro el statement 
 					st.close();
@@ -547,6 +642,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 					JOptionPane.showMessageDialog(this,"Resultado del partido seleccionado actualizado correctamente.","Actualización exitosa",JOptionPane.INFORMATION_MESSAGE,null);
 					
 					ActualizarCampos();
+					vc.crearClasificacion();
 					
 
 					// Establecemos los valores de los txt a campos vacíos
@@ -584,6 +680,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 			
 			VentanaJornadas vj = new VentanaJornadas();
 			vj.setVisible(true);
+			vc.dispose();
 			dispose();
 			
 		}
@@ -664,10 +761,10 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		if (seleccion >= 0) {
 			
 			// Establecemos los valores de los txt
-			txtEquipoLocal.setText((String) dtmTablaPartidos.getValueAt(seleccion, 1));
-			txtGolesLocal.setText((String) dtmTablaPartidos.getValueAt(seleccion, 2));
-			txtEquipoVisit.setText((String) dtmTablaPartidos.getValueAt(seleccion, 3));
-			txtGolesVisit.setText((String) dtmTablaPartidos.getValueAt(seleccion, 4));
+			txtEquipoLocal.setText(""+ dtmTablaPartidos.getValueAt(seleccion, 1));
+			txtGolesLocal.setText(""+dtmTablaPartidos.getValueAt(seleccion, 2));
+			txtEquipoVisit.setText(""+ dtmTablaPartidos.getValueAt(seleccion, 3));
+			txtGolesVisit.setText(""+ dtmTablaPartidos.getValueAt(seleccion, 4));
 		}
 	}
 	

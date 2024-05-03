@@ -547,7 +547,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 			// compruebo que haya algun jugador seleccionado en la tabla
 			int filas = tablaJugadores.getSelectedRowCount();
-			if (filas <= 0) {
+			if (filas < 0) {
 				// si no hay ningun elemento seleccionado
 				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
 
@@ -743,7 +743,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 			int filas = tablaJugadores.getSelectedRow();
 			
-			if (filas <= 0) { // compruebo que haya algun jugador seleccionado en la tabla
+			if (filas < 0) { // compruebo que haya algun jugador seleccionado en la tabla
 				// si no hay ningun elemento seleccionado
 				JOptionPane.showMessageDialog(this, "Error, no hay ningun elemento seleccionado.","Ningun elemento seleccionado", JOptionPane.ERROR_MESSAGE, null);
 
