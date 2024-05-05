@@ -73,6 +73,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 	private JLabel lblEscudo;
 	private JTextField txtEscudo;
 	private JButton btnEscudo;
+	private JLabel lblImagen;
 
 	/**
 	 * Launch the application.
@@ -452,6 +453,14 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 		btnEscudo.setBounds(830, 65, 135, 20);
 		btnEscudo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
+		//creamos y añadimos un JLabel donde se reflejará la imagen seleccionada en la tabla
+		lblImagen = new JLabel("");
+		contentPane.add(lblImagen);
+		
+		//propiedades del JLabel
+		lblImagen.setBounds(750, 11, 50, 50);
+		
+		
 		//añado los listeners necesarios
 		btnEscudo.addActionListener(this);
 
@@ -774,11 +783,16 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 		// si se ha hecho click en una fila
 		if (seleccion >= 0) {
 			// Establecemos los valores de los txt
-			txtNombre.setText((String) dtmTablaEquipos.getValueAt(seleccion, 0));
-			txtHimno.setText((String) dtmTablaEquipos.getValueAt(seleccion, 1));
-			txtEquipacion.setText((String) dtmTablaEquipos.getValueAt(seleccion, 2));
-			txtEstadio.setText((String) dtmTablaEquipos.getValueAt(seleccion, 3));
-			txtEscudo.setText((String)dtmTablaEquipos.getValueAt(seleccion, 4));
+			txtNombre.setText(""+dtmTablaEquipos.getValueAt(seleccion, 0));
+			txtHimno.setText(""+dtmTablaEquipos.getValueAt(seleccion, 1));
+			txtEquipacion.setText(""+dtmTablaEquipos.getValueAt(seleccion, 2));
+			txtEstadio.setText(""+dtmTablaEquipos.getValueAt(seleccion, 3));
+			txtEscudo.setText(""+dtmTablaEquipos.getValueAt(seleccion, 4));
+			ImageIcon imgc = new ImageIcon("src/img/"+dtmTablaEquipos.getValueAt(seleccion, 4));
+			Image img = imgc.getImage();
+			img = img.getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
+			lblImagen.setIcon(new ImageIcon(img));
+			
 		}
 	}
 
@@ -798,5 +812,4 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
             JOptionPane.showMessageDialog(this, "La imagen ya existe por lo que se usará la imagen ya almacenada.");
         }
     }
-    
 }

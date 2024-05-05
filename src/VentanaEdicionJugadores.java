@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -77,6 +78,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 	private JLabel lblImagen;
 	private JTextField txtImagen;
 	private JButton btnImagen;
+	private JLabel lblImagenJugador;
 	private List<String> Equipos;
 
 	/**
@@ -538,6 +540,13 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		//añado los listeners necesarios
 		btnImagen.addActionListener(this);
 		
+		//creamos y añadimos un JLabel donde se reflejará la imagen seleccionada en la tabla
+		lblImagenJugador = new JLabel("");
+		contentPane.add(lblImagenJugador);
+				
+		//propiedades del JLabel
+		lblImagenJugador.setBounds(1077, 11, 50, 50);
+		
 	}
 
 	@Override
@@ -888,7 +897,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
         return false; // No se encontró el string en la columna
     }
     
-    public void cogerDatos() {
+    public void cogerDatos() {s
 		// sacamos en que fila se ha hecho click
 		int seleccion = tablaJugadores.getSelectedRow();
 		// si se ha hecho click en una fila
@@ -901,6 +910,10 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 			cmbEquipo.setSelectedItem(dtmTablaJugadores.getValueAt(seleccion, 5));
 			txtCapitan.setText((String)dtmTablaJugadores.getValueAt(seleccion, 6));
 			txtImagen.setText((String)dtmTablaJugadores.getValueAt(seleccion, 7));
+			ImageIcon imgc = new ImageIcon("src/img/jugadores/"+dtmTablaJugadores.getValueAt(seleccion, 7));
+			Image img = imgc.getImage();
+			img = img.getScaledInstance(lblImagenJugador.getWidth(), lblImagenJugador.getHeight(), Image.SCALE_SMOOTH);
+			lblImagenJugador.setIcon(new ImageIcon(img));
 		}
 	}
     
