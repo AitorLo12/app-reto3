@@ -8,6 +8,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -927,8 +931,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    
 	    else if (o == btnXML) {
 	    	
-	    	
-	    	
+	    	generarXML();
+	    	JOptionPane.showMessageDialog(this, "XML generado correctamente con todos los datos.", "Archivo XML generado", JOptionPane.INFORMATION_MESSAGE,null);
+			
 	    }
 	}
 	
@@ -1356,42 +1361,200 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		
 		public void generarXML () {
 			
-			//me intento conectar a la base de datos mysql para borrar la temporada seleccionada
+			
+			
+			//me intento conectar a la base de datos mysql para coger los datos de todas las temporadas
 			try {
 				
+				
+				FileWriter fichero = new FileWriter("C:\\Users\\ik_1DW3A\\Desktop\\datos.xml");
+			    PrintWriter pw = new PrintWriter(fichero);
+			    BufferedWriter bw = new BufferedWriter(pw);
+			    
+			    bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			    bw.newLine();
+			    bw.write("<?xml-model href=\"datos.xsd\"?> ");
+			    bw.newLine();
+			    bw.write("<?xml-stylesheet type=\"text/xsl\" href=\"xml/transformacion.xsl\"?>");
+			    bw.newLine();
+			    bw.write("<datos>");
+			    bw.newLine();
+			    bw.write("<usuarios>");
+			    
+			    
+			    //me intento conectar a la base de datos orientada a objetos para coger los datos de los usuarios
+				EntityManagerFactory emf = Persistence.createEntityManagerFactory("objectdb:db/balonmano.odb");
+				EntityManager em = emf.createEntityManager();
+				
+				// ejecuto la consulta
+				TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
+				List<Usuario> results = tq1.getResultList();
+				
+				for (Usuario u : results) {
+
+					bw.newLine();
+					bw.write("<usuario>");
+					bw.newLine();
+					bw.write("<nombre>"+u.getNombre()+"</nombre>");
+					bw.newLine();
+					bw.write("<correo>"+u.getCorreo()+"</correo>");
+					bw.newLine();
+					bw.write("<contraseña>"+u.getContraseña()+"</contraseña>");
+					bw.newLine();
+					bw.write("<rol>"+u.getPermisos()+"</rol>");
+					bw.newLine();
+					bw.write("</usuario>");
+					
+				}
+				
+				bw.newLine();
+				bw.write("</usuarios>");
+
 				//me conecto a la base de datos como root
 				Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
 
-
-				//CONSULTA PARA COGER LAS TEMPORADAS
 				//creo el Statement para coger las temporadas que haya en la base de datos
+				//CONSULTA PARA COGER TODAS LAS TEMPORADAS
 				Statement st = conexion.createStatement();
+				ResultSet rsT = st.executeQuery("SELECT * FROM balonmano.temporadas WHERE Num_Temp!= 0;");
 				
-				
+				while (rsT.next()) {
 					
-				st.execute("DELETE FROM partidos WHERE ID_Jornada IN (SELECT ID_Jornada FROM jornadas WHERE Num_Temp="+temporada.getFecha()+" );");
-				
-				
-				st.execute("DELETE FROM balonmano.jornadas WHERE Num_Temp="+temporada.getFecha());
-				
-				for (Equipo e : temporada.getListaEquipos()) {
+					bw.newLine();
+					bw.write("<temporada nombre='"+rsT.getString("Num_Temp")+"'>");
+					bw.newLine();
+					bw.write("<equipos>");
 					
-					st.executeUpdate("DELETE FROM balonmano.jugadores WHERE ID_Equipo="+e.getID()+";");
+					//CONSULTA PARA COGER TODOS LOS EQUIPOS DE LA TEMPORADA
+					Statement st1 = conexion.createStatement();
+					ResultSet rsE = st1.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp="+rsT.getString("Num_Temp")+";");
 					
-				}
+					while (rsE.next()) {
+						
+						bw.newLine();
+						bw.write("<equipo nombre='"+rsE.getString("Nom_Equipo")+"' img='"+rsE.getString("Escudo")+"'>");
+						
+						//CONSULTA PARA COGER TODOS LOS JUGADORES DEL EQUIPO DE LA TEMPORADA
+						Statement st2 = conexion.createStatement();
+						ResultSet rsJ = st2.executeQuery("SELECT * FROM balonmano.jugadores WHERE ID_Equipo="+rsE.getString("ID_Equipo")+";");
+						
+						while (rsJ.next()) {
 
-				st.executeUpdate("DELETE FROM balonmano.participaciones WHERE Num_Temp='"+temporada.getFecha()+"';");
+							bw.newLine();
+							bw.write("<jugador>");
+							bw.newLine();
+							bw.write("<nombre>"+rsJ.getString("Nombre")+"</nombre>");
+							bw.newLine();
+							bw.write("<imagen>"+rsJ.getString("Imagen")+"</imagen>");
+							bw.newLine();
+							bw.write("</jugador>");
+							
+						}
+						
+						rsJ.close();
+						st2.close();
+						
+						bw.newLine();
+						bw.write("</equipo>");
+						
+					}
+					
+					rsE.close();
+					st1.close();
+					
+					bw.newLine();
+					bw.write("</equipos>");
+					bw.newLine();
+					bw.write("<jornadas>");
+					
+					//CONSULTA PARA COGER TODAS LAS JORNADAS DE LA TEMPORADA
+					Statement st3 = conexion.createStatement();
+					ResultSet rsJr = st3.executeQuery("SELECT * FROM balonmano.jornadas WHERE Num_Temp="+rsT.getString("Num_Temp")+";");
+					
+					//variable que guarda el numero de la jornada
+					int i = 0;
+					
+					while (rsJr.next()) {
+						
+						//por cada jornada que exista en el resultset, sumo uno a la variable que contabiliza el numero de la jornada
+						i++;
+						bw.newLine();
+						bw.write("<jornada numero='"+i+"'>");
+						
+						//CONSULTA PARA COGER TODOS LOS PARTIDOS DE LA JORNADA DE LA TEMPORADA
+						Statement st4 = conexion.createStatement();
+						ResultSet rsP = st4.executeQuery("SELECT * FROM balonmano.partidos WHERE ID_Jornada="+rsJr.getString("ID_Jornada")+";");
+						
+						while (rsP.next()) {
+							
+							Equipo EL = new Equipo (rsP.getString("nom_equipo_loc"));
+							Equipo EV = new Equipo (rsP.getString("nom_equipo_vis"));
+							
+							bw.newLine();
+							bw.write("<partido>");
+							
+							Statement st5 = conexion.createStatement();
+							ResultSet rsI = st5.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp= "+rsT.getString("Num_Temp")+" AND Nom_Equipo='"+EL.getNombre()+"';");
+							while(rsI.next()) {
+								
+								bw.newLine();
+								bw.write("<local>"+rsI.getString("Nom_Equipo")+"</local>");
+								
+								bw.newLine();
+								bw.write("<escudo-local>"+rsI.getString("Escudo")+"</escudo-local>");
+							
+							}
+							
+							bw.newLine();
+							bw.write("<goles-local>"+rsP.getString("goles_equipo_loc")+"</goles-local>");
+							
+							rsI = st5.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp= "+rsT.getString("Num_Temp")+" AND Nom_Equipo='"+EV.getNombre()+"';");
+							while(rsI.next()) {
+								
+								bw.newLine();
+								bw.write("<visitante>"+rsI.getString("Nom_Equipo")+"</visitante>"); 
+
+								bw.newLine();
+								bw.write("<escudo-visitante>"+rsI.getString("Escudo")+"</escudo-visitante>");
+								
+								}
+							rsI.close();
+							st5.close();
+							
+							bw.newLine();
+							bw.write("<goles-visitante>"+rsP.getString("goles_equipo_vis")+"</goles-visitante>");
+							bw.newLine();
+							bw.write("</partido>");
+							
+						}
+						
+						rsP.close();
+						st4.close();
+						
+						bw.newLine();
+						bw.write("</jornada>");
+						
+					}
+					
+					rsJr.close();
+					st3.close();
+					
+					bw.newLine();
+					bw.write("</jornadas>");
+					
+					bw.newLine();
+					bw.write("</temporada>");
+				}
 				
-				
-				st.executeUpdate("DELETE FROM balonmano.equipos WHERE Num_Temp='"+temporada.getFecha()+"';");
-				
-				st.executeUpdate("DELETE FROM balonmano.temporadas WHERE Num_Temp='"+temporada.getFecha()+"';");
-				
-				//Cierro el statement 
+				rsT.close();
 				st.close();
-			
-				// cierro la conexion
-				conexion.close();
+				
+				bw.newLine();
+				bw.write("</datos>");
+				
+				bw.close();
+				pw.close();
+				fichero.close();
 				
 				
 			}
@@ -1403,7 +1566,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 					
 				}
 			
-		}
+				catch (Exception e1) {
+			     // TODO: handle exception
+				}
+
+		
 }
+		}
 
 

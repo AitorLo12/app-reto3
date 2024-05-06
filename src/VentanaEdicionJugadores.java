@@ -897,7 +897,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
         return false; // No se encontró el string en la columna
     }
     
-    public void cogerDatos() {s
+    public void cogerDatos() {
 		// sacamos en que fila se ha hecho click
 		int seleccion = tablaJugadores.getSelectedRow();
 		// si se ha hecho click en una fila

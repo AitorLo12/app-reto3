@@ -5,16 +5,20 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Vector;
 import java.awt.Image;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -34,8 +38,25 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
     private JLabel lblLog;
     private JLabel lblEquipo;
     private JButton btnAtras;
+    private JButton btnAtras1;
     private JLabel lblTemporada;
     private JButton btnEquipo;
+    private JPanel contentPaneEquipo;
+    private JLabel lblNombreEquipo;
+    private JLabel lblIcn;
+    private JLabel lblIcnEquipo;
+    private JLabel lblJugadores;
+    private JLabel lblJugadoresIcn;
+    private JLabel lblJugadoresNom;
+    private JLabel lblEstadio;
+    private JLabel lblEstadioEquipo;
+    private JLabel lblEquipacion;
+    private JLabel lblEquipacionEquipo;
+    private JTable TablaJugadoresE;
+    private DefaultTableModel dtmTablaJugadoresE;
+	private Vector<Vector<String>> datosTablaJugadoresE = new Vector<Vector<String>>();
+	private Vector<String> fila;
+    private JScrollPane scrollPane;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -73,6 +94,12 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
         contentPane.setForeground(new Color(0, 0, 0));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(null);
+        
+        contentPaneEquipo = new JPanel();
+        contentPaneEquipo.setBackground(new Color(255, 255, 255));
+        contentPaneEquipo.setForeground(new Color(0, 0, 0));
+        contentPaneEquipo.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPaneEquipo.setLayout(null);
 
         // asignamos el panel del menú como predeterminado
         setContentPane(contentPane);
@@ -133,6 +160,32 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
             btnEquipo.setBackground(null);
             btnEquipo.setBorder(null);
             btnEquipo.setIcon(new ImageIcon(("src/img/"+equipo.getImagenEscudo())));
+            
+            //añadimos los listeners en los botones 
+            btnEquipo.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseClicked(MouseEvent me) {
+                    //cuando se pulsa el ratón encima cerramos el panel del menú y vamos al panel del equipo
+                    contentPane.setVisible(false);
+                    contentPaneEquipo.setVisible(true);
+                    setContentPane(contentPaneEquipo);
+                    lblJugadoresIcn.setIcon(null);
+                    lblJugadoresNom.setText("");
+
+                    // Actualizar los componentes del panel del equipo con la información del equipo seleccionado
+                    actualizarPanelEquipo(equipo);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent me) {
+                    //Cuando el raton no esta por encima
+                    btnEquipo.setBackground(null);
+                }
+                
+                
+                
+            });
         
             
             
@@ -143,7 +196,7 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
             //propiedades del JLabel
             lblEquipo.setBounds(68 + (equipoIndex % 3) * 200, 250 + (equipoIndex/3) * 150, 100, 100);
             lblEquipo.setForeground(new Color(0,0,0));
-            lblEquipo.setFont(new Font("Arial", Font.BOLD, 15));
+            lblEquipo.setFont(new Font("Arial", Font.BOLD, 14));
             lblEquipo.setHorizontalAlignment(SwingConstants.CENTER);
             
             equipoIndex++;
@@ -168,15 +221,6 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
         btnAtras.addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseClicked(MouseEvent me) {
-                //cuando se pulsa el ratón encima cerramos la ventana actual y volvemos a la ventana de inicio
-
-                VentanaInicio vi = new VentanaInicio();
-                vi.setVisible(true);
-                dispose();
-            }
-
-            @Override
             public void mouseEntered(MouseEvent me) {
                 //cuando de pasa el ratón por encima
                 btnAtras.setBackground(new Color(212, 212, 212));
@@ -186,6 +230,150 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
             public void mouseExited(MouseEvent me) {
                 //Cuando el raton no esta por encima
                 btnAtras.setBackground(null);
+            }
+
+        });
+        
+//--------------------------------------------------------------Panel Equipo-----------------------------------------------------------------------//
+
+        //creamos y añadimos un JLabel con el nombre del equipo como título
+        lblNombreEquipo = new JLabel();
+        contentPaneEquipo.add(lblNombreEquipo);
+
+        //propiedades del JLabel
+        lblNombreEquipo.setBounds(125, 50, 400, 50);
+        lblNombreEquipo.setFont(new Font("Arial Black", Font.BOLD, 30));
+        lblNombreEquipo.setHorizontalAlignment(SwingConstants.CENTER);
+
+        //creamos y añadimos un JLabel como título para el logo
+        lblIcn = new JLabel("Escudo");
+        contentPaneEquipo.add(lblIcn);
+
+        //propiedades del JLabel
+        lblIcn.setBounds(30, 125, 100, 25);
+        lblIcn.setFont(new Font("Arial Black", Font.PLAIN, 20));
+
+        //creamos y añadimos un JLabel para insertar la foto del logo del equipo
+        lblIcnEquipo = new JLabel();
+        contentPaneEquipo.add(lblIcnEquipo);
+
+        //propiedades del JLabel
+        lblIcnEquipo.setBounds(20, 20, 100, 100);
+
+        //creamos y añadimos un JLabel como título para el estadio
+        lblEstadio = new JLabel("Estadio:");
+        contentPaneEquipo.add(lblEstadio);
+
+        //propiedades del JLabel
+        lblEstadio.setBounds(20, 510, 90, 25);
+        lblEstadio.setFont(new Font("Arial Black", Font.PLAIN, 18));
+
+        //creamos y añadimos un JLabel para insertar el nombre del estadio del equipo
+        lblEstadioEquipo = new JLabel();
+        contentPaneEquipo.add(lblEstadioEquipo);
+
+        //propiedades del JLabel
+        lblEstadioEquipo.setBounds(110, 512, 150, 25); 
+        lblEstadioEquipo.setFont(new Font("Arial", Font.PLAIN, 15));      
+
+        //creamos y añadimos un JLabel como título para la equipacion
+        lblEquipacion= new JLabel("Equipación:");
+        contentPaneEquipo.add(lblEquipacion);
+
+        //propiedades del JLabel
+        lblEquipacion.setBounds(350, 510, 150, 25);
+        lblEquipacion.setFont(new Font("Arial Black", Font.PLAIN, 18));
+
+        //creamos y añadimos un JLabel para insertar el color de la equipacion del equipo
+        lblEquipacionEquipo = new JLabel();
+        contentPaneEquipo.add(lblEquipacionEquipo);
+
+        //propiedades del JLabel
+        lblEquipacionEquipo.setBounds(480, 512, 150, 25);
+        lblEquipacionEquipo.setFont(new Font("Arial", Font.PLAIN, 15));                       
+        
+        //creamos y añadimos un JLabel como título para los jugadores
+        lblJugadores = new JLabel("Jugadores");
+        contentPaneEquipo.add(lblJugadores);
+
+        //propiedades del JLabel
+        lblJugadores.setBounds(110, 170, 150, 30);
+        lblJugadores.setFont(new Font("Arial Black", Font.PLAIN, 20));
+        
+        //creamos y añadimos un JLabel donde pondremos la imagen del jugador seleccionado en la tabla
+        lblJugadoresIcn = new JLabel("");
+        contentPaneEquipo.add(lblJugadoresIcn);
+        
+        //propiedades del JLabel
+        lblJugadoresIcn.setBounds(515,25,100,100);
+        
+        //creamos y añadimos un JLabel que indicará el nombre del jugador seleccionado y lo incluirá debajo de su foto
+        lblJugadoresNom = new JLabel ("");
+        contentPaneEquipo.add(lblJugadoresNom);
+        
+        //propiedades del JLabel
+        lblJugadoresNom.setBounds(515,95,100,100);
+        lblJugadoresNom.setHorizontalAlignment(SwingConstants.CENTER);
+        lblJugadoresNom.setFont(new Font("Arial", Font.PLAIN, 15));
+        
+        // si se ha conectado correctamente
+     	Vector<String> columnas = new Vector<String>();
+     	columnas.add("Nombre");
+     	columnas.add("Año Nacimiento");
+     	columnas.add("Localidad");
+     	columnas.add("Posicion");
+     	columnas.add("Imagen");
+
+     	// creo el vector para los datos de la tabla
+     	datosTablaJugadoresE = new Vector<Vector<String>>();
+     	
+     	dtmTablaJugadoresE = new DefaultTableModel(datosTablaJugadoresE, columnas);
+
+		// creo una tabla y le añado el modelo por defecto
+		TablaJugadoresE = new JTable(dtmTablaJugadoresE);
+		TablaJugadoresE.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		contentPaneEquipo.add(TablaJugadoresE);
+		
+		//añado el Mouselistener para que ponga los datos seleccionados en los campos de texto
+		TablaJugadoresE.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				cogerImagen();
+			}
+
+		});
+
+        //creamos y añadimos un JScrollPane que contendrá el JTextArea con la lista de jugadores
+        scrollPane = new JScrollPane(TablaJugadoresE);
+        scrollPane.setBounds(100, 200, 450, 300);
+        contentPaneEquipo.add(scrollPane);
+
+        //creamos y añadimos un botón para volver al inicio
+        btnAtras1 = new JButton("");
+        contentPaneEquipo.add(btnAtras1);
+
+        //propiedades del JButton
+        btnAtras1.setBackground(null);
+        btnAtras1.setIcon(new ImageIcon("src/img/atras.png"));
+        btnAtras1.setBorder(null);
+        btnAtras1.setBounds(576, 517, 30, 30);
+
+        //añadimos los listeners necesarios
+        btnAtras1.addFocusListener(this);
+        btnAtras1.addActionListener(this);
+        btnAtras1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnAtras1.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+                //cuando de pasa el ratón por encima
+                btnAtras1.setBackground(new Color(212, 212, 212));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+                //Cuando el raton no esta por encima
+                btnAtras1.setBackground(null);
             }
 
         });
@@ -212,6 +400,93 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
     @Override
     public void actionPerformed(ActionEvent e) {
 
-    }
+    	Object o = e.getSource();
+    	
+    	if (o == btnAtras) {
 
+            //cuando se pulsa el ratón encima cerramos la ventana actual y volvemos a la ventana de inicio
+            VentanaInicio vi = new VentanaInicio();
+            vi.setVisible(true);
+            dispose();
+    		
+    	}
+    	
+    	else if (o == btnAtras1) {
+    		
+            //cuando se pulsa el ratón encima, ponemos el background de los botones en null, cerramos el panel del equipo actual y volvemos al menú
+            btnEquipo.setBackground(null);
+            contentPaneEquipo.setVisible(false);
+            contentPane.setVisible(true);
+            setContentPane(contentPane);
+    		
+    	}
+    }
+    
+  //Actualizar los componentes del panel del equipo con la información del equipo seleccionado
+    public void actualizarPanelEquipo(Equipo equipo) {
+
+    	
+    	
+        // Asignar el nombre del equipo al JLabel correspondiente
+        lblNombreEquipo.setText(equipo.getNombre());
+        
+        //Creamos los vectores necesarios para crear una tabla con los jugadores del equipo seleccionado
+     	Vector<String> columnas = new Vector<String>();
+     	columnas.add("Nombre");
+     	columnas.add("Año Nacimiento");
+     	columnas.add("Localidad");
+     	columnas.add("Posicion");
+     	columnas.add("Imagen");
+
+     	datosTablaJugadoresE = new Vector<Vector<String>>();
+        //recorremos la lista de los jugadores del equipo y lo añadimos a la tabla
+        for (Jugador j : equipo.getListaJugadores()) {
+        	
+        	fila = new Vector<String>();
+			fila.add(j.getNombre());
+			fila.add(""+j.getAño());
+			fila.add(j.getLocalidad());
+			fila.add(j.getPosicion());
+			fila.add(j.getImagen());
+			fila.add("\n\n\n\n\n\n\n");
+			datosTablaJugadoresE.add(fila);
+        	
+        	
+        }
+        
+
+		dtmTablaJugadoresE = new DefaultTableModel(datosTablaJugadoresE, columnas);
+        
+        TablaJugadoresE.setModel(dtmTablaJugadoresE);
+        
+        if (TablaJugadoresE.getRowCount() > 0) {
+        
+		TablaJugadoresE.setRowHeight(300/TablaJugadoresE.getRowCount());
+
+        }
+        
+        // Cargar y mostrar la imagen del escudo del equipo
+        lblIcnEquipo.setIcon(new ImageIcon("src/img/"+equipo.getImagenEscudo()));
+
+        // Cargamos el nombre del estadio
+        lblEstadioEquipo.setText(equipo.getEstadio()+"");;
+        
+        //Cargamos el color de la equipacion del equipo
+        lblEquipacionEquipo.setText(equipo.getEquipacion());
+
+
+    }
+    
+    public void cogerImagen() {
+
+		// sacamos en que fila se ha hecho click
+		int seleccion = TablaJugadoresE.getSelectedRow();
+    	ImageIcon imgc = new ImageIcon("src/img/jugadores/"+dtmTablaJugadoresE.getValueAt(seleccion, 4));
+		Image img = imgc.getImage();
+		img = img.getScaledInstance(lblJugadoresIcn.getWidth(), lblJugadoresIcn.getHeight(), Image.SCALE_SMOOTH);
+		lblJugadoresIcn.setIcon(new ImageIcon(img));
+		
+		lblJugadoresNom.setText(""+dtmTablaJugadoresE.getValueAt(seleccion, 0));
+    	
+    }
 }

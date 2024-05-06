@@ -49,7 +49,7 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
     private JLabel lblClasificacion;
     private JLabel lblTemporada;
     private JLabel lblLog;
-    private JButton btnAtras;
+    JButton btnAtras;
     private JButton btnPDF;
 	private Vector<Vector<String>> datosTablaClasificacion = new Vector<Vector<String>>();
 	private Vector<String> fila;

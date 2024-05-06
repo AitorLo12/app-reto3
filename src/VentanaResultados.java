@@ -107,6 +107,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		vc = new VentanaClasificacion();
         vc.setVisible(true);
         vc.setLocation(750, 100);
+        vc.btnAtras.setVisible(false);
         vc.setAlwaysOnTop(true);
 
 		// quita el redimensionado de la ventana
@@ -137,6 +138,45 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		lblJornadas.setForeground(Color.BLACK);
 		lblJornadas.setFont(new Font("Arial Black", Font.PLAIN, 15));
 		lblJornadas.setBounds(193, 60, 250, 30);
+		
+     	Vector<String> columnas = new Vector<String>();
+     	columnas.add("Nombre");
+     	columnas.add("Año Nacimiento");
+     	columnas.add("Localidad");
+     	columnas.add("Posicion");
+     	columnas.add("Imagen");
+
+     	// creo el vector para los datos de la tabla
+     	datosTablaPartidos = new Vector<Vector<String>>();
+     	
+     	dtmTablaPartidos = new DefaultTableModel(datosTablaPartidos, columnas);
+
+		// creo una tabla y le añado el modelo por defecto
+		tablaPartidos = new JTable(dtmTablaPartidos);
+		tablaPartidos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablaPartidos.setRowHeight(92);
+		contentPane.add(tablaPartidos);
+		
+		//añado el Mouselistener para que ponga los datos seleccionados en los campos de texto
+		tablaPartidos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				cogerDatos();
+			}
+		});
+
+		tablaPartidos.getColumnModel().getColumn(0).setPreferredWidth(64);
+		tablaPartidos.getColumnModel().getColumn(1).setPreferredWidth(200);
+		tablaPartidos.getColumnModel().getColumn(2).setPreferredWidth(64);
+		tablaPartidos.getColumnModel().getColumn(3).setPreferredWidth(200);
+		tablaPartidos.getColumnModel().getColumn(4).setPreferredWidth(64);
+		
+		// creo un scroll pane y le añado la tabla
+		JScrollPane scrollPane = new JScrollPane(tablaPartidos);
+		scrollPane.setBounds(25, 210, 583, 300);
+
+		// añado el scroll pane al panel principal
+		contentPane.add(scrollPane);
 
 		try {
 			
@@ -538,9 +578,9 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 					//creo el Statement para actualizar los datos del partido seleccionado
 					st.executeUpdate("UPDATE balonmano.partidos SET goles_equipo_loc="+GolesL+",goles_equipo_vis="+GolesV+" WHERE cod_partido="+Cod+";");
 					
-					//lo actualizamos en la tabla
-					dtmTablaPartidos.setValueAt(GolesL, filas, 2);
-					dtmTablaPartidos.setValueAt(GolesV, filas, 4);
+					//lo actualizamos en el arraylist de los partidos
+					listaJornadas.get(posicion).getListaPartidos().get(filas).setPtsLocal(GolesL);
+					listaJornadas.get(posicion).getListaPartidos().get(filas).setPtsVisit(GolesV);
 					
 					int IDL = 0;
 					int PtsL = 0;
@@ -630,8 +670,8 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 					}
 					
 					//CONSULTA PARA ACTUALIZAR LOS EQUIPOS CON LOS GOLES Y LOS PARTIDOS JUGADOS
-					st.executeUpdate("UPDATE balonmano.equipos SET Puntos="+PtsL+",Partidos_Jugados="+PJL+",Partidos_Ganados="+PGL+",Partidos_Perdidos="+PPL+",GF="+GFL+",GC="+GCL+" WHERE Nom_Equipo='"+EquipoL+"' AND Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
-					st.executeUpdate("UPDATE balonmano.equipos SET Puntos="+PtsV+",Partidos_Jugados="+PJV+",Partidos_Ganados="+PGV+",Partidos_Perdidos="+PPV+",GF="+GFV+",GC="+GCV+" WHERE Nom_Equipo='"+EquipoV+"' AND Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
+					st.executeUpdate("UPDATE balonmano.equipos SET Puntos="+PtsL+",Partidos_Jugados="+PJL+",Partidos_Ganados="+PGL+",Partidos_Perdidos="+PPL+",GF="+GFL+",GC="+GCL+" WHERE ID_Equipo="+IDL+";");
+					st.executeUpdate("UPDATE balonmano.equipos SET Puntos="+PtsV+",Partidos_Jugados="+PJV+",Partidos_Ganados="+PGV+",Partidos_Perdidos="+PPV+",GF="+GFV+",GC="+GCV+" WHERE ID_Equipo="+IDV+";");
 					
 					//Cierro el statement 
 					st.close();
@@ -805,32 +845,8 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		// creo el DefaultTableModel de la JTable
 		dtmTablaPartidos = new DefaultTableModel(datosTablaPartidos, columnas);
 		
-		// creo una tabla y le añado el modelo por defecto
-		tablaPartidos = new JTable(dtmTablaPartidos);
-		tablaPartidos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tablaPartidos.setRowHeight(92);
-		contentPane.add(tablaPartidos);
-		
-		//añado el Mouselistener para que ponga los datos seleccionados en los campos de texto
-		tablaPartidos.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				cogerDatos();
-			}
-		});
-
-		tablaPartidos.getColumnModel().getColumn(0).setPreferredWidth(64);
-		tablaPartidos.getColumnModel().getColumn(1).setPreferredWidth(200);
-		tablaPartidos.getColumnModel().getColumn(2).setPreferredWidth(64);
-		tablaPartidos.getColumnModel().getColumn(3).setPreferredWidth(200);
-		tablaPartidos.getColumnModel().getColumn(4).setPreferredWidth(64);
-
-		// creo un scroll pane y le añado la tabla
-		JScrollPane scrollPane = new JScrollPane(tablaPartidos);
-		scrollPane.setBounds(25, 210, 583, 300);
-
-		// añado el scroll pane al panel principal
-		contentPane.add(scrollPane);
+		// asigno el DefaultTableModel a la Tabla
+		tablaPartidos.setModel(dtmTablaPartidos);
 		
 		}
 		

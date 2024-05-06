@@ -266,7 +266,7 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 		});
 	
 		//añadir JLabel para registrarse
-		lblRegistrarse = new JLabel("<HTML><U>Registrarse</U></HTML>");
+		lblRegistrarse = new JLabel("<HTML><U>ReSgistrarse</U></HTML>");
 		lblRegistrarse.setForeground(new Color(0, 0, 0));
 		contentPaneL.add(lblRegistrarse);
 
