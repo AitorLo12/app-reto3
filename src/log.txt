@@ -838,3 +838,5 @@ may 07, 2024 10:51:22 A. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
 may 07, 2024 10:51:37 A. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
+may 07, 2024 7:17:37 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
