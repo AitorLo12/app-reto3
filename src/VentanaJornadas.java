@@ -216,7 +216,7 @@ public class VentanaJornadas extends JFrame implements FocusListener, ActionList
         });
         
         //hacemos una comprobación de si el usuario que ha iniciado sesion es admin o no para dar la opcion de editar los resultados o no
-        if (!VentanaRegistro.NewReg.getPermisos().equals("Admin")) {
+        if (!VentanaRegistro.NewReg.getPermisos().equals("Admin") && !VentanaRegistro.NewReg.getPermisos().equals("Arbitro") || VentanaTemporadas.temporadaSeleccionada.getEstado().equals("Finalizada")) {
         	
         	btnEditar.setVisible(false);
         	

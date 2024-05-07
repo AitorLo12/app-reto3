@@ -299,10 +299,11 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
 			    Collections.sort(listaEquiposClasificacion, (e2, e1) -> {
 			        if (e1.getPuntos() != e2.getPuntos()) {
 			            return Integer.compare(e1.getPuntos(), e2.getPuntos());
-			        } else {
-			            int setsfavor1 = e1.getGolesfavor() - e1.getGolescontra();
-			            int setsfavor2 = e2.getGolesfavor()- e2.getGolescontra();
-			            return Integer.compare(setsfavor1, setsfavor2);
+			        } else if (e1.getGolesfavor() != e2.getGolesfavor()){
+			            return Integer.compare(e1.getGolesfavor(), e2.getGolesfavor());
+			        }
+			        else {
+			        	return Integer.compare(e2.getGolescontra(), e1.getGolescontra());
 			        }
 			    });
 				

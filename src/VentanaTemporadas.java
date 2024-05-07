@@ -320,16 +320,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	  	scrollPane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	  	scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 	  	scrollPane2.setBounds(333, 400, 220, 137);
-	  	
-	  	
-		/*
-		 * GridLayout gridLayout = new GridLayout(0, 1);
-		 * panelEquipos.setLayout(gridLayout);
-		 * 
-		 * GridLayout gridLayout2 = new GridLayout(0,1);
-		 * panelEquiposSeleccionados.setLayout(gridLayout2);
-		 */
-		
 		
 		//creamos y añadimos un Jlabel para el título de inicio
 		lblTemporadas= new JLabel("Temporadas");
@@ -1188,6 +1178,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				
 				JlistTemporadas.setBounds(38,206,525,150);
 				btnSiguiente.setBounds(38,400,525,100);
+				
+				
 				}
 			
 				else {
@@ -1211,6 +1203,35 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				
 				JlistTemporadas.setBounds(38, 206, 200, 137);
 				btnSiguiente.setBounds(290,300,269,45);
+				
+				//Le mostramos un JOptionPane con distintas opciones avisando que puede modificar los jugadores o los equipos
+		        String[] opciones = {"Editar temporadas", "Editar Jugadores", "Editar Equipos"};
+
+		        // Mostrar el cuadro de diálogo con las opciones
+		        int seleccion = JOptionPane.showOptionDialog(null, "Estás a punto de ser redirigido al panel de creación y borrado de temporadas, "
+		        		+ "si no quiere crear una temporada con los valores predeterminados, puede cambiar los jugadores, sus equipos y los equipos existentes. Elija lo que quiere hacer:", "Selección de opciones",
+		                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
+
+		        // Verificar qué opción fue seleccionada
+		        switch (seleccion) {
+		            case 0:
+		                break;
+		            case 1:
+		                // Si se selecciona la opción de editar jugadores
+		            	VentanaEdicionJugadores vej = new VentanaEdicionJugadores();
+		            	vej.setVisible(true);
+		            	dispose();
+		                break;
+		            case 2:
+		                // Si se selecciona la opción de editar equipos
+		            	VentanaEdicionEquipos vee = new VentanaEdicionEquipos();
+		            	vee.setVisible(true);
+		            	dispose();
+		                break;
+		            default:
+
+		                break;
+		        }
 				}
 			
 		}

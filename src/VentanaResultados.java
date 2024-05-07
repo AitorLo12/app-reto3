@@ -712,6 +712,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		
 		else if (o == btnFinalizar) {
 			
+			finalizarTemporada();
 			
 			
 		}
@@ -857,5 +858,73 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		}
 		
 		lblJornadas.setText(mensaje);
+	}
+	
+	public void finalizarTemporada() {
+		
+		//primero de todo obtengo los partidos jugados de todos los equipos de la temporada seleccionada desde la base de datos mysql
+		try {
+			
+			//CONSULTA PARA COGER LOS PARTIDOS JUGADOS DE TODOS LOS EQUIPOS DE ESTA TEMPORADA
+				
+			//me conecto a la base de datos como root
+			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/balonmano", "root", "");
+			
+			//creo el Statement para coger los equipos
+			Statement st = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			
+			//como es una query, creo un objeto ResultSet 
+			ResultSet rs = st.executeQuery("SELECT Partidos_Jugados FROM balonmano.equipos WHERE Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
+			
+			int cont = 0;
+			
+			while (rs.next()) {
+				
+				//voy sumandole al contador los partidos jugados de todos los equipos
+				cont = cont + Integer.parseInt(rs.getString("Partidos_Jugados"));
+			}
+			
+			rs.close();
+			
+			if (cont == 60) { //si hay 60 partidos jugados (10 jornadas por los 6 equipos)
+				
+				//finalizo la temporada en la variable de la aplicación
+				VentanaTemporadas.temporadaSeleccionada.setEstado("Finalizada");
+				
+				//finalizo la temporada en la base de datos
+				st.executeUpdate("UPDATE balonmano.temporadas SET Estado='Finalizada' WHERE Num_Temp="+VentanaTemporadas.temporadaSeleccionada.getFecha()+";");
+				
+				//informo de la finalización de la temporada
+				JOptionPane.showMessageDialog(this,"Temporada '"+VentanaTemporadas.temporadaSeleccionada.getFecha()+"' finalizada correctamente.","Temporada finalizada",JOptionPane.INFORMATION_MESSAGE,null);
+				
+
+				VentanaJornadas vj = new VentanaJornadas();
+				vj.setVisible(true);
+				vc.dispose();
+				dispose();
+			}
+			
+			else {
+				
+				//informo de que no se ha podido finalizar la temporada
+				JOptionPane.showMessageDialog(this,"No se han jugado todos los partidos de la temporada '"+VentanaTemporadas.temporadaSeleccionada.getFecha()+"'.","No se ha podido finalizar la temporada",JOptionPane.ERROR_MESSAGE,null);
+				
+				
+			}
+
+			st.close();
+			
+			}
+			
+			catch (SQLException e) {
+				// si se produce una excepción SQL
+				int errorcode = e.getErrorCode();
+				
+				//si se produce cualquier error sql
+				 System.out.println("Error SQL Numero "+e.getErrorCode()+":"+e.getMessage());
+				
+				
+			}
+		
 	}
 }
