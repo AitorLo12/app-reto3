@@ -279,7 +279,7 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 		contentPaneL.add(lblRegistrarse);
 
 		//propiedades del JLabel
-		lblRegistrarse.setBounds(30, 420, 68, 13);
+		lblRegistrarse.setBounds(30, 420, 75, 13);
 		lblRegistrarse.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblRegistrarse.setFont(new Font("Arial", Font.PLAIN, 12));
 

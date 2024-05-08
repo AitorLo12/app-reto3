@@ -367,6 +367,7 @@ public class VentanaJornadas extends JFrame implements FocusListener, ActionList
     				int GL = Integer.parseInt(rs2.getString("goles_equipo_loc"));
     				Equipo EV = new Equipo (rs2.getString("nom_equipo_vis"));
     				int GV = Integer.parseInt(rs2.getString("goles_equipo_vis"));
+    				String E = rs2.getString("estado");
     				
     				//CONSULTA PARA RECOGER EL ESCUDO DEL EQUIPO LOCAL DEL PARTIDO ACTUAL
         			Statement st3 = conexion.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -387,7 +388,7 @@ public class VentanaJornadas extends JFrame implements FocusListener, ActionList
         				
         			}
     				
-    				Partido p = new Partido (idP, EL, GL, EV, GV);
+    				Partido p = new Partido (idP, EL, GL, EV, GV,E);
     				listaPartidosJ.add(p);
     				
     			}

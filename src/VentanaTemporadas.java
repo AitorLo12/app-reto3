@@ -1067,9 +1067,8 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 					st.executeUpdate("INSERT INTO balonmano.jornadas VALUES ("+temporada.getFecha()+","+j.getID()+");");
 					
 					for (Partido p : j.getListaPartidos()) {
-
 						
-						st.executeUpdate("INSERT INTO balonmano.partidos VALUES ("+p.getID()+","+j.getID()+",'"+p.getEquipoLocal().getNombre()+"',"+p.getPtsLocal()+",'"+p.getEquipoVisit().getNombre()+"',"+p.getPtsVisit()+",101);");
+						st.executeUpdate("INSERT INTO balonmano.partidos VALUES ("+p.getID()+","+j.getID()+",'"+p.getEquipoLocal().getNombre()+"',"+p.getPtsLocal()+",'"+p.getEquipoVisit().getNombre()+"',"+p.getPtsVisit()+",101,'"+p.getEstado()+"');");
 						
 					}
 					
@@ -1243,9 +1242,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 1
 			List<Partido>listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+1),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(3),0);
-			Partido p2j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+2),2,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(5),0);
-			Partido p3j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+3),3,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(1),0);
+			Partido p1j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+1),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(3),0,"Pendiente");
+			Partido p2j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+2),2,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(5),0,"Pendiente");
+			Partido p3j1 = new Partido(Integer.parseInt(temporada.getFecha()+""+3),3,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(1),0,"Pendiente");
 			listaPartidosActual.add(p1j1);
 			listaPartidosActual.add(p2j1);
 			listaPartidosActual.add(p3j1);
@@ -1254,9 +1253,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 2
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+4),1,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(2),0);
-			Partido p2j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+5),2,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(0),0);
-			Partido p3j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+6),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(3),0);
+			Partido p1j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+4),1,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(2),0,"Pendiente");
+			Partido p2j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+5),2,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(0),0,"Pendiente");
+			Partido p3j2 = new Partido(Integer.parseInt(temporada.getFecha()+""+6),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(3),0,"Pendiente");
 			listaPartidosActual.add(p1j2);
 			listaPartidosActual.add(p2j2);
 			listaPartidosActual.add(p3j2);
@@ -1265,9 +1264,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 3
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+7),1,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(5),0);
-			Partido p2j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+8),2,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(4),0);
-			Partido p3j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+9),3,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(3),0);
+			Partido p1j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+7),1,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(5),0,"Pendiente");
+			Partido p2j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+8),2,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(4),0,"Pendiente");
+			Partido p3j3 = new Partido(Integer.parseInt(temporada.getFecha()+""+9),3,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(3),0,"Pendiente");
 			listaPartidosActual.add(p1j3);
 			listaPartidosActual.add(p2j3);
 			listaPartidosActual.add(p3j3);
@@ -1276,9 +1275,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 4
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+10),1,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(1),0);
-			Partido p2j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+11),2,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(0),0);
-			Partido p3j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+12),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(4),0);
+			Partido p1j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+10),1,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(1),0,"Pendiente");
+			Partido p2j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+11),2,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(0),0,"Pendiente");
+			Partido p3j4 = new Partido(Integer.parseInt(temporada.getFecha()+""+12),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(4),0,"Pendiente");
 			listaPartidosActual.add(p1j4);
 			listaPartidosActual.add(p2j4);
 			listaPartidosActual.add(p3j4);
@@ -1287,9 +1286,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 5
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+13),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(5),0);
-			Partido p2j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+14),2,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(3),0);
-			Partido p3j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+15),3,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(2),0);
+			Partido p1j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+13),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(5),0,"Pendiente");
+			Partido p2j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+14),2,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(3),0,"Pendiente");
+			Partido p3j5 = new Partido(Integer.parseInt(temporada.getFecha()+""+15),3,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(2),0,"Pendiente");
 			listaPartidosActual.add(p1j5);
 			listaPartidosActual.add(p2j5);
 			listaPartidosActual.add(p3j5);
@@ -1298,9 +1297,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 6
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+16),1,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(0),0);
-			Partido p2j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+17),2,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(4),0);
-			Partido p3j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+18),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(2),0);
+			Partido p1j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+16),1,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(0),0,"Pendiente");
+			Partido p2j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+17),2,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(4),0,"Pendiente");
+			Partido p3j6 = new Partido(Integer.parseInt(temporada.getFecha()+""+18),3,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(2),0,"Pendiente");
 			listaPartidosActual.add(p1j6);
 			listaPartidosActual.add(p2j6);
 			listaPartidosActual.add(p3j6);
@@ -1309,9 +1308,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 7
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+19),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(1),0);
-			Partido p2j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+20),2,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(5),0);
-			Partido p3j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+21),3,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(4),0);
+			Partido p1j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+19),1,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(1),0,"Pendiente");
+			Partido p2j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+20),2,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(5),0,"Pendiente");
+			Partido p3j7 = new Partido(Integer.parseInt(temporada.getFecha()+""+21),3,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(4),0,"Pendiente");
 			listaPartidosActual.add(p1j7);
 			listaPartidosActual.add(p2j7);
 			listaPartidosActual.add(p3j7);
@@ -1320,9 +1319,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 8
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+22),1,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(1),0);
-			Partido p2j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+23),2,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(2),0);
-			Partido p3j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+24),3,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(0),0);
+			Partido p1j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+22),1,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(1),0,"Pendiente");
+			Partido p2j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+23),2,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(2),0,"Pendiente");
+			Partido p3j8 = new Partido(Integer.parseInt(temporada.getFecha()+""+24),3,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(0),0,"Pendiente");
 			listaPartidosActual.add(p1j8);
 			listaPartidosActual.add(p2j8);
 			listaPartidosActual.add(p3j8);
@@ -1331,9 +1330,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 9
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+25),1,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(5),0);
-			Partido p2j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+26),2,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(2),0);
-			Partido p3j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+27),3,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(3),0);
+			Partido p1j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+25),1,temporada.getListaEquiposT().get(4),0,temporada.getListaEquiposT().get(5),0,"Pendiente");
+			Partido p2j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+26),2,temporada.getListaEquiposT().get(0),0,temporada.getListaEquiposT().get(2),0,"Pendiente");
+			Partido p3j9 = new Partido(Integer.parseInt(temporada.getFecha()+""+27),3,temporada.getListaEquiposT().get(1),0,temporada.getListaEquiposT().get(3),0,"Pendiente");
 			listaPartidosActual.add(p1j9);
 			listaPartidosActual.add(p2j9);
 			listaPartidosActual.add(p3j9);
@@ -1342,9 +1341,9 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			
 			//JORNADA 10
 			listaPartidosActual = new ArrayList<Partido>();
-			Partido p1j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+28),1,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(1),0);
-			Partido p2j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+29),2,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(0),0);
-			Partido p3j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+30),3,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(4),0);
+			Partido p1j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+28),1,temporada.getListaEquiposT().get(2),0,temporada.getListaEquiposT().get(1),0,"Pendiente");
+			Partido p2j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+29),2,temporada.getListaEquiposT().get(5),0,temporada.getListaEquiposT().get(0),0,"Pendiente");
+			Partido p3j10 = new Partido(Integer.parseInt(temporada.getFecha()+""+30),3,temporada.getListaEquiposT().get(3),0,temporada.getListaEquiposT().get(4),0,"Pendiente");
 			listaPartidosActual.add(p1j10);
 			listaPartidosActual.add(p2j10);
 			listaPartidosActual.add(p3j10);
