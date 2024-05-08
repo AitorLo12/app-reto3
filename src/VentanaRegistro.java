@@ -115,6 +115,14 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 		TypedQuery<Usuario> tq1 = em.createQuery("SELECT u FROM Usuario u", Usuario.class);
 		listaUsuarios = tq1.getResultList();	
 		
+		if (listaUsuarios.isEmpty()) {
+			
+			Usuario u = new Usuario();
+			listaUsuarios.add(u);
+			em.persist(u);
+			
+		}
+		
 		em.getTransaction().commit();
 		
 		//Cierro la conexión

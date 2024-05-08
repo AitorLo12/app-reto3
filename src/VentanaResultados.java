@@ -886,7 +886,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 			
 			rs.close();
 			
-			if (cont == 60) { //si hay 60 partidos jugados (10 jornadas por los 6 equipos)
+			if (cont >= 60) { //si hay 60 partidos jugados (10 jornadas por los 6 equipos)
 				
 				//finalizo la temporada en la variable de la aplicación
 				VentanaTemporadas.temporadaSeleccionada.setEstado("Finalizada");

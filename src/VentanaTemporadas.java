@@ -873,7 +873,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    	else {
 
 		    	int index = JlistTemporadas.getSelectedIndex();
-				temporadaSeleccionada = listaTemporadas.get(index);				
+				temporadaSeleccionada = listaTemporadas.get(index);	
 				VentanaClasificacion vc = new VentanaClasificacion();
 				vc.setVisible(true);
 				dispose();	
@@ -1364,7 +1364,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			try {
 				
 				
-				FileWriter fichero = new FileWriter("C:\\Users\\ik_1DW3A\\Desktop\\datos.xml");
+				FileWriter fichero = new FileWriter("..//web-reto3//datos.xml");
 			    PrintWriter pw = new PrintWriter(fichero);
 			    BufferedWriter bw = new BufferedWriter(pw);
 			    
@@ -1396,7 +1396,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 					bw.newLine();
 					bw.write("<correo>"+u.getCorreo()+"</correo>");
 					bw.newLine();
-					bw.write("<contraseña>"+u.getContraseña()+"</contraseña>");
+					bw.write("<contrasena>"+u.getContraseña()+"</contrasena>");
 					bw.newLine();
 					bw.write("<rol>"+u.getPermisos()+"</rol>");
 					bw.newLine();
@@ -1418,7 +1418,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 				while (rsT.next()) {
 					
 					bw.newLine();
-					bw.write("<temporada nombre='"+rsT.getString("Num_Temp")+"'>");
+					bw.write("<temporada nombre='"+rsT.getString("Num_Temp")+"' estado='"+rsT.getString("Estado")+"'>");
 					bw.newLine();
 					bw.write("<equipos>");
 					
