@@ -401,8 +401,8 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 				dtmTablaUsuarios.removeRow(borrar);
 
 				// informamos del borrado
-				JOptionPane.showMessageDialog(this, "Se ha eliminado el usuario correctamente",
-						"Usuario borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
+			    VentanaRegistro.LOGGERU.info("Se ha eliminado el usuario '"+nombre+"'.");
+				JOptionPane.showMessageDialog(this, "Se ha eliminado el usuario correctamente", "Usuario borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
 
 				// guardo los cambios de la base de datos
 				em.getTransaction().commit();
@@ -464,6 +464,9 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 				em.getTransaction().begin();
 				em.persist(Usuario);
 				em.getTransaction().commit();
+				
+
+			    VentanaRegistro.LOGGERU.info("Se ha creado el usuario '"+Usuario.getNombre()+"' con los permisos '"+Usuario.getPermisos()+"'.");
 				JOptionPane.showMessageDialog(this,"Usuario '"+Usuario.getNombre()+"' creado correctamente.","Creación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
 				
 				//si lo ha insertado correctamente en la base de datos
@@ -531,6 +534,8 @@ public class VentanaUsuarios extends JFrame implements ActionListener, FocusList
 				dtmTablaUsuarios.setValueAt(Permisos,filas , 1);
 				
 				em.getTransaction().commit();
+
+			    VentanaRegistro.LOGGERU.info("Se ha modificado el usuario '"+NombreAntes+"'.");
 				JOptionPane.showMessageDialog(this,"Usuario '"+NombreAntes+"' ha sido modificado correctamente.","Modificación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
 				
 				em.close();

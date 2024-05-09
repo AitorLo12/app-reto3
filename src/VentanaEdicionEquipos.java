@@ -24,6 +24,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -74,6 +78,7 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 	private JTextField txtEscudo;
 	private JButton btnEscudo;
 	private JLabel lblImagen;
+	public static final Logger LOGGERE = Logger.getLogger(VentanaResultados.class.getName());
 
 	/**
 	 * Launch the application.
@@ -96,6 +101,8 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 	 */
 	public VentanaEdicionEquipos() {
 
+		configureLogger();
+		
 		// establecemos título e icono de la aplicación
 		setTitle("Real Federación EspaÑola de Balonmano");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaTemporadas.class.getResource("/img/Logo.png")));
@@ -508,9 +515,9 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 
 					// informamos del borrado
 					JOptionPane.showMessageDialog(this, "Se ha eliminado el equipo correctamente", "Equipo borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
+					LOGGERE.info("Se ha borrado el equipo '"+Nombre+"'.");
 
-
-					// Establecemos los valores de los txt a campos vacíos
+					// Establecemos los valores de los txt a campos vacíos 
 					txtNombre.setText("");
 					txtHimno.setText("");
 					txtEquipacion.setText("");
@@ -616,6 +623,8 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 					fila.add("\n\n\n\n\n\n\n");
 					dtmTablaEquipos.addRow(fila);
 					
+
+				    LOGGERE.info("Se ha creado el equipo '"+Nombre+"'.");
 					JOptionPane.showMessageDialog(this,"Equipo '"+Nombre+"' creado correctamente.","Creación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
 					
 
@@ -692,6 +701,8 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 					// cierro la conexion
 					conexion.close();
 					
+
+				    LOGGERE.info("Se ha modificado el equipo '"+NombreAntes+"'.");
 					JOptionPane.showMessageDialog(this,"Equipo '"+NombreAntes+"' actualizado correctamente.","Actualización exitosa",JOptionPane.INFORMATION_MESSAGE,null);
 					
 					//lo actualizamos en la tabla
@@ -812,4 +823,26 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
             JOptionPane.showMessageDialog(this, "La imagen ya existe por lo que se usará la imagen ya almacenada.");
         }
     }
+    
+	private void configureLogger() { //Configuramos un log para la edicion de los equipos
+	    try {
+	        // Ruta del archivo de registro en la carpeta src
+	        String logFilePath = "src/logs/logEquipos.txt";
+
+	        // Verificar si el directorio existe, si no, intentar crearlo
+	        File logFile = new File(logFilePath);
+	        if (!logFile.getParentFile().exists()) {
+	            logFile.getParentFile().mkdirs();
+	        }
+
+	        // Crear FileHandler con la ruta del archivo de registro
+	        FileHandler fileHandler = new FileHandler(logFilePath, true);
+	        fileHandler.setFormatter(new SimpleFormatter());
+	        LOGGERE.addHandler(fileHandler);
+	        LOGGERE.setLevel(Level.ALL);
+	    } catch (IOException | SecurityException e) {
+	        LOGGERE.log(Level.SEVERE, "Error al configurar el sistema de logging: " + e.getMessage(), e);
+	    }
+	}
+    
 }

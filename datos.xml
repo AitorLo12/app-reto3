@@ -6,29 +6,29 @@
 <usuario>
 <nombre>admin</nombre>
 <correo>admin@gmail.com</correo>
-<contraseña>1234</contraseña>
+<contrasena>1234</contrasena>
 <rol>Admin</rol>
 </usuario>
 <usuario>
 <nombre>Usuario</nombre>
 <correo>Usuario@gmail.com</correo>
-<contraseña>1234</contraseña>
+<contrasena>1234</contrasena>
 <rol>Usuario</rol>
 </usuario>
 <usuario>
 <nombre>Aitor</nombre>
 <correo>Aitor@gmail.com</correo>
-<contraseña>1234</contraseña>
+<contrasena>1234</contrasena>
 <rol>Usuario</rol>
 </usuario>
 <usuario>
 <nombre>Arbitro</nombre>
 <correo>Arbitro@gmail.com</correo>
-<contraseña>1234</contraseña>
+<contrasena>1234</contrasena>
 <rol>Arbitro</rol>
 </usuario>
 </usuarios>
-<temporada nombre='2023' estado='Finalizada'>
+<temporada nombre='2023' estado='En progreso'>
 <equipos>
 <equipo nombre='Athletic Club' img='Athletic.png'>
 <jugador>
@@ -236,7 +236,7 @@
 <imagen>1055.png</imagen>
 </jugador>
 <jugador>
-<nombre>José</nombre>
+<nombre>Jose</nombre>
 <imagen>1056.png</imagen>
 </jugador>
 </equipo>
@@ -288,1256 +288,260 @@
 <partido>
 <local>Athletic Club</local>
 <escudo-local>Athletic.png</escudo-local>
-<goles-local>3</goles-local>
+<goles-local>2</goles-local>
 <visitante>Real Madrid</visitante>
 <escudo-visitante>Madrid.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>4</goles-visitante>
 </partido>
 <partido>
 <local>Real Zaragoza</local>
 <escudo-local>Zaragoza.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Sevilla FC</visitante>
 <escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Salamanca CF</local>
 <escudo-local>Salamanca.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>FC Barcelona</visitante>
 <escudo-visitante>Barcelona.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='2'>
 <partido>
 <local>Salamanca CF</local>
 <escudo-local>Salamanca.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Zaragoza</visitante>
 <escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>FC Barcelona</local>
 <escudo-local>Barcelona.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Athletic Club</visitante>
 <escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Sevilla FC</local>
 <escudo-local>Sevilla.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Madrid</visitante>
 <escudo-visitante>Madrid.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='3'>
 <partido>
 <local>FC Barcelona</local>
 <escudo-local>Barcelona.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Sevilla FC</visitante>
 <escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Athletic Club</local>
 <escudo-local>Athletic.png</escudo-local>
-<goles-local>3</goles-local>
+<goles-local>X</goles-local>
 <visitante>Salamanca CF</visitante>
 <escudo-visitante>Salamanca.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Real Zaragoza</local>
 <escudo-local>Zaragoza.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Madrid</visitante>
 <escudo-visitante>Madrid.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='4'>
 <partido>
 <local>Real Madrid</local>
 <escudo-local>Madrid.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>FC Barcelona</visitante>
 <escudo-visitante>Barcelona.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Real Zaragoza</local>
 <escudo-local>Zaragoza.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Athletic Club</visitante>
 <escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>3</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Sevilla FC</local>
 <escudo-local>Sevilla.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>Salamanca CF</visitante>
 <escudo-visitante>Salamanca.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='5'>
 <partido>
 <local>Athletic Club</local>
 <escudo-local>Athletic.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Sevilla FC</visitante>
 <escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Salamanca CF</local>
 <escudo-local>Salamanca.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Madrid</visitante>
 <escudo-visitante>Madrid.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>FC Barcelona</local>
 <escudo-local>Barcelona.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Zaragoza</visitante>
 <escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='6'>
 <partido>
 <local>Real Madrid</local>
 <escudo-local>Madrid.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Athletic Club</visitante>
 <escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>4</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>FC Barcelona</local>
 <escudo-local>Barcelona.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>Salamanca CF</visitante>
 <escudo-visitante>Salamanca.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Sevilla FC</local>
 <escudo-local>Sevilla.png</escudo-local>
-<goles-local>3</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Zaragoza</visitante>
 <escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='7'>
 <partido>
 <local>Athletic Club</local>
 <escudo-local>Athletic.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>FC Barcelona</visitante>
 <escudo-visitante>Barcelona.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Real Madrid</local>
 <escudo-local>Madrid.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Sevilla FC</visitante>
 <escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Real Zaragoza</local>
 <escudo-local>Zaragoza.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>Salamanca CF</visitante>
 <escudo-visitante>Salamanca.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='8'>
 <partido>
 <local>Sevilla FC</local>
 <escudo-local>Sevilla.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>FC Barcelona</visitante>
 <escudo-visitante>Barcelona.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Real Madrid</local>
 <escudo-local>Madrid.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Zaragoza</visitante>
 <escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>3</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Salamanca CF</local>
 <escudo-local>Salamanca.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>Athletic Club</visitante>
 <escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>4</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='9'>
 <partido>
 <local>Salamanca CF</local>
 <escudo-local>Salamanca.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>Sevilla FC</visitante>
 <escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Athletic Club</local>
 <escudo-local>Athletic.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Zaragoza</visitante>
 <escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>3</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>FC Barcelona</local>
 <escudo-local>Barcelona.png</escudo-local>
-<goles-local>1</goles-local>
+<goles-local>X</goles-local>
 <visitante>Real Madrid</visitante>
 <escudo-visitante>Madrid.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 <jornada numero='10'>
 <partido>
 <local>Real Zaragoza</local>
 <escudo-local>Zaragoza.png</escudo-local>
-<goles-local>3</goles-local>
+<goles-local>X</goles-local>
 <visitante>FC Barcelona</visitante>
 <escudo-visitante>Barcelona.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Sevilla FC</local>
 <escudo-local>Sevilla.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Athletic Club</visitante>
 <escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>4</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 <partido>
 <local>Real Madrid</local>
 <escudo-local>Madrid.png</escudo-local>
-<goles-local>2</goles-local>
+<goles-local>X</goles-local>
 <visitante>Salamanca CF</visitante>
 <escudo-visitante>Salamanca.png</escudo-visitante>
-<goles-visitante>1</goles-visitante>
-</partido>
-</jornada>
-</jornadas>
-</temporada>
-<temporada nombre='2024' estado='En progreso'>
-<equipos>
-<equipo nombre='Athletic Club' img='Athletic.png'>
-<jugador>
-<nombre>Carmen</nombre>
-<imagen>1000.png</imagen>
-</jugador>
-<jugador>
-<nombre>Nerea</nombre>
-<imagen>1001.png</imagen>
-</jugador>
-<jugador>
-<nombre>Celia</nombre>
-<imagen>1002.png</imagen>
-</jugador>
-<jugador>
-<nombre>Angela</nombre>
-<imagen>1003.png</imagen>
-</jugador>
-<jugador>
-<nombre>Sara</nombre>
-<imagen>1004.png</imagen>
-</jugador>
-<jugador>
-<nombre>Laura</nombre>
-<imagen>1005.png</imagen>
-</jugador>
-<jugador>
-<nombre>Angelica</nombre>
-<imagen>1006.png</imagen>
-</jugador>
-<jugador>
-<nombre>Juan</nombre>
-<imagen>1042.png</imagen>
-</jugador>
-<jugador>
-<nombre>Sofia</nombre>
-<imagen>1043.png</imagen>
-</jugador>
-<jugador>
-<nombre>Diego</nombre>
-<imagen>1044.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='Real Zaragoza' img='Zaragoza.png'>
-<jugador>
-<nombre>Alba</nombre>
-<imagen>1014.png</imagen>
-</jugador>
-<jugador>
-<nombre>Silvia</nombre>
-<imagen>1015.png</imagen>
-</jugador>
-<jugador>
-<nombre>Maddi</nombre>
-<imagen>1016.png</imagen>
-</jugador>
-<jugador>
-<nombre>Ana</nombre>
-<imagen>1017.png</imagen>
-</jugador>
-<jugador>
-<nombre>Paula</nombre>
-<imagen>1018.png</imagen>
-</jugador>
-<jugador>
-<nombre>Estitxu</nombre>
-<imagen>1019.png</imagen>
-</jugador>
-<jugador>
-<nombre>Ane</nombre>
-<imagen>1020.png</imagen>
-</jugador>
-<jugador>
-<nombre>Luis</nombre>
-<imagen>1048.png</imagen>
-</jugador>
-<jugador>
-<nombre>Marina</nombre>
-<imagen>1049.png</imagen>
-</jugador>
-<jugador>
-<nombre>Carlos</nombre>
-<imagen>1050.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='Deportivo La Coruña' img='Depor.png'>
-<jugador>
-<nombre>Marta</nombre>
-<imagen>1060.png</imagen>
-</jugador>
-<jugador>
-<nombre>Alejandro</nombre>
-<imagen>1061.png</imagen>
-</jugador>
-<jugador>
-<nombre>Rocio</nombre>
-<imagen>1062.png</imagen>
-</jugador>
-<jugador>
-<nombre>Lucas</nombre>
-<imagen>1063.png</imagen>
-</jugador>
-<jugador>
-<nombre>Ana</nombre>
-<imagen>1064.png</imagen>
-</jugador>
-<jugador>
-<nombre>David</nombre>
-<imagen>1065.png</imagen>
-</jugador>
-<jugador>
-<nombre>Isabel</nombre>
-<imagen>1066.png</imagen>
-</jugador>
-<jugador>
-<nombre>Marisol</nombre>
-<imagen>1067.png</imagen>
-</jugador>
-<jugador>
-<nombre>Cristina</nombre>
-<imagen>1068.png</imagen>
-</jugador>
-<jugador>
-<nombre>Rubén</nombre>
-<imagen>1069.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='SD Eibar' img='Eibar.png'>
-<jugador>
-<nombre>Lorena</nombre>
-<imagen>1070.png</imagen>
-</jugador>
-<jugador>
-<nombre>Sergio</nombre>
-<imagen>1071.png</imagen>
-</jugador>
-<jugador>
-<nombre>María</nombre>
-<imagen>1072.png</imagen>
-</jugador>
-<jugador>
-<nombre>Antonio</nombre>
-<imagen>1073.png</imagen>
-</jugador>
-<jugador>
-<nombre>Nuria</nombre>
-<imagen>1074.png</imagen>
-</jugador>
-<jugador>
-<nombre>Lolito</nombre>
-<imagen>1075.png</imagen>
-</jugador>
-<jugador>
-<nombre>Gabbie</nombre>
-<imagen>1076.png</imagen>
-</jugador>
-<jugador>
-<nombre>Daniel</nombre>
-<imagen>1077.png</imagen>
-</jugador>
-<jugador>
-<nombre>Alicia</nombre>
-<imagen>1078.png</imagen>
-</jugador>
-<jugador>
-<nombre>Marcos</nombre>
-<imagen>1079.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='Deportivo Alaves' img='Alaves.png'>
-<jugador>
-<nombre>Sara</nombre>
-<imagen>1080.png</imagen>
-</jugador>
-<jugador>
-<nombre>Carlos</nombre>
-<imagen>1081.png</imagen>
-</jugador>
-<jugador>
-<nombre>Carmen</nombre>
-<imagen>1082.png</imagen>
-</jugador>
-<jugador>
-<nombre>Oihan</nombre>
-<imagen>1083.png</imagen>
-</jugador>
-<jugador>
-<nombre>Raquel</nombre>
-<imagen>1084.png</imagen>
-</jugador>
-<jugador>
-<nombre>Alejandra</nombre>
-<imagen>1085.png</imagen>
-</jugador>
-<jugador>
-<nombre>Alberto</nombre>
-<imagen>1086.png</imagen>
-</jugador>
-<jugador>
-<nombre>Lucía</nombre>
-<imagen>1087.png</imagen>
-</jugador>
-<jugador>
-<nombre>Miguel</nombre>
-<imagen>1088.png</imagen>
-</jugador>
-<jugador>
-<nombre>Elena</nombre>
-<imagen>1089.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='VIH SD' img='VIH.png'>
-<jugador>
-<nombre>Diego</nombre>
-<imagen>1090.png</imagen>
-</jugador>
-<jugador>
-<nombre>Marta</nombre>
-<imagen>1091.png</imagen>
-</jugador>
-<jugador>
-<nombre>Javier</nombre>
-<imagen>1092.png</imagen>
-</jugador>
-<jugador>
-<nombre>Sandra</nombre>
-<imagen>1093.png</imagen>
-</jugador>
-<jugador>
-<nombre>Francisco</nombre>
-<imagen>1094.png</imagen>
-</jugador>
-<jugador>
-<nombre>Laura</nombre>
-<imagen>1095.png</imagen>
-</jugador>
-<jugador>
-<nombre>Mono</nombre>
-<imagen>1096.png</imagen>
-</jugador>
-<jugador>
-<nombre>Lautaro</nombre>
-<imagen>1097.png</imagen>
-</jugador>
-<jugador>
-<nombre>Cristiano</nombre>
-<imagen>1098.png</imagen>
-</jugador>
-<jugador>
-<nombre>Adolfo</nombre>
-<imagen>1099.png</imagen>
-</jugador>
-</equipo>
-</equipos>
-<jornadas>
-<jornada numero='1'>
-<partido>
-<local>Athletic Club</local>
-<escudo-local>Athletic.png</escudo-local>
-<goles-local>4</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>2</goles-visitante>
-</partido>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>4</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>3</goles-visitante>
-</partido>
-<partido>
-<local>Real Zaragoza</local>
-<escudo-local>Zaragoza.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='2'>
-<partido>
-<local>Real Zaragoza</local>
-<escudo-local>Zaragoza.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Athletic Club</visitante>
-<escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='3'>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Athletic Club</local>
-<escudo-local>Athletic.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Real Zaragoza</visitante>
-<escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='4'>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Athletic Club</visitante>
-<escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Real Zaragoza</visitante>
-<escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='5'>
-<partido>
-<local>Athletic Club</local>
-<escudo-local>Athletic.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Real Zaragoza</local>
-<escudo-local>Zaragoza.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='6'>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Athletic Club</visitante>
-<escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Real Zaragoza</visitante>
-<escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='7'>
-<partido>
-<local>Athletic Club</local>
-<escudo-local>Athletic.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Real Zaragoza</visitante>
-<escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='8'>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Real Zaragoza</local>
-<escudo-local>Zaragoza.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Athletic Club</visitante>
-<escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='9'>
-<partido>
-<local>Real Zaragoza</local>
-<escudo-local>Zaragoza.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Athletic Club</local>
-<escudo-local>Athletic.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='10'>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Athletic Club</visitante>
-<escudo-visitante>Athletic.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Real Zaragoza</visitante>
-<escudo-visitante>Zaragoza.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-</jornadas>
-</temporada>
-<temporada nombre='2025' estado='En progreso'>
-<equipos>
-<equipo nombre='Sevilla FC' img='Sevilla.png'>
-<jugador>
-<nombre>Raquel</nombre>
-<imagen>1035.png</imagen>
-</jugador>
-<jugador>
-<nombre>Maria</nombre>
-<imagen>1036.png</imagen>
-</jugador>
-<jugador>
-<nombre>Deonise</nombre>
-<imagen>1037.png</imagen>
-</jugador>
-<jugador>
-<nombre>Ania</nombre>
-<imagen>1038.png</imagen>
-</jugador>
-<jugador>
-<nombre>Soraya</nombre>
-<imagen>1039.png</imagen>
-</jugador>
-<jugador>
-<nombre>Carla</nombre>
-<imagen>1040.png</imagen>
-</jugador>
-<jugador>
-<nombre>Ona</nombre>
-<imagen>1041.png</imagen>
-</jugador>
-<jugador>
-<nombre>Paula</nombre>
-<imagen>1057.png</imagen>
-</jugador>
-<jugador>
-<nombre>Antonio</nombre>
-<imagen>1058.png</imagen>
-</jugador>
-<jugador>
-<nombre>Beatriz</nombre>
-<imagen>1059.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='Deportivo La Coruña' img='Depor.png'>
-<jugador>
-<nombre>Marta</nombre>
-<imagen>1060.png</imagen>
-</jugador>
-<jugador>
-<nombre>Alejandro</nombre>
-<imagen>1061.png</imagen>
-</jugador>
-<jugador>
-<nombre>Rocio</nombre>
-<imagen>1062.png</imagen>
-</jugador>
-<jugador>
-<nombre>Lucas</nombre>
-<imagen>1063.png</imagen>
-</jugador>
-<jugador>
-<nombre>Ana</nombre>
-<imagen>1064.png</imagen>
-</jugador>
-<jugador>
-<nombre>David</nombre>
-<imagen>1065.png</imagen>
-</jugador>
-<jugador>
-<nombre>Isabel</nombre>
-<imagen>1066.png</imagen>
-</jugador>
-<jugador>
-<nombre>Marisol</nombre>
-<imagen>1067.png</imagen>
-</jugador>
-<jugador>
-<nombre>Cristina</nombre>
-<imagen>1068.png</imagen>
-</jugador>
-<jugador>
-<nombre>Rubén</nombre>
-<imagen>1069.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='SD Eibar' img='Eibar.png'>
-<jugador>
-<nombre>Lorena</nombre>
-<imagen>1070.png</imagen>
-</jugador>
-<jugador>
-<nombre>Sergio</nombre>
-<imagen>1071.png</imagen>
-</jugador>
-<jugador>
-<nombre>María</nombre>
-<imagen>1072.png</imagen>
-</jugador>
-<jugador>
-<nombre>Antonio</nombre>
-<imagen>1073.png</imagen>
-</jugador>
-<jugador>
-<nombre>Nuria</nombre>
-<imagen>1074.png</imagen>
-</jugador>
-<jugador>
-<nombre>Lolito</nombre>
-<imagen>1075.png</imagen>
-</jugador>
-<jugador>
-<nombre>Gabbie</nombre>
-<imagen>1076.png</imagen>
-</jugador>
-<jugador>
-<nombre>Daniel</nombre>
-<imagen>1077.png</imagen>
-</jugador>
-<jugador>
-<nombre>Alicia</nombre>
-<imagen>1078.png</imagen>
-</jugador>
-<jugador>
-<nombre>Marcos</nombre>
-<imagen>1079.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='Deportivo Alaves' img='Alaves.png'>
-<jugador>
-<nombre>Sara</nombre>
-<imagen>1080.png</imagen>
-</jugador>
-<jugador>
-<nombre>Carlos</nombre>
-<imagen>1081.png</imagen>
-</jugador>
-<jugador>
-<nombre>Carmen</nombre>
-<imagen>1082.png</imagen>
-</jugador>
-<jugador>
-<nombre>Oihan</nombre>
-<imagen>1083.png</imagen>
-</jugador>
-<jugador>
-<nombre>Raquel</nombre>
-<imagen>1084.png</imagen>
-</jugador>
-<jugador>
-<nombre>Alejandra</nombre>
-<imagen>1085.png</imagen>
-</jugador>
-<jugador>
-<nombre>Alberto</nombre>
-<imagen>1086.png</imagen>
-</jugador>
-<jugador>
-<nombre>Lucía</nombre>
-<imagen>1087.png</imagen>
-</jugador>
-<jugador>
-<nombre>Miguel</nombre>
-<imagen>1088.png</imagen>
-</jugador>
-<jugador>
-<nombre>Elena</nombre>
-<imagen>1089.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='VIH SD' img='VIH.png'>
-<jugador>
-<nombre>Diego</nombre>
-<imagen>1090.png</imagen>
-</jugador>
-<jugador>
-<nombre>Marta</nombre>
-<imagen>1091.png</imagen>
-</jugador>
-<jugador>
-<nombre>Javier</nombre>
-<imagen>1092.png</imagen>
-</jugador>
-<jugador>
-<nombre>Sandra</nombre>
-<imagen>1093.png</imagen>
-</jugador>
-<jugador>
-<nombre>Francisco</nombre>
-<imagen>1094.png</imagen>
-</jugador>
-<jugador>
-<nombre>Laura</nombre>
-<imagen>1095.png</imagen>
-</jugador>
-<jugador>
-<nombre>Mono</nombre>
-<imagen>1096.png</imagen>
-</jugador>
-<jugador>
-<nombre>Lautaro</nombre>
-<imagen>1097.png</imagen>
-</jugador>
-<jugador>
-<nombre>Cristiano</nombre>
-<imagen>1098.png</imagen>
-</jugador>
-<jugador>
-<nombre>Adolfo</nombre>
-<imagen>1099.png</imagen>
-</jugador>
-</equipo>
-<equipo nombre='Porcinos FC' img='Porcinos.png'>
-</equipo>
-</equipos>
-<jornadas>
-<jornada numero='1'>
-<partido>
-<local>Sevilla FC</local>
-<escudo-local>Sevilla.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Porcinos FC</visitante>
-<escudo-visitante>Porcinos.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='2'>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Sevilla FC</visitante>
-<escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Porcinos FC</local>
-<escudo-local>Porcinos.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='3'>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Porcinos FC</visitante>
-<escudo-visitante>Porcinos.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Sevilla FC</local>
-<escudo-local>Sevilla.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='4'>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Sevilla FC</visitante>
-<escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Porcinos FC</local>
-<escudo-local>Porcinos.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='5'>
-<partido>
-<local>Sevilla FC</local>
-<escudo-local>Sevilla.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Porcinos FC</visitante>
-<escudo-visitante>Porcinos.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='6'>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Sevilla FC</visitante>
-<escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Porcinos FC</local>
-<escudo-local>Porcinos.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='7'>
-<partido>
-<local>Sevilla FC</local>
-<escudo-local>Sevilla.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Porcinos FC</visitante>
-<escudo-visitante>Porcinos.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='8'>
-<partido>
-<local>Porcinos FC</local>
-<escudo-local>Porcinos.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Sevilla FC</visitante>
-<escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='9'>
-<partido>
-<local>VIH SD</local>
-<escudo-local>VIH.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Porcinos FC</visitante>
-<escudo-visitante>Porcinos.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Sevilla FC</local>
-<escudo-local>Sevilla.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>SD Eibar</visitante>
-<escudo-visitante>Eibar.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo La Coruña</local>
-<escudo-local>Depor.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo Alaves</visitante>
-<escudo-visitante>Alaves.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-</jornada>
-<jornada numero='10'>
-<partido>
-<local>SD Eibar</local>
-<escudo-local>Eibar.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Deportivo La Coruña</visitante>
-<escudo-visitante>Depor.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Porcinos FC</local>
-<escudo-local>Porcinos.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>Sevilla FC</visitante>
-<escudo-visitante>Sevilla.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
-</partido>
-<partido>
-<local>Deportivo Alaves</local>
-<escudo-local>Alaves.png</escudo-local>
-<goles-local>0</goles-local>
-<visitante>VIH SD</visitante>
-<escudo-visitante>VIH.png</escudo-visitante>
-<goles-visitante>0</goles-visitante>
+<goles-visitante>X</goles-visitante>
 </partido>
 </jornada>
 </jornadas>

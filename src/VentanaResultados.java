@@ -11,6 +11,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -19,6 +21,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -73,6 +79,9 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 	private JButton btnInsertar;
 	private JButton btnFinalizar;
 	private VentanaClasificacion vc;
+	private boolean modificado;
+	private int conteo;
+	public static final Logger LOGGERP = Logger.getLogger(VentanaResultados.class.getName());
 
 	/**
 	 * Launch the application.
@@ -95,6 +104,11 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 	 */
 	public VentanaResultados() {
 
+		
+		configureLogger();
+		modificado = false;
+		conteo = 0;
+		
 		// establecemos título e icono de la aplicación
 		setTitle("Real Federación EspaÑola de Balonmano");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaTemporadas.class.getResource("/img/Logo.png")));
@@ -746,6 +760,10 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 					conexion.close();
 					
 					JOptionPane.showMessageDialog(this,"Resultado del partido seleccionado actualizado correctamente.","Actualización exitosa",JOptionPane.INFORMATION_MESSAGE,null);
+				    LOGGERP.info("Se ha modificado el partido entre los equipos "+EquipoL+" y "+EquipoV+".");
+					
+					modificado = true;
+					conteo = conteo +1;
 					
 					ActualizarCampos();
 					vc.crearClasificacion();
@@ -784,6 +802,13 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		}
 		
 		else if (o == btnAtras) {
+			
+			if (modificado = true) {
+				
+
+			    LOGGERP.info("Se han modificado "+conteo+" resultados.");
+				
+			}
 			
 			VentanaJornadas vj = new VentanaJornadas();
 			vj.setVisible(true);
@@ -994,5 +1019,26 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 				
 			}
 		
+	}
+	
+	private void configureLogger() { //Configuramos un log para la edicion de los partidos
+	    try {
+	        // Ruta del archivo de registro en la carpeta src
+	        String logFilePath = "src/logs/logPartidos.txt";
+
+	        // Verificar si el directorio existe, si no, intentar crearlo
+	        File logFile = new File(logFilePath);
+	        if (!logFile.getParentFile().exists()) {
+	            logFile.getParentFile().mkdirs();
+	        }
+
+	        // Crear FileHandler con la ruta del archivo de registro
+	        FileHandler fileHandler = new FileHandler(logFilePath, true);
+	        fileHandler.setFormatter(new SimpleFormatter());
+	        LOGGERP.addHandler(fileHandler);
+	        LOGGERP.setLevel(Level.ALL);
+	    } catch (IOException | SecurityException e) {
+	        LOGGERP.log(Level.SEVERE, "Error al configurar el sistema de logging: " + e.getMessage(), e);
+	    }
 	}
 }

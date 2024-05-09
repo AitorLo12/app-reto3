@@ -24,6 +24,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -73,13 +77,12 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 	private JComboBox cmbPosicion;
 	private JLabel lblEquipo;
 	private JComboBox cmbEquipo;
-	private JLabel lblCapitan;
-	private JTextField txtCapitan;
 	private JLabel lblImagen;
 	private JTextField txtImagen;
 	private JButton btnImagen;
 	private JLabel lblImagenJugador;
 	private List<String> Equipos;
+	public static final Logger LOGGERJ = Logger.getLogger(VentanaResultados.class.getName());
 
 	/**
 	 * Launch the application.
@@ -103,13 +106,15 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 	@SuppressWarnings("unchecked")
 	public VentanaEdicionJugadores() {
 
+		configureLogger();
+		
 		// establecemos título e icono de la aplicación
 		setTitle("Real Federación EspaÑola de Balonmano");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaTemporadas.class.getResource("/img/Logo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// ubicación y tamaño de la ventana
-		setBounds(100, 100, 1400, 600);
+		setBounds(100, 100, 1210, 600);
 		setLocationRelativeTo(null);
 
 		// quita el redimensionado de la ventana
@@ -127,7 +132,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		// propiedades del JLabel
 		lblTitulo.setForeground(new Color(0, 0, 0));
 		lblTitulo.setFont(new Font("Arial Black", Font.BOLD, 30));
-		lblTitulo.setBounds(603, 20, 180, 30);
+		lblTitulo.setBounds(508, 15, 180, 40);
 		lblTitulo.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
 /*-----------------------------------------------BASE DE DATOS MYSQL---------------------------------------------------------------------*/
@@ -154,7 +159,6 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 			columnas.add("Año Nacimiento");
 			columnas.add("Posición");
 			columnas.add("Equipo");
-			columnas.add("Capitán");
 			columnas.add("Imagen");
 			
 
@@ -182,7 +186,6 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					fila.add(rs2.getString("Nom_Equipo"));	
 				}
 				
-				fila.add(rs.getString("Capitan"));
 				fila.add(rs.getString("Imagen"));
 				fila.add("\n\n\n\n\n\n\n");
 				datosTablaJugadores.add(fila);
@@ -248,7 +251,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 		// creo un scroll pane y le añado la tabla
 		JScrollPane scrollPane = new JScrollPane(tablaJugadores);
-		scrollPane.setBounds(25, 100, 1340, 400);
+		scrollPane.setBounds(25, 100, 1150, 400);
 
 		// añado el scroll pane al panel principal
 		contentPane.add(scrollPane);
@@ -290,7 +293,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		btnBorrar.setBackground(new Color(192, 192, 192));
 		btnBorrar.setForeground(new Color(0, 0, 0));
 		btnBorrar.setBorder(null);
-		btnBorrar.setBounds(593, 510, 200, 30);
+		btnBorrar.setBounds(498, 510, 200, 30);
 		btnBorrar.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnBorrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -322,7 +325,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		btnAñadir.setBackground(new Color(192, 192, 192));
 		btnAñadir.setForeground(new Color(0, 0, 0));
 		btnAñadir.setBorder(null);
-		btnAñadir.setBounds(343, 510, 200, 30);
+		btnAñadir.setBounds(258, 510, 200, 30);
 		btnAñadir.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnAñadir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -354,7 +357,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		btnActualizar.setBackground(new Color(192, 192, 192));
 		btnActualizar.setForeground(new Color(0, 0, 0));
 		btnActualizar.setBorder(null);
-		btnActualizar.setBounds(843, 510, 200, 30);
+		btnActualizar.setBounds(748, 510, 200, 30);
 		btnActualizar.setFont(new Font("Arial Black", Font.BOLD, 15));
 		btnActualizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -489,33 +492,13 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		cmbEquipo.setSelectedIndex(-1);
 		
 		// creamos y añadimos un Jlabel para indicar el textfield del capitán
-		lblCapitan = new JLabel("Capitán:");
-		contentPane.add(lblCapitan);
-
-		// propiedades del JLabel
-		lblCapitan.setForeground(new Color(0, 0, 0));
-		lblCapitan.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblCapitan.setBounds(865, 65, 50, 20);
-		lblCapitan.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-		
-
-		// creamos y añadimos un JTextField donde pondremos el capitan que queramos introducir
-		txtCapitan = new JTextField();
-		contentPane.add(txtCapitan);
-
-		// propiedades del JTextField
-		txtCapitan.setBounds(915, 65, 100, 20);
-		txtCapitan.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		txtCapitan.setColumns(10);
-		
-		// creamos y añadimos un Jlabel para indicar el textfield del capitán
 		lblImagen = new JLabel("Foto:");
 		contentPane.add(lblImagen);
 
 		// propiedades del JLabel
 		lblImagen.setForeground(new Color(0, 0, 0));
 		lblImagen.setFont(new Font("Arial Black", Font.PLAIN, 10));
-		lblImagen.setBounds(1020, 65, 30, 20);
+		lblImagen.setBounds(870, 65, 30, 20);
 		lblImagen.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		
 		// creamos y añadimos un JTextField donde pondremos el path de la imagen del jugador que queramos introducir
@@ -523,7 +506,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		contentPane.add(txtImagen);
 
 		// propiedades del JTextField
-		txtImagen.setBounds(1055, 65, 100, 20);
+		txtImagen.setBounds(905, 65, 100, 20);
 		txtImagen.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		txtImagen.setColumns(10);
 		txtImagen.setEditable(false);
@@ -534,7 +517,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		contentPane.add(btnImagen);
 		
 		//propiedades del JButton
-		btnImagen.setBounds(1155, 65, 135, 20);
+		btnImagen.setBounds(1010, 65, 135, 20);
 		btnImagen.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		//añado los listeners necesarios
@@ -545,7 +528,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		contentPane.add(lblImagenJugador);
 				
 		//propiedades del JLabel
-		lblImagenJugador.setBounds(1077, 11, 50, 50);
+		lblImagenJugador.setBounds(930, 11, 50, 50);
 		
 	}
 
@@ -590,7 +573,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 					// informamos del borrado
 					JOptionPane.showMessageDialog(this, "Se ha eliminado el jugador correctamente", "Jugador borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
-
+					LOGGERJ.info("Se han eliminado el jugador '"+dtmTablaJugadores.getValueAt(fila, 1)+"'.");
 
 					// Establecemos los valores de los txt a campos vacíos
 					txtNombre.setText("");
@@ -598,7 +581,6 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					txtAñoNac.setText("");
 					cmbPosicion.setSelectedIndex(-1);
 					cmbEquipo.setSelectedIndex(-1);
-					txtCapitan.setText("");
 					txtImagen.setText("");
 					
 					
@@ -634,7 +616,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 			
 			
 			
-			if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || cmbPosicion.getSelectedIndex() <0 || cmbEquipo.getSelectedIndex() <0 || txtCapitan.getText().isEmpty() || txtImagen.getText().isEmpty() ) {
+			if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || cmbPosicion.getSelectedIndex() <0 || cmbEquipo.getSelectedIndex() <0 || txtImagen.getText().isEmpty() ) {
 
 				// si los campos están vacíos
 				JOptionPane.showMessageDialog(this, "Rellena todos los campos para crear un jugador nuevo.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
@@ -656,7 +638,6 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 				String Nacimiento = txtAñoNac.getText();
 				String Posicion  = (String)cmbPosicion.getSelectedItem();
 				String Equipo = (String)cmbEquipo.getSelectedItem();
-				String Capitan = txtCapitan.getText();
 				String Imagen = txtImagen.getText();
 				
 				//me intento conectar a la base de datos mysql para añadir el jugador deseado
@@ -688,7 +669,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 						
 					}
 					
-					st.executeUpdate("INSERT INTO balonmano.jugadores VALUES ("+idJ+",'"+Nombre+"','"+Posicion+"','"+Localidad+"','"+Nacimiento+"',"+idE+",'"+Capitan+"','"+Imagen+"');");
+					st.executeUpdate("INSERT INTO balonmano.jugadores VALUES ("+idJ+",'"+Nombre+"','"+Posicion+"','"+Localidad+"','"+Nacimiento+"',"+idE+",'Por definir','"+Imagen+"');");
 					
 					//Cierro el resultset
 					rs.close();
@@ -710,11 +691,12 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					fila.add(Nacimiento);
 					fila.add(Posicion);
 					fila.add(Equipo);
-					fila.add(Capitan);
 					fila.add(Imagen);
 					fila.add("\n\n\n\n\n\n\n");
 					dtmTablaJugadores.addRow(fila);
 					
+
+				    LOGGERJ.info("Se ha creado el jugador '"+Nombre+"'.");
 					JOptionPane.showMessageDialog(this,"Jugador '"+Nombre+"' creado correctamente.","Creación exitosa",JOptionPane.INFORMATION_MESSAGE,null);
 					
 
@@ -724,7 +706,6 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					txtAñoNac.setText("");
 					cmbPosicion.setSelectedIndex(-1);
 					cmbEquipo.setSelectedIndex(-1);
-					txtCapitan.setText("");
 					txtImagen.setText("");
 					
 				}
@@ -758,7 +739,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 			}
 			
-			else if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || cmbPosicion.getSelectedIndex() <0 || cmbEquipo.getSelectedIndex() <0 || txtCapitan.getText().isEmpty() || txtImagen.getText().isEmpty()) {
+			else if (txtNombre.getText().isEmpty() || txtLocalidad.getText().isEmpty() || txtAñoNac.getText().isEmpty() || cmbPosicion.getSelectedIndex() <0 || cmbEquipo.getSelectedIndex() <0 || txtImagen.getText().isEmpty()) {
 
 				// si los campos están vacíos
 				JOptionPane.showMessageDialog(this, "Rellena todos los campos para modificar un jugador.","Error, campo(s) vacío(s)", JOptionPane.ERROR_MESSAGE, null);
@@ -773,7 +754,6 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 				String Nacimiento = txtAñoNac.getText();
 				String Posicion  = (String)cmbPosicion.getSelectedItem();
 				String Equipo = (String)cmbEquipo.getSelectedItem();
-				String Capitan = txtCapitan.getText();
 				String Imagen = txtImagen.getText();
 				String id = (String)dtmTablaJugadores.getValueAt(filas, 0);
 				String NombreAntes = (String) dtmTablaJugadores.getValueAt(filas, 1);
@@ -797,7 +777,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 
 					//CONSULTA PARA ACTUALIZAR EL JUGADOR SELECCIONADO
 					//creo el Statement para actualizar todos los datos que podemos introducir en el jugador seleccionado
-					st.executeUpdate("UPDATE balonmano.jugadores SET Nombre='"+Nombre+"',Posicion='"+Posicion+"',Localidad='"+Localidad+"',Año_Nacimiento='"+Nacimiento+"',ID_Equipo='"+idE+"',Capitan='"+Capitan+"',Imagen='"+Imagen+"' WHERE ID_Jugador="+idJ+";");
+					st.executeUpdate("UPDATE balonmano.jugadores SET Nombre='"+Nombre+"',Posicion='"+Posicion+"',Localidad='"+Localidad+"',Año_Nacimiento='"+Nacimiento+"',ID_Equipo='"+idE+"',Capitan='Por definir',Imagen='"+Imagen+"' WHERE ID_Jugador="+idJ+";");
 					
 					//cierro el resultset
 					rs.close();
@@ -809,6 +789,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					conexion.close();
 					
 					JOptionPane.showMessageDialog(this,"Jugador '"+NombreAntes+"' actualizado correctamente.","Actualización exitosa",JOptionPane.INFORMATION_MESSAGE,null);
+				    LOGGERJ.info("Se ha modificado el jugador'"+NombreAntes+"'.");
 					
 					//lo actualizamos en la tabla
 					dtmTablaJugadores.setValueAt(Nombre, filas, 1);
@@ -816,8 +797,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					dtmTablaJugadores.setValueAt(Nacimiento, filas, 3);
 					dtmTablaJugadores.setValueAt(Posicion, filas, 4);
 					dtmTablaJugadores.setValueAt(Equipo, filas, 5);
-					dtmTablaJugadores.setValueAt(Capitan, filas, 6);
-					dtmTablaJugadores.setValueAt(Imagen, filas, 7);
+					dtmTablaJugadores.setValueAt(Imagen, filas, 6);
 					
 
 					// Establecemos los valores de los txt a campos vacíos
@@ -826,7 +806,6 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					txtAñoNac.setText("");
 					cmbPosicion.setSelectedIndex(-1);
 					cmbEquipo.setSelectedIndex(-1);
-					txtCapitan.setText("");
 					txtImagen.setText("");
 					
 				}
@@ -908,9 +887,8 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 			txtAñoNac.setText((String) dtmTablaJugadores.getValueAt(seleccion, 3));
 			cmbPosicion.setSelectedItem(dtmTablaJugadores.getValueAt(seleccion, 4));
 			cmbEquipo.setSelectedItem(dtmTablaJugadores.getValueAt(seleccion, 5));
-			txtCapitan.setText((String)dtmTablaJugadores.getValueAt(seleccion, 6));
-			txtImagen.setText((String)dtmTablaJugadores.getValueAt(seleccion, 7));
-			ImageIcon imgc = new ImageIcon("src/img/jugadores/"+dtmTablaJugadores.getValueAt(seleccion, 7));
+			txtImagen.setText((String)dtmTablaJugadores.getValueAt(seleccion, 6));
+			ImageIcon imgc = new ImageIcon("src/img/jugadores/"+dtmTablaJugadores.getValueAt(seleccion, 6));
 			Image img = imgc.getImage();
 			img = img.getScaledInstance(lblImagenJugador.getWidth(), lblImagenJugador.getHeight(), Image.SCALE_SMOOTH);
 			lblImagenJugador.setIcon(new ImageIcon(img));
@@ -933,4 +911,26 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
             JOptionPane.showMessageDialog(this, "La imagen ya existe por lo que se usará la imagen ya almacenada.");
         }
     }
+    
+	private void configureLogger() { //Configuramos un log para la edicion de los jugadores
+	    try {
+	        // Ruta del archivo de registro en la carpeta src
+	        String logFilePath = "src/logs/logJugadores.txt";
+
+	        // Verificar si el directorio existe, si no, intentar crearlo
+	        File logFile = new File(logFilePath);
+	        if (!logFile.getParentFile().exists()) {
+	            logFile.getParentFile().mkdirs();
+	        }
+
+	        // Crear FileHandler con la ruta del archivo de registro
+	        FileHandler fileHandler = new FileHandler(logFilePath, true);
+	        fileHandler.setFormatter(new SimpleFormatter());
+	        LOGGERJ.addHandler(fileHandler);
+	        LOGGERJ.setLevel(Level.ALL);
+	    } catch (IOException | SecurityException e) {
+	        LOGGERJ.log(Level.SEVERE, "Error al configurar el sistema de logging: " + e.getMessage(), e);
+	    }
+	}
+    
 }

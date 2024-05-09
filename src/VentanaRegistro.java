@@ -64,7 +64,7 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 	public static List<Usuario> listaUsuarios = new ArrayList<>();
 	static Usuario NewReg;
 	static String Nombre;
-	public static final Logger LOGGER = Logger.getLogger(VentanaRegistro.class.getName());
+	public static final Logger LOGGERU = Logger.getLogger(VentanaRegistro.class.getName());
 	
 	//creamos la varible para poder llamar a la función de usuario
 
@@ -638,7 +638,6 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 					VentanaTemporadas vt = new VentanaTemporadas();
 					vt.setVisible(true);
 					dispose();
-				    LOGGER.info(VentanaRegistro.getNombre()+" ha iniciado sesion");
 				}
 				
 		
@@ -712,10 +711,10 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 		
 	}
 	
-	private void configureLogger() {
+	private void configureLogger() { //Creamos un log para la modificacion de los usuarios
 	    try {
 	        // Ruta del archivo de registro en la carpeta src
-	        String logFilePath = "src/log.txt";
+	        String logFilePath = "src/logs/logUsuarios.txt";
 
 	        // Verificar si el directorio existe, si no, intentar crearlo
 	        File logFile = new File(logFilePath);
@@ -726,10 +725,10 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 	        // Crear FileHandler con la ruta del archivo de registro
 	        FileHandler fileHandler = new FileHandler(logFilePath, true);
 	        fileHandler.setFormatter(new SimpleFormatter());
-	        LOGGER.addHandler(fileHandler);
-	        LOGGER.setLevel(Level.ALL);
+	        LOGGERU.addHandler(fileHandler);
+	        LOGGERU.setLevel(Level.ALL);
 	    } catch (IOException | SecurityException e) {
-	        LOGGER.log(Level.SEVERE, "Error al configurar el sistema de logging: " + e.getMessage(), e);
+	        LOGGERU.log(Level.SEVERE, "Error al configurar el sistema de logging: " + e.getMessage(), e);
 	    }
 	}
 	
@@ -780,8 +779,10 @@ public class VentanaRegistro extends JFrame implements FocusListener, ActionList
 				EntityManager em = emf.createEntityManager();
 				em.getTransaction().begin();
 
-				//Añado la temporada a la base de datos orientada a objetos
+				//Añado el usuario a la base de datos orientada a objetos
 				em.persist(Usuario);
+				
+			    LOGGERU.info("El usuario '"+Usuario.getNombre()+"' ha sido registrado.");
 				
 				//Guardo los cambios
 				em.getTransaction().commit();

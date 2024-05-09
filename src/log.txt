@@ -52,3 +52,13 @@ INFORMACIÓN: admin ha iniciado sesion
 may 08, 2024 9:28:17 P. M. VentanaRegistro actionPerformed
 >>>>>>> c2427601f0913a437e19b053ea369fcd10abb27c
 INFORMACIÓN: admin ha iniciado sesion
+may 09, 2024 10:27:59 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 09, 2024 10:28:06 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 09, 2024 10:42:27 A. M. VentanaResultados actionPerformed
+INFORMACIÓN: Se han modificado 1 resultados.
+may 09, 2024 10:42:55 A. M. VentanaResultados actionPerformed
+INFORMACIÓN: Se han modificado 4 resultados.
+may 09, 2024 10:44:57 A. M. VentanaRegistro añadirUsuario
+INFORMACIÓN: El usuario 'Imanol' ha sido registrado.
