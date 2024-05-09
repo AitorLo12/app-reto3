@@ -78,7 +78,7 @@ public class VentanaEquipos extends JFrame implements FocusListener, ActionListe
 
         //establecemos título e icono de la aplicación
         setTitle("Real Federación EspaÑola de Balonmano");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEquipos.class.getResource("img/logo.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEquipos.class.getResource("img/Logo.png")));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //ubicación y tamaño de la ventana

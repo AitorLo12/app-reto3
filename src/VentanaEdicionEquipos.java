@@ -511,11 +511,12 @@ public class VentanaEdicionEquipos extends JFrame implements ActionListener, Foc
 					conexion.close();
 					
 					// lo borro de la tabla
+					LOGGERE.info("Se ha borrado el equipo '"+Nombre+"'.");
 					dtmTablaEquipos.removeRow(fila);
 
 					// informamos del borrado
 					JOptionPane.showMessageDialog(this, "Se ha eliminado el equipo correctamente", "Equipo borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
-					LOGGERE.info("Se ha borrado el equipo '"+Nombre+"'.");
+
 
 					// Establecemos los valores de los txt a campos vacíos 
 					txtNombre.setText("");

@@ -77,7 +77,8 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
 
         //establecemos título e icono de la aplicación
         setTitle("Real Federación EspaÑola de Balonmano");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaClasificacion.class.getResource("img/logo.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaClasificacion.class.getResource("/img/Logo.png")));
+		
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //ubicación y tamaño de la ventana
@@ -111,18 +112,18 @@ public class VentanaClasificacion extends JFrame implements FocusListener, Actio
         lblClasificacion.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
         //creamos y añadimos un Jlabel para marcar la temporada
-        lblTemporada = new JLabel();
-        contentPane.add(lblTemporada);
+      //  lblTemporada = new JLabel();
+      //  contentPane.add(lblTemporada);
 
         //propiedades del JLabel
-        lblTemporada.setForeground(new Color(0, 0, 0));
-        lblTemporada.setFont(new Font("Arial Black", Font.PLAIN, 20));
-        lblTemporada.setBounds(260, 85, 115, 23);
-        lblTemporada.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTemporada.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+      //  lblTemporada.setForeground(new Color(0, 0, 0));
+      //  lblTemporada.setFont(new Font("Arial Black", Font.PLAIN, 20));
+      //  lblTemporada.setBounds(260, 85, 115, 23);
+      //  lblTemporada.setHorizontalAlignment(SwingConstants.CENTER);
+      //  lblTemporada.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
         //Asignamos la temporada 
-        lblTemporada.setText("" + VentanaTemporadas.temporadaSeleccionada.getFecha());
+      //  lblTemporada.setText("" + VentanaTemporadas.temporadaSeleccionada.getFecha());
         
         //creamos y añadimos un JLabel para mostrar con qué usuario ha iniciado sesión
       	lblLog = new JLabel("");

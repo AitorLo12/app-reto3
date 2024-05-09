@@ -263,7 +263,7 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 		// propiedades del JButton
 		btnAtras.setBackground(null);
 		btnAtras.setBorder(null);
-		btnAtras.setBounds(1335, 511, 30, 30);
+		btnAtras.setBounds(1145, 511, 30, 30);
 		btnAtras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAtras.setIcon(new ImageIcon("src/img/atras.png"));
 
@@ -569,11 +569,12 @@ public class VentanaEdicionJugadores extends JFrame implements ActionListener, F
 					conexion.close();
 					
 					// lo borro de la tabla
+					LOGGERJ.info("Se ha eliminado el jugador '"+dtmTablaJugadores.getValueAt(fila, 1)+"'.");
 					dtmTablaJugadores.removeRow(fila);
 
 					// informamos del borrado
 					JOptionPane.showMessageDialog(this, "Se ha eliminado el jugador correctamente", "Jugador borrado correctamente", JOptionPane.INFORMATION_MESSAGE, null);
-					LOGGERJ.info("Se han eliminado el jugador '"+dtmTablaJugadores.getValueAt(fila, 1)+"'.");
+
 
 					// Establecemos los valores de los txt a campos vacíos
 					txtNombre.setText("");

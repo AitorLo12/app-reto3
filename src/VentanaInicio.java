@@ -66,7 +66,7 @@ public class VentanaInicio extends JFrame implements FocusListener, ActionListen
         
         //establecemos título e icono de la aplicación
         setTitle("Real Federación EspaÑola de Balonmano");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaInicio.class.getResource("/img/logo.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaInicio.class.getResource("/img/Logo.png")));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //ubicación y tamaño de la ventana
