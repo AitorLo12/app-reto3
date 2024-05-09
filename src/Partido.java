@@ -6,8 +6,9 @@ public class Partido {
 	private int PtsLocal;
 	private Equipo EquipoVisit;
 	private int PtsVisit;
+	private String Estado;
 	
-	public Partido (int id,int N, Equipo EL, int PL, Equipo EV, int PV) {
+	public Partido (int id,int N, Equipo EL, int PL, Equipo EV, int PV, String E) {
 		
 		ID = id;
 		Numero = N;
@@ -15,16 +16,18 @@ public class Partido {
 		PtsLocal = PL;
 		EquipoVisit = EV;
 		PtsVisit = PV;
+		Estado = E;
 		
 	}
 	
-	public Partido (int id,Equipo EL, int PL, Equipo EV, int PV) {
+	public Partido (int id,Equipo EL, int PL, Equipo EV, int PV, String E) {
 		
 		ID = id;
 		EquipoLocal = EL;
 		PtsLocal = PL;
 		EquipoVisit = EV;
 		PtsVisit = PV;
+		Estado = E;
 		
 	}
 
@@ -74,6 +77,14 @@ public class Partido {
 
 	public void setPtsVisit(int ptsVisit) {
 		PtsVisit = ptsVisit;
+	}
+
+	public String getEstado() {
+		return Estado;
+	}
+
+	public void setEstado(String estado) {
+		Estado = estado;
 	}
 	
 }

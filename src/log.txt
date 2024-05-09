@@ -1,4 +1,54 @@
 may 08, 2024 12:54:22 P. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
+<<<<<<< HEAD
 may 09, 2024 10:19:04 A. M. VentanaRegistro actionPerformed
+=======
+may 08, 2024 8:40:23 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:41:25 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:41:41 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:45:08 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:45:26 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:46:31 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:46:55 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:47:48 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:48:14 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:48:27 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:49:50 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:50:05 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:54:25 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:55:26 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:55:55 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:56:46 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 8:57:42 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 9:15:34 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 9:16:16 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 9:20:47 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 9:21:57 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 9:24:36 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 9:26:56 P. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion
+may 08, 2024 9:28:17 P. M. VentanaRegistro actionPerformed
+>>>>>>> c2427601f0913a437e19b053ea369fcd10abb27c
 INFORMACIÓN: admin ha iniciado sesion

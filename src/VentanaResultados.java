@@ -140,11 +140,12 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		lblJornadas.setBounds(193, 60, 250, 30);
 		
      	Vector<String> columnas = new Vector<String>();
-     	columnas.add("Nombre");
-     	columnas.add("Año Nacimiento");
-     	columnas.add("Localidad");
-     	columnas.add("Posicion");
-     	columnas.add("Imagen");
+		columnas.add("ID");
+		columnas.add("Equipo Local");
+		columnas.add("Goles Local");
+		columnas.add("Equipo Visitante");
+		columnas.add("Goles Visitante");
+		columnas.add("Estado");
 
      	// creo el vector para los datos de la tabla
      	datosTablaPartidos = new Vector<Vector<String>>();
@@ -165,11 +166,12 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 			}
 		});
 
-		tablaPartidos.getColumnModel().getColumn(0).setPreferredWidth(64);
+		tablaPartidos.getColumnModel().getColumn(0).setPreferredWidth(20);
 		tablaPartidos.getColumnModel().getColumn(1).setPreferredWidth(200);
-		tablaPartidos.getColumnModel().getColumn(2).setPreferredWidth(64);
+		tablaPartidos.getColumnModel().getColumn(2).setPreferredWidth(20);
 		tablaPartidos.getColumnModel().getColumn(3).setPreferredWidth(200);
-		tablaPartidos.getColumnModel().getColumn(4).setPreferredWidth(64);
+		tablaPartidos.getColumnModel().getColumn(4).setPreferredWidth(20);
+		tablaPartidos.getColumnModel().getColumn(5).setPreferredWidth(20);
 		
 		// creo un scroll pane y le añado la tabla
 		JScrollPane scrollPane = new JScrollPane(tablaPartidos);
@@ -214,8 +216,9 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 				int GL = Integer.parseInt(rs2.getString("goles_equipo_loc"));
 				Equipo EV = new Equipo (rs2.getString("nom_equipo_vis"));
 				int GV = Integer.parseInt(rs2.getString("goles_equipo_vis"));
+				String E = rs2.getString("estado");
 				
-				Partido p = new Partido (idP, EL, GL, EV, GV);
+				Partido p = new Partido (idP, EL, GL, EV, GV,E);
 				listaPartidos.add(p);
 				
 			}
@@ -559,12 +562,12 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 			
 			else {
 				
-				//Se crean variables que guardan los datos de los campos para poder manipular correctamente con estos
 				int Cod = Integer.parseInt(""+dtmTablaPartidos.getValueAt(filas, 0));
-				int GolesL = Integer.parseInt(txtGolesLocal.getText());
-				int GolesV = Integer.parseInt(txtGolesVisit.getText());
-				String EquipoL = txtEquipoLocal.getText();
-				String EquipoV = txtEquipoVisit.getText();
+				String EquipoL = ""+dtmTablaPartidos.getValueAt(filas, 1);
+				int GolesL = Integer.parseInt(""+dtmTablaPartidos.getValueAt(filas, 2));
+				String EquipoV = ""+dtmTablaPartidos.getValueAt(filas, 3);
+				int GolesV = Integer.parseInt(""+dtmTablaPartidos.getValueAt(filas, 4));
+				String E = ""+dtmTablaPartidos.getValueAt(filas, 5);
 				
 				//me intento conectar a la base de datos mysql para actualizar el partido
 				try {
@@ -574,14 +577,6 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 
 					Statement st = conexion.createStatement();
 
-					//CONSULTA PARA ACTUALIZAR EL PARTIDO SELECCIONADO
-					//creo el Statement para actualizar los datos del partido seleccionado
-					st.executeUpdate("UPDATE balonmano.partidos SET goles_equipo_loc="+GolesL+",goles_equipo_vis="+GolesV+" WHERE cod_partido="+Cod+";");
-					
-					//lo actualizamos en el arraylist de los partidos
-					listaJornadas.get(posicion).getListaPartidos().get(filas).setPtsLocal(GolesL);
-					listaJornadas.get(posicion).getListaPartidos().get(filas).setPtsVisit(GolesV);
-					
 					int IDL = 0;
 					int PtsL = 0;
 					int PJL = 0;
@@ -625,9 +620,80 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 						PPV = Integer.parseInt(rs.getString("Partidos_Perdidos"));
 						GFV = Integer.parseInt(rs.getString("GF"));
 						GCV = Integer.parseInt(rs.getString("GC"));
+					
 						
 					}
 					
+					
+					if (E.equals("Jugado")) { //Hacemos una comprobación de si el partido ha sido ya jugado para poner el partido como si no hubiese jugado y sumalo luego con el nuevo resultado
+						
+						
+						if (GolesL > GolesV) {
+							
+							PtsL = PtsL -3;
+							PJL = PJL - 1;
+							PJV = PJV - 1;
+							PGL = PGL - 1;
+							PPV = PPV - 1;
+							GFL = GFL - GolesL;
+							GCL = GCL - GolesV;
+							GFV = GFV - GolesV;
+							GCV = GCV - GolesL;
+							
+						}
+						
+						else if (GolesL < GolesV) {
+							
+							PtsV = PtsV - 3;
+							PJL = PJL - 1;
+							PJV = PJV - 1;
+							PGV = PGV - 1;
+							PPL = PPL - 1;
+							GFL = GFL - GolesL;
+							GCL = GCL - GolesV;
+							GFV = GFV - GolesV;
+							GCV = GCV - GolesL;
+							
+						}
+						
+						else {
+							
+							PtsL = PtsL - 1;
+							PtsV = PtsV - 1;
+							PJL = PJL - 1;
+							PJV = PJV - 1;
+							GFL = GFL - GolesL;
+							GCL = GCL - GolesV;
+							GFV = GFV - GolesV;
+							GCV = GCV - GolesL;
+							
+						}
+						
+						
+					}
+					
+
+					//Se crean variables que guardan los datos de los campos para poder manipular correctamente con estos
+					Cod = Integer.parseInt(""+dtmTablaPartidos.getValueAt(filas, 0));
+					GolesL = Integer.parseInt(txtGolesLocal.getText());
+					GolesV = Integer.parseInt(txtGolesVisit.getText());
+					EquipoL = txtEquipoLocal.getText();
+					EquipoV = txtEquipoVisit.getText();
+					E = "Jugado";
+					
+
+					//CONSULTA PARA ACTUALIZAR EL PARTIDO SELECCIONADO
+					//creo el Statement para actualizar los datos del partido seleccionado
+					st.executeUpdate("UPDATE balonmano.partidos SET goles_equipo_loc="+GolesL+",goles_equipo_vis="+GolesV+", estado='"+E+"' WHERE cod_partido="+Cod+";");
+					
+
+					//lo actualizamos en el arraylist de los partidos
+					listaJornadas.get(posicion).getListaPartidos().get(filas).setPtsLocal(GolesL);
+					listaJornadas.get(posicion).getListaPartidos().get(filas).setPtsVisit(GolesV);
+					listaJornadas.get(posicion).getListaPartidos().get(filas).setEstado(E);
+					
+					
+					//Una vez comprobado que los partidos hayan sido jugados o no, sumamos los datos equivalentes a los equipos
 					if (GolesL > GolesV) {
 						
 						PtsL = PtsL + 3;
@@ -823,6 +889,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 		columnas.add("Goles Local");
 		columnas.add("Equipo Visitante");
 		columnas.add("Goles Visitante");
+		columnas.add("Estado");
 		
 		//cargo los datos de la posicion actual
 		Jornada valor = listaJornadas.get(posicion);
@@ -838,6 +905,7 @@ public class VentanaResultados extends JFrame implements ActionListener, FocusLi
 			fila.add(""+p.getPtsLocal());
 			fila.add(p.getEquipoVisit().getNombre());
 			fila.add(""+p.getPtsVisit());
+			fila.add(""+p.getEstado());
 			fila.add("\n\n\n\n\n\n\n");
 			datosTablaPartidos.add(fila);
 			
