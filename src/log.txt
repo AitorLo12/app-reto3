@@ -1,2 +1,4 @@
 may 08, 2024 12:54:22 P. M. VentanaRegistro actionPerformed
 INFORMACIÓN: admin ha iniciado sesion
+may 09, 2024 10:19:04 A. M. VentanaRegistro actionPerformed
+INFORMACIÓN: admin ha iniciado sesion

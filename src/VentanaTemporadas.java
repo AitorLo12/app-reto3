@@ -798,6 +798,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 	    		JOptionPane.showMessageDialog(null, "Ya existe una temporada con la fecha introducida.", "Temporada ya existente", JOptionPane.ERROR_MESSAGE);
 				
 	    }
+	    	else if (temporadaEnProgreso("En progreso")) {
+	    		
+	    		JOptionPane.showMessageDialog(null, "Solo puede haber una temporada en progreso.", "Temporada en progreso ya existe", JOptionPane.ERROR_MESSAGE);
+	    		
+	    	}
+	    	
 	    	else if (dlmListaSeleccionados.size()!=6) {
 	    		
 	    		JOptionPane.showMessageDialog(null, "No se han seleccionados 6 equipos para la creación de temporada.", "Numero de equipos seleccionados incorrecto", JOptionPane.ERROR_MESSAGE);
@@ -1008,11 +1014,23 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 		}
 	}
 	
-	//Comprueba si existe la temporada en la lista de temporadas
+		//Comprueba si existe la temporada en la lista de temporadas
 		public boolean existeTemporada (String fecha) {
 			boolean existe = false;
 			for (Temporada t : listaTemporadas) {
 				existe = t.getFecha().equals(fecha) ? true : false;
+				if(existe) {
+					break;
+				}
+			}
+			return existe;
+		}
+		
+		//Comprueba si hay alguna temporada en progreso
+		public boolean temporadaEnProgreso (String estado) {
+			boolean existe = false;
+			for (Temporada t : listaTemporadas) {
+				existe = t.getEstado().equals(estado) ? true : false;
 				if(existe) {
 					break;
 				}
@@ -1364,7 +1382,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 			try {
 				
 				
-				FileWriter fichero = new FileWriter("..//web-reto3//datos.xml");
+				FileWriter fichero = new FileWriter("datos.xml");
 			    PrintWriter pw = new PrintWriter(fichero);
 			    BufferedWriter bw = new BufferedWriter(pw);
 			    
@@ -1484,6 +1502,7 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 						
 						while (rsP.next()) {
 							
+							String G = rsP.getString("estado");
 							Equipo EL = new Equipo (rsP.getString("nom_equipo_loc"));
 							Equipo EV = new Equipo (rsP.getString("nom_equipo_vis"));
 							
@@ -1502,8 +1521,18 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 							
 							}
 							
-							bw.newLine();
-							bw.write("<goles-local>"+rsP.getString("goles_equipo_loc")+"</goles-local>");
+							if (G.equals("Jugado")) {
+							
+								bw.newLine();
+								bw.write("<goles-local>"+rsP.getString("goles_equipo_loc")+"</goles-local>");
+								
+							}
+							else {
+								
+								bw.newLine();
+								bw.write("<goles-local>X</goles-local>");
+								
+							}
 							
 							rsI = st5.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp= "+rsT.getString("Num_Temp")+" AND Nom_Equipo='"+EV.getNombre()+"';");
 							while(rsI.next()) {
@@ -1518,8 +1547,19 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 							rsI.close();
 							st5.close();
 							
-							bw.newLine();
-							bw.write("<goles-visitante>"+rsP.getString("goles_equipo_vis")+"</goles-visitante>");
+							if (G.equals("Jugado")) {
+							
+								bw.newLine();
+								bw.write("<goles-visitante>"+rsP.getString("goles_equipo_vis")+"</goles-visitante>");
+							
+							}
+							else {
+								
+								bw.newLine();
+								bw.write("<goles-visitante>X</goles-visitante>");
+								
+							}
+							
 							bw.newLine();
 							bw.write("</partido>");
 							
