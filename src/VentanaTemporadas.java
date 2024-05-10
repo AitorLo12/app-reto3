@@ -1501,7 +1501,6 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 						
 						while (rsP.next()) {
 							
-							String G = rsP.getString("estado");
 							Equipo EL = new Equipo (rsP.getString("nom_equipo_loc"));
 							Equipo EV = new Equipo (rsP.getString("nom_equipo_vis"));
 							
@@ -1520,18 +1519,10 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 							
 							}
 							
-							if (G.equals("Jugado")) {
-							
 								bw.newLine();
 								bw.write("<goles-local>"+rsP.getString("goles_equipo_loc")+"</goles-local>");
 								
-							}
-							else {
-								
-								bw.newLine();
-								bw.write("<goles-local>X</goles-local>");
-								
-							}
+							
 							
 							rsI = st5.executeQuery("SELECT * FROM balonmano.equipos WHERE Num_Temp= "+rsT.getString("Num_Temp")+" AND Nom_Equipo='"+EV.getNombre()+"';");
 							while(rsI.next()) {
@@ -1546,18 +1537,12 @@ public class VentanaTemporadas extends JFrame implements FocusListener, ActionLi
 							rsI.close();
 							st5.close();
 							
-							if (G.equals("Jugado")) {
+							
 							
 								bw.newLine();
 								bw.write("<goles-visitante>"+rsP.getString("goles_equipo_vis")+"</goles-visitante>");
 							
-							}
-							else {
-								
-								bw.newLine();
-								bw.write("<goles-visitante>X</goles-visitante>");
-								
-							}
+					
 							
 							bw.newLine();
 							bw.write("</partido>");
